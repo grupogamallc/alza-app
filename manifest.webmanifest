@@ -1,0 +1,14 @@
+{
+  "name": "ALZA — Mente · Cuerpo · Alma",
+  "short_name": "ALZA",
+  "description": "Tu sistema diario: Mente, Cuerpo y Alma.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#08080D",
+  "theme_color": "#08080D",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

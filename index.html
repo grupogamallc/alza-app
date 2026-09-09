@@ -1,0 +1,756 @@
+<title>ALZA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ALZA">
+<meta name="description" content="Tu sistema diario: Mente, Cuerpo y Alma.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#08080D;--ink2:#0E0E16;--surface:#15151F;--surface2:#1C1C2A;
+  --glass:rgba(28,28,42,.55);
+  --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+  --tx:#F5F6FA;--mid:#C6C9D2;--dim:#8C90A0;
+  --gold:#FFC15E;--golds:#F2C57C;--amber:#F2954B;--magenta:#C2447E;--indigo:#5B49C9;
+  --green:#43D6A0;--coral:#FF6B6B;--teal:#2FD1C6;
+  --mente:#7B5CFF;--cuerpo:#43D6A0;--alma:#FFC15E;--apoyo:#2FD1C6;
+  --sunh:linear-gradient(90deg,#7B5CFF,#43D6A0,#FFC15E);
+  --warm:linear-gradient(180deg,#FFCE7A,#F2954B);
+  --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--ink);color:var(--tx);font-family:"Instrument Sans",system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.05}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx);background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:90px;line-height:1.5}
+.mono{font-family:"JetBrains Mono",monospace}
+.serif{font-family:"Fraunces",serif}
+.tnum{font-variant-numeric:tabular-nums}
+.dim{color:var(--mid)}
+.eye{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+
+#app{max-width:520px;margin:0 auto;min-height:100%;position:relative;padding-bottom:96px}
+.view{padding:14px 16px 8px;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:linear-gradient(180deg,var(--ink) 70%,transparent);backdrop-filter:blur(6px)}
+.brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;letter-spacing:.02em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mid);background:var(--surface)}
+
+.card{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--surface),var(--ink2));padding:16px;margin-bottom:12px}
+.card.tight{padding:13px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pillbtn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:13px 16px;border-radius:12px;font-weight:600;font-size:15px;width:100%}
+.primary{background:linear-gradient(90deg,var(--gold),var(--amber));color:var(--ink);box-shadow:0 10px 26px -12px var(--amber)}
+.ghost{border:1px solid var(--line2);color:var(--tx);background:var(--surface)}
+.chip{font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--mid);background:var(--surface);white-space:nowrap}
+.link{color:var(--gold);text-decoration:underline;cursor:pointer}
+
+.quote{position:relative;border:1px solid var(--line);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(123,92,255,.12),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--mente),inset 0 1px 0 rgba(255,255,255,.05)}
+.quote::before{content:"\201C";position:absolute;top:2px;left:14px;font-family:"Fraunces";font-size:58px;color:var(--mente);opacity:.28;line-height:1}
+.quote .q{font-family:"Fraunces";font-style:italic;font-size:20px;line-height:1.42;color:#EFEBFF;position:relative}
+.quote .att{font-family:"JetBrains Mono";font-size:11px;color:#B9A9FF;margin-top:12px;letter-spacing:.05em}
+.verse{position:relative;border:1px solid rgba(255,193,94,.22);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(255,193,94,.11),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--gold),inset 0 1px 0 rgba(255,255,255,.05)}
+.verse::before{content:"\271D";position:absolute;top:16px;right:18px;font-size:20px;color:var(--gold);opacity:.4}
+.verse .q{font-family:"Fraunces";font-style:italic;font-size:18px;line-height:1.42;color:#FBEBD3}
+.verse b{color:var(--golds);font-family:"JetBrains Mono";font-size:11px;display:block;margin-top:10px;letter-spacing:.04em;font-weight:400}
+
+.greetband{position:relative;border-radius:20px;overflow:hidden;padding:16px 18px;margin-bottom:12px;border:1px solid var(--line);background:linear-gradient(180deg,#141019,#0A0A10 72%);box-shadow:0 24px 50px -44px #000,inset 0 1px 0 rgba(255,255,255,.05)}
+.greetband .warmglow{position:absolute;inset:0;z-index:0;background:radial-gradient(90% 62% at 50% -14%,rgba(255,193,94,.30),rgba(242,149,75,.12) 40%,transparent 66%)}
+.greetband>*{position:relative;z-index:2}
+.greetband.slim{padding:12px 16px;border-radius:16px}
+.greetband .day{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--golds);opacity:.85}
+.greetband .hi{font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.02em;color:#FBF3E7;margin-top:7px}
+.greetband .hi .nm{color:var(--gold);font-weight:700}
+
+.stage{position:relative;width:100%;max-width:340px;margin:6px auto 2px}
+.stage svg{display:block;width:100%;height:auto;overflow:visible}
+.stage .track{fill:none;stroke:#20202f;stroke-width:6}
+.stage .pr{fill:none;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transform-box:fill-box;transition:stroke-dashoffset 1.25s cubic-bezier(.22,.9,.24,1)}
+.stage .disc{fill:var(--ink2);stroke:rgba(255,255,255,.06)}
+.stage .core-num{font-family:"Bricolage Grotesque";font-weight:800;fill:#fff;text-anchor:middle;letter-spacing:-.02em}
+.stage .core-cap{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;text-anchor:middle}
+.stage .flow{fill:none;stroke:url(#edge);stroke-width:2;stroke-linecap:round;stroke-dasharray:5 12;opacity:.9;animation:flowe 2.6s linear infinite}
+@keyframes flowe{to{stroke-dashoffset:-102}}
+.stage .n-lab{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:.01em}
+.stage .n-pct{font-family:"JetBrains Mono";font-weight:500;text-anchor:middle;fill:var(--mid)}
+
+.ph{position:relative;border-radius:22px;overflow:hidden;padding:20px 18px;margin-bottom:14px;border:1px solid var(--line);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
+.ph>*{position:relative;z-index:2}
+.ph .em{font-size:30px}
+.ph h2{font-size:26px;margin-top:4px}
+.ph .sub{color:var(--mid);font-size:13.5px;margin-top:2px}
+
+.task{display:flex;align-items:center;gap:12px;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--surface);margin-bottom:8px;transition:.2s;cursor:pointer}
+.task .box{width:22px;height:22px;border-radius:7px;border:1.6px solid var(--dim);flex:none;display:grid;place-items:center;transition:.2s}
+.task .box svg{width:13px;height:13px;opacity:0;transform:scale(.4);transition:.2s}
+.task .lbl{font-size:15.5px;flex:1}
+.task .em{font-size:18px}
+.task.done .box{background:var(--green);border-color:var(--green)}
+.task.done .box svg{opacity:1;transform:scale(1)}
+
+.sec-title{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-family:"JetBrains Mono";margin:18px 2px 10px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:"";width:16px;height:2px;border-radius:2px;background:currentColor;opacity:.5}
+.empty{text-align:center;color:var(--dim);font-size:14px;padding:22px}
+
+.macrobar{margin-bottom:10px}
+.macrobar .r{display:flex;justify-content:space-between;font-family:"JetBrains Mono";font-size:12px;color:var(--mid);margin-bottom:5px}
+.bar{height:8px;border-radius:99px;background:#232333;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;transition:width .5s}
+
+.vid{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--surface);margin-bottom:9px;text-decoration:none;color:inherit;cursor:pointer}
+.vid .thumb{width:64px;height:42px;border-radius:8px;background:linear-gradient(135deg,#7A2E6E,#241B4D) center/cover no-repeat;display:grid;place-items:center;flex:none;color:#fff;position:relative;overflow:hidden}
+.vid .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vid .t{flex:1;font-size:14.5px;font-weight:500}
+.vid .cat{font-family:"JetBrains Mono";font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+.vplayer{position:fixed;inset:0;z-index:130;display:none;flex-direction:column;background:rgba(0,0,0,.94);padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom))}
+.vplayer.on{display:flex}
+.vplayer .bar2{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.vplayer .vt{font-size:15px;font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vplayer .close{color:#fff;font-size:24px;width:38px;height:38px;flex:none;display:grid;place-items:center;background:rgba(255,255,255,.1);border-radius:50%}
+.vplayer .frame16{position:relative;width:100%;max-width:860px;margin:auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+.vplayer .frame16 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));background:rgba(10,10,16,.86);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:40}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dim);font-size:9.5px;font-family:"JetBrains Mono";letter-spacing:.02em;padding:4px 4px;flex:1;opacity:.62;transition:opacity .2s}
+.nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7}
+.nav button.panel{color:var(--tx)}
+.nav button.mente{color:var(--mente)}
+.nav button.cuerpo{color:var(--cuerpo)}
+.nav button.alma{color:var(--alma)}
+.nav button.apoyo{color:var(--apoyo)}
+.nav button.on{opacity:1;font-weight:700}
+
+.toast{position:fixed;bottom:104px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--line2);color:var(--tx);padding:11px 18px;border-radius:999px;font-size:14px;z-index:200;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 12px 40px -10px #000}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.modal.on{display:flex}
+.sheet{width:100%;max-width:520px;background:var(--ink2);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));animation:up .3s ease;max-height:88vh;overflow:auto}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sheet h3{font-size:19px;margin-bottom:14px}
+.field{margin-bottom:11px}
+.field label{font-size:12px;color:var(--mid);display:block;margin-bottom:5px;font-family:"JetBrains Mono";letter-spacing:.03em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* AUTH / ONBOARDING */
+.auth{max-width:440px;margin:0 auto;min-height:100%;padding:calc(30px + env(safe-area-inset-top)) 22px 40px;display:flex;flex-direction:column}
+.auth .logo{font-family:"Bricolage Grotesque";font-weight:800;font-size:38px;letter-spacing:.04em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+.auth .tag{text-align:center;color:var(--mid);font-family:"Fraunces";font-style:italic;font-size:16px;margin-top:6px}
+.auth .aur{position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 34% at 50% 0%,rgba(123,92,255,.22),transparent 60%),radial-gradient(50% 30% at 12% 100%,rgba(67,214,160,.16),transparent 62%),radial-gradient(50% 30% at 90% 100%,rgba(255,193,94,.18),transparent 62%)}
+.auth .card{margin-top:22px}
+.auth .tabs{display:flex;gap:6px;margin-bottom:16px;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--surface)}
+.auth .tabs button{flex:1;padding:10px;border-radius:9px;color:var(--mid);font-weight:600;font-size:14px}
+.auth .tabs button.on{background:var(--gold);color:var(--ink)}
+.auth .err{color:var(--coral);font-size:13px;margin:6px 2px;min-height:16px}
+.auth .fine{color:var(--dim);font-size:11.5px;line-height:1.5;margin-top:12px;text-align:center}
+.tri3{display:flex;justify-content:center;gap:26px;margin:26px 0 6px}
+.tri3 .t{text-align:center}
+.tri3 .t .d{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin:0 auto 7px;font-size:22px;border:1px solid var(--line)}
+.tri3 .t .n{font-family:"JetBrains Mono";font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.chkline{display:flex;gap:10px;align-items:flex-start;margin:8px 0 2px;font-size:12.5px;color:var(--mid);line-height:1.45}
+.chkbox{width:22px;height:22px;border-radius:6px;border:1.6px solid var(--dim);flex:none;display:grid;place-items:center;margin-top:1px;cursor:pointer}
+.chkbox.on{background:var(--gold);border-color:var(--gold)}
+.chkbox svg{width:13px;height:13px;opacity:0}.chkbox.on svg{opacity:1}
+
+/* PAYWALL */
+.pw{max-width:440px;margin:0 auto;padding:calc(40px + env(safe-area-inset-top)) 22px 40px;text-align:center}
+.pw .price{font-family:"Bricolage Grotesque";font-weight:800;font-size:44px;margin:8px 0}
+.pw .feat{text-align:left;margin:18px 0}
+.pw .feat .f{display:flex;gap:10px;align-items:flex-start;margin-bottom:11px;font-size:14.5px}
+.pw .feat .f .ck{color:var(--green);flex:none;margin-top:2px}
+
+/* INSTALL */
+.step{display:flex;gap:12px;align-items:flex-start;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface);margin-bottom:9px}
+.step .no{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--ink);font-weight:800;display:grid;place-items:center;flex:none;font-size:14px}
+.step .tx{font-size:14px;line-height:1.45}
+
+/* ADICCION */
+.sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(47,209,198,.4);background:linear-gradient(180deg,rgba(47,209,198,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
+.bignum{font-family:"Bricolage Grotesque";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#7FEFE4,#2FD1C6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.trg{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.trg .dt{font-family:"JetBrains Mono";font-size:10.5px;color:var(--dim)}
+
+/* ADMIN */
+.adm{border:1px solid var(--line);border-radius:13px;background:var(--surface);padding:12px;margin-bottom:9px}
+.adm .del{color:var(--coral);font-size:12px}
+.badge{font-family:"JetBrains Mono";font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;color:var(--mid)}
+
+.loader{position:fixed;inset:0;display:grid;place-items:center;background:var(--ink);z-index:300}
+.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;letter-spacing:.06em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div id="app"></div>
+<div class="loader" id="loader"><div class="lg">ALZA</div></div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="vplayer" id="vplayer">
+  <div class="bar2"><div class="vt" id="vptitle"></div><button class="close" onclick="closeVideo()">✕</button></div>
+  <div class="frame16" id="vpframe"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ================= CONFIG ================= */
+const SB_URL="https://wgkwfctbwiwoaycbtuia.supabase.co";
+const SB_KEY="sb_publishable_sMZmlBkmDrdjeiNmmK7sMQ_XFIPrUFG";
+const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+/* ================= SEED ================= */
+const SEED_QUOTES=[
+ {t:"La única persona que estás destinado a ser es la persona que decides ser.",a:"Ralph Waldo Emerson"},
+ {t:"Lo que la mente puede concebir y creer, lo puede lograr.",a:"Napoleón Hill"},
+ {t:"Si haces lo que siempre has hecho, obtendrás lo que siempre has obtenido.",a:"Tony Robbins"},
+ {t:"El éxito no es algo que persigues; es algo que atraes por la persona en la que te conviertes.",a:"Jim Rohn"},
+ {t:"Nos convertimos en aquello en lo que pensamos la mayor parte del tiempo.",a:"Earl Nightingale"},
+ {t:"Cambia la forma en que ves las cosas y las cosas que ves cambiarán.",a:"Wayne Dyer"},
+ {t:"No cuentes los días, haz que los días cuenten.",a:"Muhammad Ali"},
+ {t:"Disciplina es el puente entre las metas y los logros.",a:"Jim Rohn"},
+ {t:"Empieza donde estás, usa lo que tienes, haz lo que puedas.",a:"Arthur Ashe"},
+ {t:"La calidad de tu vida depende de la calidad de tus pensamientos.",a:"Marco Aurelio"}
+];
+const SEED_VERSES=[
+ {t:"Todo lo puedo en Cristo que me fortalece.",r:"Filipenses 4:13"},
+ {t:"Esfuérzate y sé valiente; no temas ni desmayes.",r:"Josué 1:9"},
+ {t:"Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.",r:"Salmos 118:24"},
+ {t:"Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.",r:"Proverbios 3:5"},
+ {t:"Los que esperan a Jehová tendrán nuevas fuerzas.",r:"Isaías 40:31"},
+ {t:"A los que aman a Dios, todas las cosas les ayudan a bien.",r:"Romanos 8:28"},
+ {t:"No nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.",r:"2 Timoteo 1:7"},
+ {t:"Por nada estéis afanosos; sean conocidas vuestras peticiones delante de Dios.",r:"Filipenses 4:6"}
+];
+const SEED_AFF=[
+ "Hoy elijo la versión más fuerte de mí.",
+ "Un día a la vez. Hoy me toca ganar hoy.",
+ "Soy más fuerte que mi antojo. El impulso pasa; mi decisión queda.",
+ "No tengo que ser perfecto, solo constante.",
+ "Cada elección sana suma. Estoy construyendo a alguien nuevo.",
+ "Mi paz vale más que cualquier alivio momentáneo.",
+ "Lo que resisto hoy me hace libre mañana."
+];
+const SEED_HABITS=[
+ {id:"read",em:"📖",lbl:"Leer / aprender 10 min",pillar:"mente"},
+ {id:"visual",em:"🎯",lbl:"Visualizar mis metas",pillar:"mente"},
+ {id:"journal",em:"✍️",lbl:"Journal del día",pillar:"mente"},
+ {id:"train",em:"🏋️",lbl:"Entrenamiento",pillar:"cuerpo"},
+ {id:"macros",em:"🥗",lbl:"Cumplir mis macros",pillar:"cuerpo"},
+ {id:"water",em:"💧",lbl:"Tomar agua",pillar:"cuerpo"},
+ {id:"sleep",em:"😴",lbl:"Dormir bien",pillar:"cuerpo"},
+ {id:"medit",em:"🧘",lbl:"Meditar",pillar:"alma"},
+ {id:"pray",em:"🙏",lbl:"Oración / la Palabra",pillar:"alma"},
+ {id:"grat",em:"🕊️",lbl:"Gratitud",pillar:"alma"}
+];
+const PILLARS={
+ mente:{name:"Mente",color:"#7B5CFF",em:"🧠",sub:"Mentalidad, foco y aprendizaje"},
+ cuerpo:{name:"Cuerpo",color:"#43D6A0",em:"💪",sub:"Nutrición, energía y descanso"},
+ alma:{name:"Alma",color:"#FFC15E",em:"✨",sub:"Fe, calma y propósito"}
+};
+
+/* ================= STATE ================= */
+const DEFAULT_STATE={
+  habits:JSON.parse(JSON.stringify(SEED_HABITS)),
+  goals:{kcal:2000,p:150,c:200,f:60},
+  days:{}, foods:[],
+  inbody:{weight:{c:null,p:null},smm:{c:null,p:null},pbf:{c:null,p:null}},
+  addiction:{enabled:false,label:"",since:null,best:0,triggers:[],sos:0},
+  bible:{streak:0,lastRead:null},
+  ui:{tab:"panel"}
+};
+let S=null;          // user state (jsonb)
+let ME=null;         // {user_id,email,full_name,is_admin,...}
+let SUB=null;        // subscription row
+let CONTENT=[];      // admin content
+let saveTimer=null;
+
+const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+function getDay(){const k=todayKey();if(!S.days[k])S.days[k]={ritual:{},journal:"",intention:""};if(!S.days[k].ritual)S.days[k].ritual={};return S.days[k];}
+function dayIndex(){const start=new Date(2026,0,1);return Math.floor((new Date()-start)/864e5);}
+
+function save(){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{
+  try{S.updated=Date.now();await sb.from("alza_user_state").upsert({user_id:ME.user_id,data:S,updated_at:new Date().toISOString()});}
+  catch(e){console.warn("save",e);}
+},700);}
+
+/* ================= HELPERS ================= */
+const $=s=>document.querySelector(s);
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),2200);}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function openSheet(html){$("#sheet").innerHTML=html;$("#modal").classList.add("on");}
+function closeSheet(){$("#modal").classList.remove("on");}
+$("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeSheet();});
+const CK='<svg viewBox="0 0 24 24" fill="none" stroke="#08080D" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+const CKG='<svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+/* daily pick that is stable per day */
+function daily(arr){return arr[dayIndex()%arr.length];}
+
+/* ================= AUTH ================= */
+let authMode="signup", pendingTerms=false;
+async function boot(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){$("#loader").style.display="none";renderAuth();return;}
+  await loadAccount();
+}
+sb.auth.onAuthStateChange((ev,session)=>{
+  if(ev==="SIGNED_IN" && !ME){loadAccount();}
+  if(ev==="SIGNED_OUT"){ME=null;S=null;renderAuth();}
+});
+
+async function loadAccount(){
+  $("#loader").style.display="grid";
+  try{
+    const {data:{user}}=await sb.auth.getUser();
+    if(!user){$("#loader").style.display="none";renderAuth();return;}
+    const md=user.user_metadata||{};
+    // ensure profile + subscription exist
+    await sb.rpc("alza_bootstrap",{p_full_name:md.full_name||null,p_phone:md.phone||null,p_age:md.age?parseInt(md.age):null});
+    const {data:prof}=await sb.from("alza_profiles").select("*").eq("user_id",user.id).single();
+    ME=prof||{user_id:user.id,email:user.email,is_admin:false};
+    const {data:sub}=await sb.from("alza_subscriptions").select("*").eq("user_id",user.id).single();
+    SUB=sub;
+    // load state
+    const {data:st}=await sb.from("alza_user_state").select("data").eq("user_id",user.id).single();
+    S=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), (st&&st.data)||{});
+    if(!S.ui)S.ui={tab:"panel"};
+    if(!S.addiction)S.addiction=JSON.parse(JSON.stringify(DEFAULT_STATE.addiction));
+    // content
+    const {data:ct}=await sb.from("alza_content").select("*").eq("active",true).order("sort",{ascending:true});
+    CONTENT=ct||[];
+    $("#loader").style.display="none";
+    if(hasAccess()){renderApp();} else {renderPaywall();}
+  }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderAuth();}
+}
+function hasAccess(){
+  if(ME&&ME.is_admin)return true;
+  if(!SUB)return false;
+  if(SUB.status==="active")return true;
+  if(SUB.status==="trialing"){return !SUB.trial_ends_at || new Date(SUB.trial_ends_at)>new Date();}
+  return false;
+}
+
+async function doSignup(){
+  const em=$("#a_email").value.trim(), pw=$("#a_pass").value, nm=$("#a_name").value.trim(), ph=$("#a_phone").value.trim(), ag=$("#a_age").value.trim();
+  const err=$("#a_err");
+  if(!nm){err.textContent="Escribe tu nombre.";return;}
+  if(!em||!/.+@.+\..+/.test(em)){err.textContent="Correo inválido.";return;}
+  if(pw.length<6){err.textContent="La contraseña debe tener al menos 6 caracteres.";return;}
+  if(!ag||+ag<13||+ag>120){err.textContent="Escribe una edad válida.";return;}
+  if(!pendingTerms){err.textContent="Debes aceptar los términos y el aviso de privacidad.";return;}
+  err.textContent="";
+  const btn=$("#a_btn");btn.textContent="Creando…";btn.disabled=true;
+  const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:nm,phone:ph,age:ag}}});
+  btn.disabled=false;btn.textContent="Crear cuenta";
+  if(error){err.textContent=traduce(error.message);return;}
+  if(data.session){loadAccount();}
+  else{ // needs email confirmation
+    $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
+      <div class="logo">ALZA</div>
+      <div class="card" style="margin-top:40px;text-align:center">
+        <div style="font-size:40px">📧</div>
+        <h3 style="margin:12px 0 8px">Revisa tu correo</h3>
+        <p class="dim">Te enviamos un enlace de confirmación a <b>${esc(em)}</b>. Ábrelo para activar tu cuenta y luego inicia sesión.</p>
+        <button class="pillbtn ghost" style="margin-top:16px" onclick="authMode='login';renderAuth()">Ir a iniciar sesión</button>
+      </div></div>`;
+  }
+}
+async function doLogin(){
+  const em=$("#a_email").value.trim(), pw=$("#a_pass").value, err=$("#a_err");
+  if(!em||!pw){err.textContent="Escribe tu correo y contraseña.";return;}
+  err.textContent="";
+  const btn=$("#a_btn");btn.textContent="Entrando…";btn.disabled=true;
+  const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  btn.disabled=false;btn.textContent="Entrar";
+  if(error){err.textContent=traduce(error.message);return;}
+  loadAccount();
+}
+async function doReset(){
+  const em=$("#a_email").value.trim(), err=$("#a_err");
+  if(!em){err.textContent="Escribe tu correo primero.";return;}
+  const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.href});
+  if(error){err.textContent=traduce(error.message);return;}
+  toast("Te enviamos un correo para restablecer tu contraseña.");
+}
+function traduce(m){
+  m=m||"";
+  if(/already registered|already exists/i.test(m))return "Ese correo ya tiene cuenta. Inicia sesión.";
+  if(/Invalid login/i.test(m))return "Correo o contraseña incorrectos.";
+  if(/Email not confirmed/i.test(m))return "Confirma tu correo antes de entrar (revisa tu bandeja).";
+  if(/rate limit|too many/i.test(m))return "Demasiados intentos, espera un momento.";
+  return m;
+}
+async function logout(){closeSheet();await sb.auth.signOut();}
+
+function renderAuth(){
+  const signup=authMode==="signup";
+  $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
+    <div class="logo">ALZA</div>
+    <div class="tag">Mente · Cuerpo · Alma</div>
+    <div class="tri3">
+      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">🧠</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">💪</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">✨</div><div class="n">Alma</div></div>
+    </div>
+    <div class="card">
+      <div class="tabs">
+        <button class="${signup?'on':''}" onclick="authMode='signup';renderAuth()">Crear cuenta</button>
+        <button class="${!signup?'on':''}" onclick="authMode='login';renderAuth()">Iniciar sesión</button>
+      </div>
+      ${signup?`
+        <div class="field"><label>Nombre</label><input id="a_name" autocomplete="name" placeholder="Tu nombre"></div>
+        <div class="g2">
+          <div class="field"><label>Edad</label><input id="a_age" type="number" inputmode="numeric" placeholder="Edad"></div>
+          <div class="field"><label>Teléfono</label><input id="a_phone" type="tel" autocomplete="tel" placeholder="Teléfono"></div>
+        </div>
+        <div class="field"><label>Correo</label><input id="a_email" type="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
+        <div class="field"><label>Contraseña</label><input id="a_pass" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
+        <div class="chkline">
+          <div class="chkbox ${pendingTerms?'on':''}" id="a_terms" onclick="pendingTerms=!pendingTerms;this.classList.toggle('on')">${CK}</div>
+          <div>Acepto los <span class="link" onclick="showTerms()">Términos</span> y el <span class="link" onclick="showPrivacy()">Aviso de Privacidad</span>. Entiendo que ALZA <b>no es consejo médico</b>.</div>
+        </div>
+        <div class="err" id="a_err"></div>
+        <button class="pillbtn primary" id="a_btn" onclick="doSignup()">Crear cuenta</button>
+      `:`
+        <div class="field"><label>Correo</label><input id="a_email" type="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
+        <div class="field"><label>Contraseña</label><input id="a_pass" type="password" autocomplete="current-password" placeholder="Tu contraseña"></div>
+        <div class="err" id="a_err"></div>
+        <button class="pillbtn primary" id="a_btn" onclick="doLogin()">Entrar</button>
+        <div style="text-align:center;margin-top:12px"><span class="link" onclick="doReset()">Olvidé mi contraseña</span></div>
+      `}
+    </div>
+    <div class="fine">Al continuar aceptas nuestros términos. ALZA es una herramienta de desarrollo personal y bienestar; no sustituye atención médica ni psicológica profesional.</div>
+  </div>`;
+}
+
+/* ================= PAYWALL ================= */
+function renderPaywall(){
+  const trialOver = SUB && SUB.status==="trialing" && SUB.trial_ends_at && new Date(SUB.trial_ends_at)<=new Date();
+  $("#app").innerHTML=`<div class="pw">
+    <div class="logo" style="font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">ALZA</div>
+    <h2 style="margin-top:20px">${trialOver?'Tu prueba terminó':'Activa tu membresía'}</h2>
+    <p class="dim" style="margin-top:8px">Sigue construyendo tu mejor versión — Mente, Cuerpo y Alma, todos los días.</p>
+    <div class="card" style="margin-top:20px">
+      <div class="price">$—<span style="font-size:16px;color:var(--dim)"> /mes</span></div>
+      <div class="feat">
+        <div class="f"><span class="ck">${CKG}</span> Sistema diario de hábitos por pilar</div>
+        <div class="f"><span class="ck">${CKG}</span> Nutrición y seguimiento de composición</div>
+        <div class="f"><span class="ck">${CKG}</span> Videos y afirmaciones diarias curadas</div>
+        <div class="f"><span class="ck">${CKG}</span> Módulo de apoyo contra adicciones</div>
+      </div>
+      <button class="pillbtn primary" onclick="startCheckout()">Activar membresía</button>
+    </div>
+    <div style="margin-top:14px"><span class="link" onclick="settingsSheet()">Mi cuenta</span> · <span class="link" onclick="logout()">Cerrar sesión</span></div>
+  </div>`;
+}
+function startCheckout(){
+  // Se conecta con Stripe cuando estén las llaves. Por ahora informa.
+  toast("Pagos en línea en configuración — te avisamos pronto.");
+}
+
+/* ================= APP SHELL ================= */
+function go(tab){S.ui.tab=tab;save();render();window.scrollTo(0,0);}
+function render(){
+  if(!S)return;
+  const tab=S.ui.tab||"panel";
+  let body="";
+  if(tab==="panel")body=viewPanel();
+  else if(tab==="mente")body=viewPillar("mente");
+  else if(tab==="cuerpo")body=viewCuerpo();
+  else if(tab==="alma")body=viewPillar("alma");
+  else if(tab==="apoyo")body=viewApoyo();
+  else if(tab==="admin")body=viewAdmin();
+  $("#app").innerHTML=`
+    <div class="appbar"><div class="brand">ALZA</div>
+      <button class="iconbtn" onclick="settingsSheet()">⚙</button></div>
+    <div class="view">${body}</div>
+    ${navBar(tab)}`;
+}
+function navBar(tab){
+  const item=(id,cls,label,svg)=>`<button class="${cls} ${tab===id?'on':''}" onclick="go('${id}')">${svg}<span>${label}</span></button>`;
+  return `<div class="nav">
+    ${item("panel","panel","Panel",'<svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>')}
+    ${item("mente","mente","Mente",'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>')}
+    ${item("cuerpo","cuerpo","Cuerpo",'<svg viewBox="0 0 24 24"><path d="M20 12h-4l-3 9L9 3l-3 9H2"/></svg>')}
+    ${item("alma","alma","Alma",'<svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>')}
+    ${item("apoyo","apoyo","Apoyo",'<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 000-7.8z"/></svg>')}
+  </div>`;
+}
+
+/* ---- PANEL ---- */
+function pillarPct(p){const hs=S.habits.filter(h=>h.pillar===p);if(!hs.length)return 0;const r=getDay().ritual;const done=hs.filter(h=>r[h.id]).length;return done/hs.length;}
+function viewPanel(){
+  const d=new Date();const dd=d.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
+  const q=daily(SEED_QUOTES);
+  const aff=CONTENT.filter(c=>c.kind==="affirmation");
+  const affTxt = aff.length ? aff[dayIndex()%aff.length].body : daily(SEED_AFF);
+  const v=daily(SEED_VERSES);
+  return `
+  <div class="greetband slim"><div class="warmglow"></div>
+    <div class="day">${dd}</div>
+    <div class="hi">Hola, <span class="nm">${esc((ME.full_name||"").split(" ")[0]||"")}</span></div>
+  </div>
+  ${stageTriangle()}
+  <div class="card" style="border-color:rgba(47,209,198,.25);background:linear-gradient(180deg,rgba(47,209,198,.10),var(--ink2))">
+    <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
+    <div class="serif" style="font-style:italic;font-size:18px;margin-top:8px;color:#E8FBF8">"${esc(affTxt)}"</div>
+  </div>
+  <div class="quote"><div class="q">${esc(q.t)}</div><div class="att">— ${esc(q.a)}</div></div>
+  <div style="height:12px"></div>
+  <div class="verse"><div class="q">${esc(v.t)}</div><b>${esc(v.r)}</b></div>`;
+}
+function stageTriangle(){
+  const P={mente:pillarPct("mente"),cuerpo:pillarPct("cuerpo"),alma:pillarPct("alma")};
+  const overall=Math.round((P.mente+P.cuerpo+P.alma)/3*100);
+  const R=30,C=2*Math.PI*R;
+  const ring=(cx,cy,pct,col,lab)=>{
+    const off=C*(1-pct);
+    return `<circle class="track" cx="${cx}" cy="${cy}" r="${R}"/>
+      <circle class="pr" cx="${cx}" cy="${cy}" r="${R}" stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${off}"/>
+      <text class="n-lab" x="${cx}" y="${cy-2}" font-size="15" fill="${col}">${Math.round(pct*100)}</text>
+      <text class="n-pct" x="${cx}" y="${cy+13}" font-size="8">${lab}</text>`;
+  };
+  return `<div class="stage"><svg viewBox="0 0 340 250">
+    <defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7B5CFF"/><stop offset="0.5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
+    <path class="flow" d="M170 40 L70 200 L270 200 Z"/>
+    ${ring(170,54,P.mente,"#7B5CFF","MENTE")}
+    ${ring(74,196,P.cuerpo,"#43D6A0","CUERPO")}
+    ${ring(266,196,P.alma,"#FFC15E","ALMA")}
+    <text class="core-num" x="170" y="150" font-size="34">${overall}%</text>
+    <text class="core-cap" x="170" y="168" fill="var(--dim)">HOY</text>
+  </svg></div>`;
+}
+
+/* ---- PILLAR (mente / alma) ---- */
+function toggleHabit(id){const r=getDay().ritual;r[id]=!r[id];save();render();}
+function viewPillar(p){
+  const P=PILLARS[p];const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
+  const vids=CONTENT.filter(c=>c.kind==="video"&&c.section===p);
+  return `
+  <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
+    <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2>
+    <div class="sub">${P.sub}</div>
+  </div>
+  <div class="sec-title">Ritual de hoy</div>
+  ${hs.map(h=>`<div class="task ${r[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
+    <div class="box">${CK}</div><div class="em">${h.em}</div><div class="lbl">${esc(h.lbl)}</div></div>`).join("")}
+  <div class="sec-title">Videos recomendados</div>
+  ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}
+  ${p==="alma"?almaExtra():""}`;
+}
+function almaExtra(){
+  const v=daily(SEED_VERSES);
+  return `<div class="sec-title">Palabra del día</div>
+  <div class="verse"><div class="q">${esc(v.t)}</div><b>${esc(v.r)}</b></div>`;
+}
+function videoRow(v){
+  const yid=ytId(v.url);
+  const thumb=yid?`<img src="https://i.ytimg.com/vi/${yid}/mqdefault.jpg" alt="">`:"";
+  return `<div class="vid" onclick="playVideo('${esc(v.url)}','${esc((v.title||'').replace(/'/g,''))}')">
+    <div class="thumb">${thumb}<span class="play">▶</span></div>
+    <div><div class="cat">${esc(v.section||'')}</div><div class="t">${esc(v.title||v.url)}</div></div></div>`;
+}
+function ytId(u){if(!u)return"";const m=u.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{6,})/);return m?m[1]:"";}
+function playVideo(url,title){const yid=ytId(url);
+  if(yid){$("#vpframe").innerHTML=`<iframe src="https://www.youtube.com/embed/${yid}?autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>`;
+    $("#vptitle").textContent=title||"";$("#vplayer").classList.add("on");}
+  else{window.open(url,"_blank");}
+}
+function closeVideo(){$("#vplayer").classList.remove("on");$("#vpframe").innerHTML="";}
+
+/* ---- CUERPO ---- */
+function viewCuerpo(){
+  const P=PILLARS.cuerpo;const hs=S.habits.filter(h=>h.pillar==="cuerpo");const r=getDay().ritual;
+  const g=S.goals;const eaten=(S.foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p,c:a.c+ +f.c,f:a.f+ +f.f}),{kc:0,p:0,c:0,f:0});
+  const bar=(lbl,val,goal,col)=>{const pct=goal?Math.min(100,val/goal*100):0;return `<div class="macrobar"><div class="r"><span>${lbl}</span><span>${Math.round(val)} / ${goal} g</span></div><div class="bar"><i style="width:${pct}%;background:${col}"></i></div></div>`;};
+  const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
+  return `
+  <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
+    <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2><div class="sub">${P.sub}</div>
+  </div>
+  <div class="sec-title">Ritual de hoy</div>
+  ${hs.map(h=>`<div class="task ${r[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
+    <div class="box">${CK}</div><div class="em">${h.em}</div><div class="lbl">${esc(h.lbl)}</div></div>`).join("")}
+  <div class="sec-title">Nutrición · hoy</div>
+  <div class="card">
+    <div class="row" style="margin-bottom:12px"><div><div class="eye">Calorías</div><div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:30px">${Math.round(eaten.kc)} <small class="dim" style="font-size:14px">/ ${g.kcal}</small></div></div>
+      <button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
+    ${bar("Proteína",eaten.p,g.p,"var(--cuerpo)")}
+    ${bar("Carbohidratos",eaten.c,g.c,"var(--gold)")}
+    ${bar("Grasas",eaten.f,g.f,"var(--magenta)")}
+    ${(S.foods||[]).length?`<div style="margin-top:8px">${S.foods.map((f,i)=>`<div class="row" style="padding:9px 0;border-top:1px solid var(--line)"><div style="flex:1">${esc(f.n)}<div class="mono dim" style="font-size:11px">${f.p}P · ${f.c}C · ${f.f}G</div></div><div class="mono">${f.kc} kcal</div><button class="del" onclick="rmFood(${i})" style="color:var(--dim);width:28px">✕</button></div>`).join("")}</div>`:'<div class="empty">Agrega tu primera comida del día.</div>'}
+    <div style="text-align:center;margin-top:10px"><span class="link" onclick="goalsSheet()">Editar mis metas</span></div>
+  </div>
+  <div class="sec-title">Wearable</div>
+  <div class="card"><div class="row"><div><b>Conectar dispositivo</b><div class="dim" style="font-size:13px">WHOOP y otros — próximamente. Opcional.</div></div><span class="badge">Pronto</span></div></div>
+  <div class="sec-title">Videos recomendados</div>
+  ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}`;
+}
+function addFoodSheet(){openSheet(`<h3>Agregar comida</h3>
+  <div class="field"><label>Alimento</label><input id="f_n" placeholder="Ej. Pechuga de pollo"></div>
+  <div class="g2"><div class="field"><label>Calorías</label><input id="f_kc" type="number" inputmode="numeric" placeholder="kcal"></div>
+  <div class="field"><label>Proteína (g)</label><input id="f_p" type="number" inputmode="decimal" placeholder="P"></div></div>
+  <div class="g2"><div class="field"><label>Carbos (g)</label><input id="f_c" type="number" inputmode="decimal" placeholder="C"></div>
+  <div class="field"><label>Grasas (g)</label><input id="f_f" type="number" inputmode="decimal" placeholder="G"></div></div>
+  <button class="pillbtn primary" onclick="addFood()">Agregar</button>`);}
+function addFood(){const n=$("#f_n").value.trim();if(!n){toast("Escribe el alimento");return;}
+  if(!S.foods)S.foods=[];
+  S.foods.push({n,kc:+$("#f_kc").value||0,p:+$("#f_p").value||0,c:+$("#f_c").value||0,f:+$("#f_f").value||0});
+  save();closeSheet();render();}
+function rmFood(i){S.foods.splice(i,1);save();render();}
+function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
+  <div class="g2"><div class="field"><label>Calorías</label><input id="g_kc" type="number" value="${g.kcal}"></div>
+  <div class="field"><label>Proteína (g)</label><input id="g_p" type="number" value="${g.p}"></div></div>
+  <div class="g2"><div class="field"><label>Carbos (g)</label><input id="g_c" type="number" value="${g.c}"></div>
+  <div class="field"><label>Grasas (g)</label><input id="g_f" type="number" value="${g.f}"></div></div>
+  <button class="pillbtn primary" onclick="saveGoals()">Guardar</button>`);}
+function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
+
+/* ---- APOYO (adicciones) ---- */
+function viewApoyo(){
+  const a=S.addiction;
+  if(!a.enabled){
+    return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
+      <div class="em">🫂</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Un día a la vez. Aquí encuentras herramientas para mantenerte firme.</div></div>
+      <div class="card"><p>Este espacio te ayuda a llevar tu sobriedad: cuenta tus días limpios, recibe una afirmación diaria, un ejercicio SOS cuando llegue el antojo y una bitácora de lo que te detona.</p>
+      <button class="pillbtn primary" style="margin-top:10px" onclick="startAddiction()">Empezar mi seguimiento</button>
+      <div class="dim" style="font-size:12px;margin-top:12px;text-align:center">Esto es apoyo de acompañamiento, no tratamiento médico. Si estás en crisis, busca ayuda profesional.</div></div>`;
+  }
+  const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;
+  const aff=daily(SEED_AFF);
+  return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
+    <div class="em">🫂</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
+  <div class="card" style="text-align:center;padding:24px 16px">
+    <div class="eye" style="color:var(--teal)">Días limpio</div>
+    <div class="bignum">${days}</div>
+    <div class="dim" style="font-size:13px;margin-top:4px">Mejor racha: ${a.best||days} días · desde ${a.since?new Date(a.since).toLocaleDateString("es-MX"):"hoy"}</div>
+    <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Reiniciar contador</button>
+  </div>
+  <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
+  <div class="card" style="border-color:rgba(47,209,198,.25);margin-top:12px">
+    <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
+    <div class="serif" style="font-style:italic;font-size:17px;margin-top:8px">"${esc(aff)}"</div>
+  </div>
+  <div class="sec-title">Bitácora de detonantes</div>
+  <div class="card">
+    <button class="chip" onclick="triggerSheet()">+ Anotar un detonante</button>
+    ${(a.triggers||[]).length?a.triggers.slice().reverse().map(t=>`<div class="trg"><div><b>${esc(t.what)}</b>${t.how?`<div class="dim" style="font-size:13px">${esc(t.how)}</div>`:""}</div><div class="dt">${new Date(t.at).toLocaleDateString("es-MX")}</div></div>`).join(""):'<div class="empty">Anota qué te detona y cómo lo superaste para ver tus patrones.</div>'}
+  </div>`;
+}
+function startAddiction(){openSheet(`<h3>Empezar mi seguimiento</h3>
+  <div class="field"><label>¿Qué quieres dejar? (privado)</label><input id="ad_l" placeholder="Ej. alcohol, azúcar, nicotina…"></div>
+  <div class="field"><label>¿Desde qué fecha estás limpio?</label><input id="ad_d" type="date" value="${todayKey()}"></div>
+  <button class="pillbtn primary" onclick="saveAddiction()">Empezar</button>
+  <div class="dim" style="font-size:12px;margin-top:10px;text-align:center">Solo tú ves esta información.</div>`);}
+function saveAddiction(){const l=$("#ad_l").value.trim();const d=$("#ad_d").value||todayKey();
+  S.addiction.enabled=true;S.addiction.label=l;S.addiction.since=d;S.addiction.best=Math.floor((Date.now()-new Date(d))/864e5)||0;
+  save();closeSheet();render();toast("Vamos contigo 💪");}
+function resetClean(){openSheet(`<h3>Reiniciar contador</h3><p class="dim">Una recaída no borra tu progreso. Volver a empezar es de valientes. ¿Reiniciamos desde hoy?</p>
+  <button class="pillbtn primary" style="margin-top:12px" onclick="doReset2()">Sí, reiniciar desde hoy</button>
+  <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
+function doReset2(){const a=S.addiction;const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;if(days>(a.best||0))a.best=days;a.since=todayKey();save();closeSheet();render();}
+function sosSheet(){S.addiction.sos=(S.addiction.sos||0)+1;save();
+  openSheet(`<h3>Respira. Esto va a pasar.</h3>
+  <div class="card" style="border-color:rgba(47,209,198,.3)"><b>1 · Respiración 4-7-8</b><div class="dim" style="font-size:14px;margin-top:4px">Inhala 4s, sostén 7s, exhala 8s. Repite 4 veces. El antojo es una ola — sube y baja en minutos.</div></div>
+  <div class="card"><b>2 · Recuerda tu porqué</b><div class="dim" style="font-size:14px;margin-top:4px">${esc(daily(SEED_AFF))}</div></div>
+  <div class="card"><b>3 · Cambia de escena</b><div class="dim" style="font-size:14px;margin-top:4px">Levántate, toma agua, sal a caminar 5 minutos o llama a alguien de confianza.</div></div>
+  <button class="pillbtn primary" onclick="closeSheet();toast('Lo lograste. Un momento a la vez.')">Ya estoy mejor</button>`);}
+function triggerSheet(){openSheet(`<h3>Anotar detonante</h3>
+  <div class="field"><label>¿Qué lo detonó?</label><input id="tg_w" placeholder="Ej. estrés, una fiesta, aburrimiento"></div>
+  <div class="field"><label>¿Cómo lo superaste? (opcional)</label><textarea id="tg_h" placeholder="Qué hiciste para resistir"></textarea></div>
+  <button class="pillbtn primary" onclick="saveTrigger()">Guardar</button>`);}
+function saveTrigger(){const w=$("#tg_w").value.trim();if(!w){toast("Escribe el detonante");return;}
+  if(!S.addiction.triggers)S.addiction.triggers=[];
+  S.addiction.triggers.push({what:w,how:$("#tg_h").value.trim(),at:Date.now()});
+  save();closeSheet();render();}
+
+/* ---- ADMIN ---- */
+function viewAdmin(){
+  if(!ME.is_admin)return '<div class="empty">Sin acceso.</div>';
+  const vids=CONTENT.filter(c=>c.kind==="video"),affs=CONTENT.filter(c=>c.kind==="affirmation");
+  return `<div class="ph" style="background:linear-gradient(180deg,#5B49C922,var(--ink2))"><div class="em">🛠️</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
+  <div class="sec-title">Videos recomendados</div>
+  <button class="chip" onclick="videoSheet()">+ Agregar video</button>
+  <div style="margin-top:10px">${vids.length?vids.map(v=>`<div class="adm"><div class="row"><div style="flex:1"><span class="badge">${esc(v.section||'general')}</span> ${esc(v.title||v.url)}</div><button class="del" onclick="delContent('${v.id}')">Borrar</button></div></div>`).join(""):'<div class="empty">Sin videos aún.</div>'}</div>
+  <div class="sec-title">Afirmaciones diarias</div>
+  <button class="chip" onclick="affSheet()">+ Agregar afirmación</button>
+  <div style="margin-top:10px">${affs.length?affs.map(a=>`<div class="adm"><div class="row"><div style="flex:1">"${esc(a.body)}"</div><button class="del" onclick="delContent('${a.id}')">Borrar</button></div></div>`).join(""):'<div class="empty">Se usan las afirmaciones por defecto.</div>'}</div>`;
+}
+function videoSheet(){openSheet(`<h3>Agregar video</h3>
+  <div class="field"><label>Sección</label><select id="v_sec"><option value="mente">Mente</option><option value="cuerpo">Cuerpo</option><option value="alma">Alma</option><option value="adiccion">Apoyo</option></select></div>
+  <div class="field"><label>Título</label><input id="v_t" placeholder="Título del video"></div>
+  <div class="field"><label>Link (YouTube)</label><input id="v_u" placeholder="https://youtu.be/…"></div>
+  <button class="pillbtn primary" onclick="addContent('video')">Guardar</button>`);}
+function affSheet(){openSheet(`<h3>Agregar afirmación</h3>
+  <div class="field"><label>Texto</label><textarea id="af_b" placeholder="Una frase de apoyo o motivación"></textarea></div>
+  <button class="pillbtn primary" onclick="addContent('affirmation')">Guardar</button>`);}
+async function addContent(kind){
+  let row={kind,active:true,created_by:ME.user_id,sort:Date.now()%100000};
+  if(kind==="video"){row.section=$("#v_sec").value;row.title=$("#v_t").value.trim();row.url=$("#v_u").value.trim();if(!row.url){toast("Falta el link");return;}}
+  else{row.body=$("#af_b").value.trim();if(!row.body){toast("Escribe la afirmación");return;}}
+  const {data,error}=await sb.from("alza_content").insert(row).select().single();
+  if(error){toast("Error: "+error.message);return;}
+  CONTENT.push(data);closeSheet();render();toast("Agregado");
+}
+async function delContent(id){
+  const {error}=await sb.from("alza_content").delete().eq("id",id);
+  if(error){toast("Error: "+error.message);return;}
+  CONTENT=CONTENT.filter(c=>c.id!==id);render();
+}
+
+/* ---- SETTINGS ---- */
+function settingsSheet(){
+  const trial = SUB&&SUB.status==="trialing"&&SUB.trial_ends_at ? `Prueba hasta ${new Date(SUB.trial_ends_at).toLocaleDateString("es-MX")}` : (SUB&&SUB.status==="active"?"Membresía activa":"Sin membresía");
+  openSheet(`<h3>Mi cuenta</h3>
+  <div class="card tight"><div><b>${esc(ME.full_name||"")}</b></div><div class="dim" style="font-size:13px">${esc(ME.email||"")}</div><div class="mono" style="font-size:11px;margin-top:6px;color:var(--gold)">${trial}</div></div>
+  <button class="pillbtn ghost" onclick="closeSheet();go('cuerpo')">🥗 Mis metas y nutrición</button>
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="closeSheet();installSheet()">📲 Instalar en mi teléfono</button>
+  ${ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="closeSheet();go('admin')">🛠️ Panel de admin</button>`:""}
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="logout()" style="color:var(--coral)">Cerrar sesión</button>`);}
+
+function installSheet(){
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  openSheet(`<h3>Instalar ALZA</h3>
+  <p class="dim" style="margin-bottom:14px">Agrégala a tu pantalla de inicio para abrirla como una app, a pantalla completa.</p>
+  ${ios?`
+    <div class="step"><div class="no">1</div><div class="tx">Toca el botón <b>Compartir</b> ⬆️ en la barra de Safari.</div></div>
+    <div class="step"><div class="no">2</div><div class="tx">Desliza y elige <b>"Agregar a inicio"</b>.</div></div>
+    <div class="step"><div class="no">3</div><div class="tx">Toca <b>Agregar</b>. Listo — ALZA aparece en tu pantalla.</div></div>
+  `:`
+    <div class="step"><div class="no">1</div><div class="tx">Toca el menú <b>⋮</b> arriba a la derecha de Chrome.</div></div>
+    <div class="step"><div class="no">2</div><div class="tx">Elige <b>"Instalar app"</b> o <b>"Agregar a pantalla principal"</b>.</div></div>
+    <div class="step"><div class="no">3</div><div class="tx">Confirma. ALZA queda en tu pantalla de inicio.</div></div>
+  `}
+  <button class="pillbtn primary" style="margin-top:8px" onclick="closeSheet()">Entendido</button>`);}
+
+function showTerms(){openSheet(`<h3>Términos de uso</h3><div class="dim" style="font-size:13.5px;line-height:1.6">
+  <p>ALZA es una herramienta de desarrollo personal, hábitos y bienestar. Al usarla aceptas usarla de forma personal y responsable.</p>
+  <p><b>No es consejo médico.</b> El contenido (nutrición, ejercicio, apoyo emocional, módulo de adicciones) es informativo y de acompañamiento; no sustituye la atención de un médico, nutriólogo o profesional de salud mental. Consulta siempre a un profesional antes de cambiar tu dieta, ejercicio o tratamiento.</p>
+  <p><b>Emergencias.</b> Si estás en crisis o en peligro, contacta servicios de emergencia o una línea de ayuda local de inmediato.</p>
+  <p>La membresía es personal e intransferible. Nos reservamos el derecho de suspender cuentas que compartan acceso.</p></div>
+  <button class="pillbtn primary" style="margin-top:12px" onclick="closeSheet();renderAuth&&(authMode==='signup')&&renderAuth()">Cerrar</button>`);}
+function showPrivacy(){openSheet(`<h3>Aviso de privacidad</h3><div class="dim" style="font-size:13.5px;line-height:1.6">
+  <p>Recolectamos tu nombre, correo, teléfono y edad para crear y administrar tu cuenta, y los datos que tú ingreses (hábitos, nutrición, notas, seguimiento de bienestar) para darte el servicio.</p>
+  <p>Tus datos de salud y notas personales son <b>privados</b>: se guardan asociados solo a tu cuenta y no se muestran a otros usuarios.</p>
+  <p>No vendemos tu información. Usamos servicios de terceros (autenticación, pagos) solo para operar la app.</p>
+  <p>Puedes solicitar la eliminación de tu cuenta y tus datos en cualquier momento.</p></div>
+  <button class="pillbtn primary" style="margin-top:12px" onclick="closeSheet()">Cerrar</button>`);}
+
+/* ================= START ================= */
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+boot();
+</script>
