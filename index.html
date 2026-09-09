@@ -162,6 +162,61 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .chkbox.on{background:var(--gold);border-color:var(--gold)}
 .chkbox svg{width:13px;height:13px;opacity:0}.chkbox.on svg{opacity:1}
 
+/* LANDING */
+.land-feats{margin:22px 0 20px;display:flex;flex-direction:column;gap:12px}
+.lfeat{display:flex;gap:13px;align-items:flex-start;text-align:left}
+.lfeat .le{font-size:24px;flex:none;width:30px;text-align:center}
+.lfeat .lt{font-weight:600;font-size:15.5px;color:var(--tx)}
+.lfeat .ld{color:var(--mid);font-size:13.5px;line-height:1.4;margin-top:2px}
+
+/* ONBOARDING */
+.ob{max-width:460px;margin:0 auto;min-height:100%;padding:calc(20px + env(safe-area-inset-top)) 22px 40px}
+.ob-prog{height:6px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-bottom:24px}
+.ob-prog>i{display:block;height:100%;background:var(--sunh);border-radius:99px;transition:width .5s}
+.ob-hero{text-align:center;padding:8px 0}
+.ob-em{font-size:52px}
+.ob-head{margin-bottom:14px}
+.ob-pillars{margin:22px 0}
+.ob-p{display:flex;gap:13px;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin-bottom:10px}
+.ob-p .obp-e{font-size:26px;flex:none}
+.ob-hab{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:12px;margin-bottom:8px;cursor:pointer;opacity:.5;transition:.15s}
+.ob-hab.on{opacity:1;border-color:var(--line2)}
+.ob-hab .obh-e{font-size:19px;flex:none}
+.ob-hab .obh-l{flex:1;font-size:15px}
+.ob-hab .obh-c{width:22px;height:22px;border-radius:6px;border:1.6px solid var(--dim);flex:none;display:grid;place-items:center}
+.ob-hab.on .obh-c{background:var(--green);border-color:var(--green)}
+.ob-hab .obh-c svg{width:13px;height:13px}
+.ob .pillbtn{margin-top:6px}
+
+/* HABIT EDIT */
+.addfood{width:100%;margin-top:8px;border:1px dashed var(--line2);border-radius:12px;padding:12px;background:transparent;font-family:"JetBrains Mono";font-size:12.5px;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:7px}
+.addfood:active{transform:scale(.99)}
+.iconpick{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.iconpick button{aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--mid);display:grid;place-items:center;font-size:18px}
+.iconpick button.on{border-color:var(--gold);background:rgba(255,193,94,.12)}
+
+/* PROGRESS / STREAK */
+.momentum{border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(242,149,75,.12),var(--ink2));padding:16px 16px 14px;margin-bottom:14px;box-shadow:0 22px 46px -40px #000}
+.momentum .mt{display:flex;align-items:center;justify-content:space-between}
+.momentum .flame{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;display:flex;align-items:center;gap:8px}
+.momentum .flame small{font-size:13px;color:var(--mid);font-weight:600}
+.momentum .goaltxt{font-family:"Fraunces";font-style:italic;font-size:14.5px;color:var(--golds);margin-top:10px;line-height:1.4}
+.week{display:flex;justify-content:space-between;gap:6px;margin-top:14px}
+.week .d{flex:1;text-align:center}
+.week .dot{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;display:grid;place-items:center;border:1.5px solid var(--line);font-size:12px}
+.week .dot.full{background:var(--green);border-color:var(--green);color:#05261a}
+.week .dot.part{border-color:var(--amber);color:var(--amber)}
+.week .dl{font-family:"JetBrains Mono";font-size:9px;color:var(--dim);text-transform:uppercase}
+.week .dot.today{box-shadow:0 0 0 2px var(--gold)}
+
+/* MEDALLAS */
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.badge2{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:13px 6px;text-align:center;opacity:.4;transition:.2s}
+.badge2.earned{opacity:1;border-color:rgba(47,209,198,.4);background:linear-gradient(180deg,rgba(47,209,198,.12),var(--ink2))}
+.badge2 .be{font-size:24px}
+.badge2 .bn{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;margin-top:3px}
+.badge2 .bl{font-family:"JetBrains Mono";font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+
 /* PAYWALL */
 .pw{max-width:440px;margin:0 auto;padding:calc(40px + env(safe-area-inset-top)) 22px 40px;text-align:center}
 .pw .price{font-family:"Bricolage Grotesque";font-weight:800;font-size:44px;margin:8px 0}
@@ -259,14 +314,16 @@ const PILLARS={
 
 /* ================= STATE ================= */
 const DEFAULT_STATE={
+  onboarded:false, goalText:"",
   habits:JSON.parse(JSON.stringify(SEED_HABITS)),
   goals:{kcal:2000,p:150,c:200,f:60},
   days:{}, foods:[],
   inbody:{weight:{c:null,p:null},smm:{c:null,p:null},pbf:{c:null,p:null}},
-  addiction:{enabled:false,label:"",since:null,best:0,triggers:[],sos:0},
+  addiction:{enabled:false,label:"",since:null,best:0,triggers:[],sos:0,plan:{why:"",trigger:"",action:"",contact:""}},
   bible:{streak:0,lastRead:null},
   ui:{tab:"panel"}
 };
+const EMOJIS=["📖","🎯","✍️","🧠","📚","🎧","🏋️","🥗","💧","😴","🏃","🚶","🧘","🙏","🕊️","❤️","☀️","🌙","💊","🚭","🍎","💪","⚡","🔥","✨","🎵","💤","🧊","📝","💵"];
 let S=null;          // user state (jsonb)
 let ME=null;         // {user_id,email,full_name,is_admin,...}
 let SUB=null;        // subscription row
@@ -299,19 +356,19 @@ function daily(arr){return arr[dayIndex()%arr.length];}
 let authMode="signup", pendingTerms=false;
 async function boot(){
   const {data:{session}}=await sb.auth.getSession();
-  if(!session){$("#loader").style.display="none";renderAuth();return;}
+  if(!session){$("#loader").style.display="none";renderLanding();return;}
   await loadAccount();
 }
 sb.auth.onAuthStateChange((ev,session)=>{
   if(ev==="SIGNED_IN" && !ME){loadAccount();}
-  if(ev==="SIGNED_OUT"){ME=null;S=null;renderAuth();}
+  if(ev==="SIGNED_OUT"){ME=null;S=null;renderLanding();}
 });
 
 async function loadAccount(){
   $("#loader").style.display="grid";
   try{
     const {data:{user}}=await sb.auth.getUser();
-    if(!user){$("#loader").style.display="none";renderAuth();return;}
+    if(!user){$("#loader").style.display="none";renderLanding();return;}
     const md=user.user_metadata||{};
     // ensure profile + subscription exist
     await sb.rpc("alza_bootstrap",{p_full_name:md.full_name||null,p_phone:md.phone||null,p_age:md.age?parseInt(md.age):null});
@@ -328,8 +385,10 @@ async function loadAccount(){
     const {data:ct}=await sb.from("alza_content").select("*").eq("active",true).order("sort",{ascending:true});
     CONTENT=ct||[];
     $("#loader").style.display="none";
-    if(hasAccess()){render();} else {renderPaywall();}
-  }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderAuth();}
+    if(!hasAccess()){renderPaywall();return;}
+    if(!S.onboarded){renderOnboarding();return;}
+    render();
+  }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderLanding();}
 }
 function hasAccess(){
   if(ME&&ME.is_admin)return true;
@@ -386,9 +445,81 @@ function traduce(m){
 }
 async function logout(){closeSheet();await sb.auth.signOut();}
 
+function goAuth(mode){authMode=mode;renderAuth();window.scrollTo(0,0);}
+function renderLanding(){
+  $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
+    <div style="height:calc(18px + env(safe-area-inset-top))"></div>
+    <div class="logo">ALZA</div>
+    <div class="tag">Construye tu mejor versión, un día a la vez.</div>
+    <div class="tri3">
+      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">🧠</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">💪</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">✨</div><div class="n">Alma</div></div>
+    </div>
+    <div class="land-feats">
+      ${landFeat("🔥","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
+      ${landFeat("🥗","Cuerpo y nutrición","Lleva tus macros, tu composición y tu energía.")}
+      ${landFeat("🫂","Apoyo real","Un módulo para cuidar tu sobriedad, día a día.")}
+      ${landFeat("✨","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
+    </div>
+    <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Empezar gratis</button>
+    <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya tengo cuenta</button>
+    <div class="fine">14 días de prueba gratis. ALZA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
+  </div>`;
+}
+function landFeat(em,t,d){return `<div class="lfeat"><div class="le">${em}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
+
+function renderOnboarding(){
+  if(!S._ob)S._ob={step:0,picked:{}};
+  const step=S._ob.step;
+  let body="";
+  if(step===0){
+    body=`<div class="ob-hero"><div class="ob-em">🔺</div>
+      <h2 style="font-size:26px;margin-top:10px">Bienvenido a ALZA</h2>
+      <p class="dim" style="margin-top:8px;font-size:15px">Tu vida se sostiene en tres pilares. Cuando los tres avanzan, tú avanzas.</p></div>
+      <div class="ob-pillars">
+        <div class="ob-p" style="border-color:rgba(123,92,255,.35)"><div class="obp-e">🧠</div><div><b style="color:var(--mente)">Mente</b><div class="dim" style="font-size:13px">Mentalidad, foco y aprendizaje.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(67,214,160,.35)"><div class="obp-e">💪</div><div><b style="color:var(--cuerpo)">Cuerpo</b><div class="dim" style="font-size:13px">Nutrición, energía y descanso.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(255,193,94,.35)"><div class="obp-e">✨</div><div><b style="color:var(--alma)">Alma</b><div class="dim" style="font-size:13px">Fe, calma y propósito.</div></div></div>
+      </div>
+      <button class="pillbtn primary" onclick="obNext()">Continuar</button>`;
+  } else if(step===1){
+    const pk=S._ob.picked;
+    const groups=["mente","cuerpo","alma"].map(p=>{
+      const items=SEED_HABITS.filter(h=>h.pillar===p).concat((S.habits||[]).filter(h=>h.pillar===p&&!SEED_HABITS.find(s=>s.id===h.id)));
+      return `<div class="sec-title" style="color:${PILLARS[p].color}">${PILLARS[p].em} ${PILLARS[p].name}</div>
+        ${items.map(h=>`<div class="ob-hab ${pk[h.id]!==false?'on':''}" onclick="obTog('${h.id}')"><div class="obh-e">${h.em||"•"}</div><div class="obh-l">${esc(h.lbl)}</div><div class="obh-c">${pk[h.id]!==false?CK:''}</div></div>`).join("")}`;
+    }).join("");
+    body=`<div class="ob-head"><h2 style="font-size:23px">Elige tu ritual</h2><p class="dim" style="font-size:14px;margin-top:4px">Marca los hábitos que quieres seguir. Podrás cambiarlos cuando quieras.</p></div>
+      ${groups}
+      <button class="pillbtn primary" style="margin-top:14px" onclick="obNext()">Continuar</button>`;
+  } else {
+    body=`<div class="ob-hero"><div class="ob-em">🎯</div>
+      <h2 style="font-size:24px;margin-top:10px">¿Cuál es tu meta?</h2>
+      <p class="dim" style="margin-top:8px;font-size:15px">Una frase que te recuerde por qué empiezas. La verás cada día.</p></div>
+      <div class="field" style="margin-top:16px"><textarea id="ob_goal" placeholder="Ej. Ser más fuerte, disciplinado y presente para mi familia." style="min-height:110px">${esc(S.goalText||"")}</textarea></div>
+      <button class="pillbtn primary" onclick="obFinish()">Empezar mi camino</button>
+      <button class="pillbtn ghost" style="margin-top:8px" onclick="obFinish()">Saltar por ahora</button>`;
+  }
+  $("#app").innerHTML=`<div class="ob">
+    <div class="ob-prog"><i style="width:${(step/2)*100}%"></i></div>
+    ${body}</div>`;
+}
+function obNext(){
+  if(S._ob.step===1){ // apply habit picks
+    const pk=S._ob.picked;
+    S.habits=(S.habits||[]).filter(h=>pk[h.id]!==false);
+  }
+  S._ob.step++;render_ob();
+}
+function obTog(id){const pk=S._ob.picked;pk[id]=pk[id]===false?true:false;render_ob();}
+function render_ob(){renderOnboarding();window.scrollTo(0,0);}
+function obFinish(){const g=$("#ob_goal");if(g)S.goalText=g.value.trim();S.onboarded=true;delete S._ob;save();render();window.scrollTo(0,0);}
+
 function renderAuth(){
   const signup=authMode==="signup";
   $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
+    <div style="text-align:left;margin-bottom:2px"><span class="link" style="color:var(--mid);text-decoration:none" onclick="renderLanding()">‹ Atrás</span></div>
     <div class="logo">ALZA</div>
     <div class="tag">Mente · Cuerpo · Alma</div>
     <div class="tri3">
@@ -483,6 +614,16 @@ function navBar(tab){
 
 /* ---- PANEL ---- */
 function pillarPct(p){const hs=S.habits.filter(h=>h.pillar===p);if(!hs.length)return 0;const r=getDay().ritual;const done=hs.filter(h=>r[h.id]).length;return done/hs.length;}
+function keyOf(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function dayCompletion(k){const day=S.days[k];if(!day||!day.ritual)return 0;const ids=(S.habits||[]).map(h=>h.id);if(!ids.length)return 0;return ids.filter(id=>day.ritual[id]).length/ids.length;}
+function computeStreak(){let s=0;const d=new Date();if(dayCompletion(keyOf(d))<0.5)d.setDate(d.getDate()-1);for(let i=0;i<400;i++){if(dayCompletion(keyOf(d))>=0.5){s++;d.setDate(d.getDate()-1);}else break;}return s;}
+function weekStrip(){const out=[];const today=keyOf(new Date());for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=keyOf(d);const c=dayCompletion(k);const cls=c>=1?'full':(c>0?'part':'');const wd=['D','L','M','M','J','V','S'][d.getDay()];out.push(`<div class="d"><div class="dot ${cls} ${k===today?'today':''}">${c>=1?'✓':(c>0?'·':'')}</div><div class="dl">${wd}</div></div>`);}return out.join("");}
+function momentumCard(){const s=computeStreak();return `<div class="momentum">
+  <div class="mt"><div class="flame">🔥 ${s} <small>${s===1?'día':'días'} de racha</small></div>
+    <div class="chip" onclick="go('mente')">Mi ritual ›</div></div>
+  ${S.goalText?`<div class="goaltxt">"${esc(S.goalText)}"</div>`:''}
+  <div class="week">${weekStrip()}</div>
+</div>`;}
 function viewPanel(){
   const d=new Date();const dd=d.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
   const q=daily(SEED_QUOTES);
@@ -495,6 +636,7 @@ function viewPanel(){
     <div class="hi">Hola, <span class="nm">${esc((ME.full_name||"").split(" ")[0]||"")}</span></div>
   </div>
   ${stageTriangle()}
+  ${momentumCard()}
   <div class="card" style="border-color:rgba(47,209,198,.25);background:linear-gradient(180deg,rgba(47,209,198,.10),var(--ink2))">
     <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
     <div class="serif" style="font-style:italic;font-size:18px;margin-top:8px;color:#E8FBF8">"${esc(affTxt)}"</div>
@@ -536,13 +678,30 @@ function viewPillar(p){
     <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2>
     <div class="sub">${P.sub}</div>
   </div>
-  <div class="sec-title">Ritual de hoy</div>
-  ${hs.map(h=>`<div class="task ${r[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
-    <div class="box">${CK}</div><div class="em">${h.em}</div><div class="lbl">${esc(h.lbl)}</div></div>`).join("")}
+  ${ritualSection(p)}
   <div class="sec-title">Videos recomendados</div>
   ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}
   ${p==="alma"?almaExtra():""}`;
 }
+let editRitual=false, pickEmoji="🎯";
+function ritualSection(p){
+  const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
+  return `<div class="sec-title" style="justify-content:space-between">Ritual de hoy
+    <span class="link" style="font-size:11px;color:var(--gold);text-transform:none;letter-spacing:0" onclick="toggleEdit()">${editRitual?'✓ Listo':'✎ Editar'}</span></div>
+  ${hs.length?hs.map(h=>`<div class="task ${(!editRitual&&r[h.id])?'done':''}" ${editRitual?'':`onclick="toggleHabit('${h.id}')"`}>
+    <div class="box">${CK}</div><div class="em">${h.em||'•'}</div><div class="lbl">${esc(h.lbl)}</div>
+    ${editRitual?`<button class="del" onclick="event.stopPropagation();rmHabit('${h.id}')" style="color:var(--coral);width:32px;font-size:16px">✕</button>`:''}</div>`).join(""):'<div class="empty">Sin hábitos aún. Agrega el primero.</div>'}
+  ${editRitual?`<button class="addfood" style="border-color:${PILLARS[p].color}66;color:${PILLARS[p].color}" onclick="addHabitSheet('${p}')">+ Agregar hábito</button>`:''}`;
+}
+function toggleEdit(){editRitual=!editRitual;render();}
+function rmHabit(id){S.habits=S.habits.filter(h=>h.id!==id);save();render();}
+function addHabitSheet(p){pickEmoji="🎯";openSheet(`<h3>Nuevo hábito</h3>
+  <div class="field"><label>Nombre</label><input id="nh_l" placeholder="Ej. Estirar 5 minutos"></div>
+  <div class="field"><label>Icono</label><div class="iconpick" id="nh_icons">${EMOJIS.map(e=>`<button class="${e===pickEmoji?'on':''}" onclick="pickEm('${e}',this)">${e}</button>`).join("")}</div></div>
+  <input type="hidden" id="nh_p" value="${p}">
+  <button class="pillbtn primary" onclick="addHabit()">Agregar hábito</button>`);}
+function pickEm(e,el){pickEmoji=e;[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function addHabit(){const l=$("#nh_l").value.trim();if(!l){toast("Escribe el nombre");return;}const p=$("#nh_p").value;S.habits.push({id:'h'+Date.now().toString(36),em:pickEmoji,lbl:l,pillar:p});save();closeSheet();render();toast("Hábito agregado");}
 function almaExtra(){
   const v=daily(SEED_VERSES);
   return `<div class="sec-title">Palabra del día</div>
@@ -573,9 +732,7 @@ function viewCuerpo(){
   <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
     <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2><div class="sub">${P.sub}</div>
   </div>
-  <div class="sec-title">Ritual de hoy</div>
-  ${hs.map(h=>`<div class="task ${r[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">
-    <div class="box">${CK}</div><div class="em">${h.em}</div><div class="lbl">${esc(h.lbl)}</div></div>`).join("")}
+  ${ritualSection("cuerpo")}
   <div class="sec-title">Nutrición · hoy</div>
   <div class="card">
     <div class="row" style="margin-bottom:12px"><div><div class="eye">Calorías</div><div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:30px">${Math.round(eaten.kc)} <small class="dim" style="font-size:14px">/ ${g.kcal}</small></div></div>
@@ -622,16 +779,21 @@ function viewApoyo(){
       <div class="dim" style="font-size:12px;margin-top:12px;text-align:center">Esto es apoyo de acompañamiento, no tratamiento médico. Si estás en crisis, busca ayuda profesional.</div></div>`;
   }
   const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;
+  celebrateCheck(days);
   const aff=daily(SEED_AFF);
+  const next=MILESTONES.find(m=>m.d>days);
   return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
     <div class="em">🫂</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
     <div class="bignum">${days}</div>
     <div class="dim" style="font-size:13px;margin-top:4px">Mejor racha: ${a.best||days} días · desde ${a.since?new Date(a.since).toLocaleDateString("es-MX"):"hoy"}</div>
+    ${next?`<div class="dim" style="font-size:12px;margin-top:8px">${next.e} Faltan ${next.d-days} días para ${next.n}</div>`:''}
     <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Reiniciar contador</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
+  ${badgesCard(days)}
+  ${planCard()}
   <div class="card" style="border-color:rgba(47,209,198,.25);margin-top:12px">
     <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
     <div class="serif" style="font-style:italic;font-size:17px;margin-top:8px">"${esc(aff)}"</div>
@@ -642,6 +804,21 @@ function viewApoyo(){
     ${(a.triggers||[]).length?a.triggers.slice().reverse().map(t=>`<div class="trg"><div><b>${esc(t.what)}</b>${t.how?`<div class="dim" style="font-size:13px">${esc(t.how)}</div>`:""}</div><div class="dt">${new Date(t.at).toLocaleDateString("es-MX")}</div></div>`).join(""):'<div class="empty">Anota qué te detona y cómo lo superaste para ver tus patrones.</div>'}
   </div>`;
 }
+const MILESTONES=[{d:1,e:"🌱",n:"Día 1"},{d:7,e:"⭐",n:"1 semana"},{d:30,e:"🔥",n:"1 mes"},{d:90,e:"💎",n:"3 meses"},{d:180,e:"🏆",n:"6 meses"},{d:365,e:"👑",n:"1 año"}];
+function badgesCard(days){return `<div class="sec-title">Hitos</div>
+  <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${m.e}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
+function planCard(){const pl=S.addiction.plan||{};const has=pl.why||pl.action||pl.contact;
+  return `<div class="sec-title">Mi plan anti-recaída</div>
+  <div class="card" onclick="planSheet()" style="cursor:pointer">
+    ${has?`${pl.why?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Mi porqué</div><div style="font-size:14px;margin-top:3px">${esc(pl.why)}</div></div>`:''}${pl.action?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Ante el antojo</div><div style="font-size:14px;margin-top:3px">${esc(pl.action)}</div></div>`:''}${pl.contact?`<div><div class="eye" style="color:var(--teal)">A quién llamo</div><div style="font-size:14px;margin-top:3px">${esc(pl.contact)}</div></div>`:''}<div class="link" style="margin-top:10px;display:inline-block">Editar plan</div>`:`<b>Arma tu plan anti-recaída</b><div class="dim" style="font-size:13px;margin-top:4px">Tu porqué, qué harás ante el antojo y a quién llamar. Tenerlo listo te salva en el momento difícil.</div><div class="link" style="margin-top:8px;display:inline-block">Crear mi plan ›</div>`}
+  </div>`;}
+function planSheet(){const pl=S.addiction.plan||{};openSheet(`<h3>Mi plan anti-recaída</h3>
+  <div class="field"><label>¿Por qué quiero lograrlo?</label><textarea id="pl_w" placeholder="Mi razón más fuerte…">${esc(pl.why||"")}</textarea></div>
+  <div class="field"><label>¿Qué haré cuando llegue el antojo?</label><textarea id="pl_a" placeholder="Ej. respirar, salir a caminar, tomar agua…">${esc(pl.action||"")}</textarea></div>
+  <div class="field"><label>¿A quién puedo llamar?</label><input id="pl_c" placeholder="Nombre / teléfono de confianza" value="${esc(pl.contact||"")}"></div>
+  <button class="pillbtn primary" onclick="savePlan()">Guardar mi plan</button>`);}
+function savePlan(){S.addiction.plan={why:$("#pl_w").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
+function celebrateCheck(days){const a=S.addiction;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`${top.e} ¡Llegaste a ${top.n} limpio!`),500);}}
 function startAddiction(){openSheet(`<h3>Empezar mi seguimiento</h3>
   <div class="field"><label>¿Qué quieres dejar? (privado)</label><input id="ad_l" placeholder="Ej. alcohol, azúcar, nicotina…"></div>
   <div class="field"><label>¿Desde qué fecha estás limpio?</label><input id="ad_d" type="date" value="${todayKey()}"></div>
