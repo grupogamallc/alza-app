@@ -349,20 +349,15 @@ async function doSignup(){
   if(!pendingTerms){err.textContent="Debes aceptar los términos y el aviso de privacidad.";return;}
   err.textContent="";
   const btn=$("#a_btn");btn.textContent="Creando…";btn.disabled=true;
-  const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:nm,phone:ph,age:ag}}});
-  btn.disabled=false;btn.textContent="Crear cuenta";
-  if(error){err.textContent=traduce(error.message);return;}
-  if(data.session){loadAccount();}
-  else{ // needs email confirmation
-    $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
-      <div class="logo">ALZA</div>
-      <div class="card" style="margin-top:40px;text-align:center">
-        <div style="font-size:40px">📧</div>
-        <h3 style="margin:12px 0 8px">Revisa tu correo</h3>
-        <p class="dim">Te enviamos un enlace de confirmación a <b>${esc(em)}</b>. Ábrelo para activar tu cuenta y luego inicia sesión.</p>
-        <button class="pillbtn ghost" style="margin-top:16px" onclick="authMode='login';renderAuth()">Ir a iniciar sesión</button>
-      </div></div>`;
-  }
+  try{
+    const r=await fetch(`${SB_URL}/functions/v1/alza-signup`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SB_KEY},body:JSON.stringify({email:em,password:pw,full_name:nm,phone:ph,age:ag})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){btn.disabled=false;btn.textContent="Crear cuenta";err.textContent=traduce(d.error||"No se pudo crear la cuenta. Intenta de nuevo.");return;}
+    const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+    btn.disabled=false;btn.textContent="Crear cuenta";
+    if(error){err.textContent="Cuenta creada. Ahora inicia sesión.";authMode='login';renderAuth();return;}
+    loadAccount();
+  }catch(e){btn.disabled=false;btn.textContent="Crear cuenta";err.textContent="Error de conexión. Intenta de nuevo.";}
 }
 async function doLogin(){
   const em=$("#a_email").value.trim(), pw=$("#a_pass").value, err=$("#a_err");
