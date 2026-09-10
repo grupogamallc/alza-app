@@ -600,9 +600,9 @@ function renderLanding(){
       ${landFeat("users","Apoyo real","Un módulo para cuidar tu sobriedad, día a día.")}
       ${landFeat("sparkle","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
     </div>
-    <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Empezar gratis</button>
+    <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Crear cuenta</button>
     <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya tengo cuenta</button>
-    <div class="fine">14 días de prueba gratis. VIDA ALFA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
+    <div class="fine">VIDA ALFA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
   </div>`;
 }
 function landFeat(ic,t,d){return `<div class="lfeat"><div class="le">${svgIcon(ic)}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
@@ -698,10 +698,9 @@ function renderAuth(){
 
 /* ================= PAYWALL ================= */
 function renderPaywall(){
-  const trialOver = SUB && SUB.status==="trialing" && SUB.trial_ends_at && new Date(SUB.trial_ends_at)<=new Date();
   $("#app").innerHTML=`<div class="pw">
     <div class="logo" style="font-family:'Inter';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">VIDA ALFA</div>
-    <h2 style="margin-top:20px">${trialOver?'Tu prueba terminó':'Activa tu membresía'}</h2>
+    <h2 style="margin-top:20px">Activa tu membresía</h2>
     <p class="dim" style="margin-top:8px">Sigue construyendo tu mejor versión — Mente, Cuerpo y Alma, todos los días.</p>
     <div class="card" style="margin-top:20px">
       <div class="price">$—<span style="font-size:16px;color:var(--dim)"> /mes</span></div>
@@ -1032,7 +1031,7 @@ async function delContent(id){
 
 /* ---- SETTINGS ---- */
 function settingsSheet(){
-  const trial = SUB&&SUB.status==="trialing"&&SUB.trial_ends_at ? `Prueba hasta ${new Date(SUB.trial_ends_at).toLocaleDateString("es-MX")}` : (SUB&&SUB.status==="active"?"Membresía activa":"Sin membresía");
+  const trial = (SUB&&(SUB.status==="active"||SUB.status==="trialing"))?"Membresía activa":"Sin membresía";
   openSheet(`<h3>Mi cuenta</h3>
   <div class="card tight"><div><b>${esc(ME.full_name||"")}</b></div><div class="dim" style="font-size:13px">${esc(ME.email||"")}</div><div class="mono" style="font-size:11px;margin-top:6px;color:var(--gold)">${trial}</div></div>
   <button class="pillbtn ghost" onclick="closeSheet();go('cuerpo')">🥗 Mis metas y nutrición</button>
