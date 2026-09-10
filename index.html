@@ -66,7 +66,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .view{padding:14px 16px 8px;animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:linear-gradient(180deg,var(--ink) 70%,transparent);backdrop-filter:blur(6px)}
+.appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:linear-gradient(180deg,var(--ink) 78%,transparent);backdrop-filter:blur(6px)}
 .brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;letter-spacing:.14em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .brandwrap{display:flex;align-items:center;gap:9px}
