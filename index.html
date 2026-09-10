@@ -103,20 +103,18 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 
 .stage{position:relative;width:100%;max-width:340px;margin:6px auto 2px}
 .stage svg{display:block;width:100%;height:auto;overflow:visible}
-.stage .track{fill:none;stroke:rgba(255,255,255,.055);stroke-width:6}
-.stage .pr{fill:none;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transform-box:fill-box;transition:stroke-dashoffset 1.25s cubic-bezier(.22,.9,.24,1);filter:drop-shadow(0 0 4px rgba(233,193,90,.45))}
+.stage .track{fill:none;stroke:rgba(233,197,110,.09);stroke-width:6}
+.stage .pr{fill:none;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transform-box:fill-box;transition:stroke-dashoffset 1.25s cubic-bezier(.22,.9,.24,1);filter:drop-shadow(0 0 5px rgba(233,193,90,.5))}
+.stage .head{filter:drop-shadow(0 0 5px rgba(246,228,166,.9));animation:headpulse 2.6s ease-in-out infinite}
+@keyframes headpulse{0%,100%{opacity:.82}50%{opacity:1}}
 .stage .disc{fill:var(--ink2);stroke:rgba(255,255,255,.06)}
 .stage .core-num{font-family:"Bricolage Grotesque";font-weight:800;fill:#fff;text-anchor:middle;letter-spacing:-.02em}
 .stage .core-cap{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;text-anchor:middle}
 .stage .edge{fill:none;stroke:rgba(233,197,110,.10);stroke-width:1}
-.stage .ring-pct{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;fill:#F5F1E6;letter-spacing:-.01em}
-.stage .ring-pct .ring-u{fill:var(--dim);font-weight:600}
+.stage .ring-num{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;fill:#F7F3E8;letter-spacing:-.02em}
+.stage .ring-u{font-family:"Bricolage Grotesque";font-weight:700;text-anchor:middle;fill:var(--dim)}
 .stage .n-lab2{font-family:"JetBrains Mono";font-weight:700;text-anchor:middle;letter-spacing:.2em;fill:var(--mid)}
 .stage .n-lab{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:.01em}
-.stage .ring-pct{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:-.02em}
-.stage .ring-unit{font-family:"JetBrains Mono";font-weight:500;text-anchor:middle;opacity:.85}
-.stage .n-lab2{font-family:"JetBrains Mono";font-weight:600;text-anchor:middle;letter-spacing:.16em}
-.stage .n-pct{font-family:"JetBrains Mono";font-weight:500;text-anchor:middle;fill:var(--mid)}
 
 .ph{position:relative;border-radius:22px;overflow:hidden;padding:20px 18px;margin-bottom:14px;border:1px solid var(--line);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
 .ph>*{position:relative;z-index:2}
@@ -784,16 +782,23 @@ function stageTriangle(){
   const R=37,C=2*Math.PI*R;
   const ring=(cx,cy,pct,lab,labAbove)=>{
     const off=C*(1-pct);const ly=labAbove?cy-R-13:cy+R+19;const p=Math.round(pct*100);
+    const ang=(-90+pct*360)*Math.PI/180;const hx=(cx+R*Math.cos(ang)).toFixed(1),hy=(cy+R*Math.sin(ang)).toFixed(1);
+    const ux=(cx+String(p).length*6.6+3.5).toFixed(1);
+    const head=(pct>.02&&pct<.999)?`<circle class="head" cx="${hx}" cy="${hy}" r="3.4" fill="#FBF0C4"/>`:'';
     return `<g>
+      <circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#rg)"/>
       <circle class="track" cx="${cx}" cy="${cy}" r="${R}"/>
       <circle class="pr" cx="${cx}" cy="${cy}" r="${R}" stroke="url(#gold)" stroke-dasharray="${C}" stroke-dashoffset="${off}"/>
-      <text class="ring-pct" x="${cx}" y="${cy+3}" font-size="23">${p}<tspan class="ring-u" dx="1" dy="0" font-size="10">%</tspan></text>
+      ${head}
+      <text class="ring-num" x="${cx}" y="${cy+7}" font-size="23">${p}</text>
+      <text class="ring-u" x="${ux}" y="${cy-7}" font-size="10.5">%</text>
       <text class="n-lab2" x="${cx}" y="${ly}" font-size="9.5">${lab}</text>
     </g>`;
   };
   return `<div class="stage"><svg viewBox="0 0 340 276">
     <defs>
-      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4DA8C"/><stop offset="1" stop-color="#CFA23A"/></linearGradient>
+      <linearGradient id="gold" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#F6E4A6"/><stop offset=".5" stop-color="#E3B23F"/><stop offset="1" stop-color="#B9852C"/></linearGradient>
+      <radialGradient id="rg" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="rgba(233,193,90,.13)"/><stop offset="1" stop-color="rgba(233,193,90,0)"/></radialGradient>
     </defs>
     <path class="edge" d="M170 66 L74 206 L266 206 Z"/>
     ${ring(170,66,P.mente,"MENTE",true)}
