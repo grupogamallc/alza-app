@@ -69,6 +69,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:linear-gradient(180deg,var(--ink) 70%,transparent);backdrop-filter:blur(6px)}
 .brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;letter-spacing:.14em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.brandwrap{display:flex;align-items:center;gap:9px}
+.brandwrap .alfa{animation:none;filter:drop-shadow(0 2px 8px rgba(233,193,90,.35))}
 .iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mid);background:var(--surface)}
 
 .card{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--surface),var(--ink2));padding:16px;margin-bottom:12px}
@@ -240,6 +242,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .week .dot.part{border-color:var(--amber);color:var(--amber)}
 .week .dl{font-family:"JetBrains Mono";font-size:9px;color:var(--dim);text-transform:uppercase}
 .week .dot.today{box-shadow:0 0 0 2px var(--gold)}
+.week .dot.fut{opacity:.3}
 
 /* MEDALLAS */
 .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -724,7 +727,7 @@ function render(){
   else if(tab==="apoyo")body=viewApoyo();
   else if(tab==="admin")body=viewAdmin();
   $("#app").innerHTML=`
-    <div class="appbar"><div class="brand">VIDA ALFA</div>
+    <div class="appbar"><div class="brandwrap">${alfaMark(30)}<div class="brand">VIDA ALFA</div></div>
       <button class="iconbtn" onclick="settingsSheet()">${svgIcon('settings')}</button></div>
     <div class="view">${body}</div>
     ${navBar(tab)}`;
@@ -745,7 +748,7 @@ function pillarPct(p){const hs=S.habits.filter(h=>h.pillar===p);if(!hs.length)re
 function keyOf(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function dayCompletion(k){const day=S.days[k];if(!day||!day.ritual)return 0;const ids=(S.habits||[]).map(h=>h.id);if(!ids.length)return 0;return ids.filter(id=>day.ritual[id]).length/ids.length;}
 function computeStreak(){let s=0;const d=new Date();if(dayCompletion(keyOf(d))<0.5)d.setDate(d.getDate()-1);for(let i=0;i<400;i++){if(dayCompletion(keyOf(d))>=0.5){s++;d.setDate(d.getDate()-1);}else break;}return s;}
-function weekStrip(){const out=[];const today=keyOf(new Date());for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=keyOf(d);const c=dayCompletion(k);const cls=c>=1?'full':(c>0?'part':'');const wd=['D','L','M','M','J','V','S'][d.getDay()];out.push(`<div class="d"><div class="dot ${cls} ${k===today?'today':''}">${c>=1?'✓':(c>0?'·':'')}</div><div class="dl">${wd}</div></div>`);}return out.join("");}
+function weekStrip(){const out=[];const now=new Date();const today=keyOf(now);const sun=new Date(now);sun.setDate(now.getDate()-now.getDay());const L=['D','L','M','M','J','V','S'];for(let i=0;i<7;i++){const d=new Date(sun);d.setDate(sun.getDate()+i);const k=keyOf(d);const c=dayCompletion(k);const fut=(k>today);const cls=c>=1?'full':(c>0?'part':'');out.push(`<div class="d"><div class="dot ${cls} ${k===today?'today':''} ${fut?'fut':''}">${c>=1?'✓':(c>0?'·':'')}</div><div class="dl">${L[i]}</div></div>`);}return out.join("");}
 function momentumCard(){const s=computeStreak();return `<div class="momentum">
   <div class="mt"><div class="flame"><span class="fi" style="color:${s>0?'var(--amber)':'var(--dim)'}">${svgIcon('flame')}</span>${s} <small>${s===1?'día':'días'} de racha</small></div>
     <div class="chip" onclick="go('mente')">Mi ritual ›</div></div>
@@ -794,8 +797,8 @@ function stageTriangle(){
     ${ring(170,66,P.mente,"#F0DFA6","MENTE",true)}
     ${ring(74,204,P.cuerpo,"#E3B23F","CUERPO",false)}
     ${ring(266,204,P.alma,"#FFC15E","ALMA",false)}
-    <text class="core-num" x="170" y="150" font-size="38">${overall}%</text>
-    <text class="core-cap" x="170" y="169" fill="var(--dim)">HOY</text>
+    <text class="core-num" x="170" y="161" font-size="38">${overall}%</text>
+    <text class="core-cap" x="170" y="180" fill="var(--dim)">HOY</text>
   </svg></div>`;
 }
 
