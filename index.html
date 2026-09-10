@@ -862,10 +862,17 @@ function viewPillar(p){
     <div class="sub">${P.sub}</div>
   </div>
   ${ritualSection(p)}
-  <div class="sec-title">Videos recomendados</div>
+  ${p==="mente"?menteModules():""}
+  <div class="sec-title">Videos${P.name?` · ${P.name}`:""}</div>
   ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}
   ${p==="alma"?almaExtra():""}`;
 }
+function menteModules(){const q=daily(SEED_QUOTES);const d=getDay();
+  return `<div class="sec-title">Palabra de tus mentores</div>
+   <div class="quote"><div class="q">${esc(q.t)}</div><div class="att">— ${esc(q.a)}</div></div>
+   <div class="sec-title">Journal de hoy</div>
+   <div class="card"><textarea id="jrnl" placeholder="¿Qué tienes en mente? Ideas, gratitud, lo que aprendiste hoy…" oninput="saveJournal(this.value)">${esc(d.journal||"")}</textarea></div>`;}
+function saveJournal(v){getDay().journal=v;save();}
 let editRitual=false, pickIcon="star";
 function ritualSection(p){
   const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
