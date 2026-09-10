@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
 <style>
 :root{
   --ink:#0A0A0B;--ink2:#100F11;--surface:#171519;--surface2:#221F25;
@@ -29,17 +29,17 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
-body{background:var(--ink);color:var(--tx);font-family:"Instrument Sans",system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
-h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.05}
+body{background:var(--ink);color:var(--tx);font-family:"Inter",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+h1,h2,h3{font-family:"Inter",system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.05}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx);background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px 12px;width:100%;outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 textarea{resize:vertical;min-height:90px;line-height:1.5}
-.mono{font-family:"JetBrains Mono",monospace}
+.mono{font-family:"Inter",system-ui,sans-serif}
 .serif{font-family:"Fraunces",serif}
 .tnum{font-variant-numeric:tabular-nums}
 .dim{color:var(--mid)}
-.eye{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.eye{font-family:"Inter",system-ui,sans-serif;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
 /* ICONS sizing */
 .ico{width:20px;height:20px;display:block;flex:none}
 .tri3 .d .ico{width:24px;height:24px}
@@ -67,7 +67,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:linear-gradient(180deg,var(--ink) 78%,transparent);backdrop-filter:blur(6px)}
-.brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;letter-spacing:.14em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
+.brand{font-family:"Inter";font-weight:800;font-size:19px;letter-spacing:.14em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .brandwrap{display:flex;align-items:center;gap:9px}
 .brandwrap .alfa{animation:none;filter:drop-shadow(0 2px 8px rgba(233,193,90,.35))}
@@ -81,17 +81,17 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .primary::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:sheen 4.5s ease-in-out infinite}
 @keyframes sheen{0%,100%{left:-60%}55%{left:130%}}
 .ghost{border:1px solid var(--line2);color:var(--tx);background:var(--surface)}
-.chip{font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--mid);background:var(--surface);white-space:nowrap}
+.chip{font-family:"Inter",system-ui,sans-serif;font-size:12px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--mid);background:var(--surface);white-space:nowrap}
 .link{color:var(--gold);text-decoration:underline;cursor:pointer}
 
 .quote{position:relative;border:1px solid var(--line);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(240,223,166,.12),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--mente),inset 0 1px 0 rgba(255,255,255,.05)}
 .quote::before{content:"\201C";position:absolute;top:2px;left:14px;font-family:"Fraunces";font-size:58px;color:var(--mente);opacity:.28;line-height:1}
 .quote .q{font-family:"Fraunces";font-style:italic;font-size:20px;line-height:1.42;color:#F3EEE2;position:relative}
-.quote .att{font-family:"JetBrains Mono";font-size:11px;color:#D8C48A;margin-top:12px;letter-spacing:.05em}
+.quote .att{font-family:"Inter";font-size:11px;color:#D8C48A;margin-top:12px;letter-spacing:.05em}
 .verse{position:relative;border:1px solid rgba(255,193,94,.22);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(255,193,94,.11),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--gold),inset 0 1px 0 rgba(255,255,255,.05)}
 .verse::before{content:"\271D";position:absolute;top:16px;right:18px;font-size:20px;color:var(--gold);opacity:.4}
 .verse .q{font-family:"Fraunces";font-style:italic;font-size:18px;line-height:1.42;color:#FBEBD3}
-.verse b{color:var(--golds);font-family:"JetBrains Mono";font-size:11px;display:block;margin-top:10px;letter-spacing:.04em;font-weight:400}
+.verse b{color:var(--golds);font-family:"Inter";font-size:11px;display:block;margin-top:10px;letter-spacing:.04em;font-weight:400}
 
 .greetband{position:relative;border-radius:20px;overflow:hidden;padding:16px 18px;margin-bottom:12px;border:1px solid var(--line);background:linear-gradient(180deg,#141019,#0A0A10 72%);box-shadow:0 24px 50px -44px #000,inset 0 1px 0 rgba(255,255,255,.05)}
 .greetband .warmglow{position:absolute;inset:0;z-index:0;background:radial-gradient(90% 62% at 50% -14%,rgba(255,193,94,.30),rgba(242,149,75,.12) 40%,transparent 66%)}
@@ -108,17 +108,17 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .stage .head{filter:drop-shadow(0 0 5px rgba(246,228,166,.9));animation:headpulse 2.6s ease-in-out infinite}
 @keyframes headpulse{0%,100%{opacity:.82}50%{opacity:1}}
 .stage .disc{fill:var(--ink2);stroke:rgba(255,255,255,.06)}
-.stage .core-num{font-family:"Bricolage Grotesque";font-weight:800;fill:#fff;text-anchor:middle;letter-spacing:-.02em}
-.stage .core-cap{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;text-anchor:middle}
+.stage .core-num{font-family:"Inter";font-weight:800;fill:#fff;text-anchor:middle;letter-spacing:-.02em}
+.stage .core-cap{font-family:"Inter";font-size:9px;letter-spacing:.22em;text-anchor:middle}
 .stage .edge{fill:none;stroke:rgba(233,197,110,.10);stroke-width:1}
 .stage .flow{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:8 92;filter:drop-shadow(0 0 5px rgba(246,228,166,.75));animation:triflow 5s linear infinite}
 .stage .flow2{animation-delay:-2.5s;opacity:.7}
 @keyframes triflow{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){.stage .flow{animation:none;opacity:.25}}
-.stage .ring-num{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;fill:#F7F3E8;letter-spacing:-.02em}
-.stage .ring-u{font-family:"Bricolage Grotesque";font-weight:700;text-anchor:middle;fill:var(--dim)}
-.stage .n-lab2{font-family:"JetBrains Mono";font-weight:700;text-anchor:middle;letter-spacing:.2em;fill:var(--mid)}
-.stage .n-lab{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:.01em}
+.stage .ring-num{font-family:"Inter";font-weight:800;text-anchor:middle;fill:#F7F3E8;letter-spacing:-.02em}
+.stage .ring-u{font-family:"Inter";font-weight:700;text-anchor:middle;fill:var(--dim)}
+.stage .n-lab2{font-family:"Inter";font-weight:700;text-anchor:middle;letter-spacing:.2em;fill:var(--mid)}
+.stage .n-lab{font-family:"Inter";font-weight:800;text-anchor:middle;letter-spacing:.01em}
 
 .ph{position:relative;border-radius:22px;overflow:hidden;padding:20px 18px;margin-bottom:14px;border:1px solid var(--line);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
 .ph>*{position:relative;z-index:2}
@@ -134,12 +134,12 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .task.done .box{background:var(--green);border-color:var(--green)}
 .task.done .box svg{opacity:1;transform:scale(1)}
 
-.sec-title{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-family:"JetBrains Mono";margin:18px 2px 10px;display:flex;align-items:center;gap:8px}
+.sec-title{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-family:"Inter";margin:18px 2px 10px;display:flex;align-items:center;gap:8px}
 .sec-title::before{content:"";width:16px;height:2px;border-radius:2px;background:currentColor;opacity:.5}
 .empty{text-align:center;color:var(--dim);font-size:14px;padding:22px}
 
 .macrobar{margin-bottom:10px}
-.macrobar .r{display:flex;justify-content:space-between;font-family:"JetBrains Mono";font-size:12px;color:var(--mid);margin-bottom:5px}
+.macrobar .r{display:flex;justify-content:space-between;font-family:"Inter";font-size:12px;color:var(--mid);margin-bottom:5px}
 .bar{height:8px;border-radius:99px;background:#232333;overflow:hidden}
 .bar>i{display:block;height:100%;border-radius:99px;transition:width .5s}
 
@@ -147,7 +147,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .vid .thumb{width:64px;height:42px;border-radius:8px;background:linear-gradient(135deg,#7A2E6E,#241B4D) center/cover no-repeat;display:grid;place-items:center;flex:none;color:#fff;position:relative;overflow:hidden}
 .vid .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .vid .t{flex:1;font-size:14.5px;font-weight:500}
-.vid .cat{font-family:"JetBrains Mono";font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+.vid .cat{font-family:"Inter";font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
 .vplayer{position:fixed;inset:0;z-index:130;display:none;flex-direction:column;background:rgba(0,0,0,.94);padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom))}
 .vplayer.on{display:flex}
 .vplayer .bar2{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
@@ -157,7 +157,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .vplayer .frame16 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));background:rgba(10,10,16,.86);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:40}
-.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dim);font-size:9.5px;font-family:"JetBrains Mono";letter-spacing:.02em;padding:4px 4px;flex:1;opacity:.62;transition:opacity .2s}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dim);font-size:9.5px;font-family:"Inter";letter-spacing:.02em;padding:4px 4px;flex:1;opacity:.62;transition:opacity .2s}
 .nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7}
 .nav button.panel{color:var(--tx)}
 .nav button.mente{color:var(--mente)}
@@ -174,12 +174,12 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 @keyframes up{from{transform:translateY(100%)}to{transform:none}}
 .sheet h3{font-size:19px;margin-bottom:14px}
 .field{margin-bottom:11px}
-.field label{font-size:12px;color:var(--mid);display:block;margin-bottom:5px;font-family:"JetBrains Mono";letter-spacing:.03em}
+.field label{font-size:12px;color:var(--mid);display:block;margin-bottom:5px;font-family:"Inter";letter-spacing:.03em}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
 /* AUTH / ONBOARDING */
 .auth{max-width:440px;margin:0 auto;min-height:100%;padding:calc(30px + env(safe-area-inset-top)) 22px 40px;display:flex;flex-direction:column}
-.auth .logo{font-family:"Bricolage Grotesque";font-weight:800;font-size:40px;letter-spacing:.12em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;animation:shimmer 5s linear infinite}
+.auth .logo{font-family:"Inter";font-weight:800;font-size:40px;letter-spacing:.12em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;animation:shimmer 5s linear infinite}
 .auth .tag{text-align:center;color:var(--mid);font-family:"Fraunces";font-style:italic;font-size:16px;margin-top:6px}
 .auth .aur{position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 42% at 50% 2%,rgba(233,193,90,.20),transparent 60%),radial-gradient(60% 34% at 50% 100%,rgba(196,146,46,.14),transparent 64%);animation:auroraB 9s ease-in-out infinite}
 @keyframes auroraB{0%,100%{opacity:.85}50%{opacity:1}}
@@ -194,7 +194,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .tri3{display:flex;justify-content:center;gap:26px;margin:26px 0 6px}
 .tri3 .t{text-align:center}
 .tri3 .t .d{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin:0 auto 7px;font-size:22px;border:1px solid var(--line)}
-.tri3 .t .n{font-family:"JetBrains Mono";font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.tri3 .t .n{font-family:"Inter";font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .chkline{display:flex;gap:10px;align-items:flex-start;margin:8px 0 2px;font-size:12.5px;color:var(--mid);line-height:1.45}
 .chkbox{width:22px;height:22px;border-radius:6px;border:1.6px solid var(--dim);flex:none;display:grid;place-items:center;margin-top:1px;cursor:pointer}
 .chkbox.on{background:var(--gold);border-color:var(--gold)}
@@ -227,7 +227,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .ob .pillbtn{margin-top:6px}
 
 /* HABIT EDIT */
-.addfood{width:100%;margin-top:8px;border:1px dashed var(--line2);border-radius:12px;padding:12px;background:transparent;font-family:"JetBrains Mono";font-size:12.5px;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:7px}
+.addfood{width:100%;margin-top:8px;border:1px dashed var(--line2);border-radius:12px;padding:12px;background:transparent;font-family:"Inter";font-size:12.5px;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:7px}
 .addfood:active{transform:scale(.99)}
 .iconpick{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .iconpick button{aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--mid);display:grid;place-items:center;font-size:18px}
@@ -236,7 +236,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 /* PROGRESS / STREAK */
 .momentum{border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(242,149,75,.12),var(--ink2));padding:16px 16px 14px;margin-bottom:14px;box-shadow:0 22px 46px -40px #000}
 .momentum .mt{display:flex;align-items:center;justify-content:space-between}
-.momentum .flame{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;display:flex;align-items:center;gap:8px}
+.momentum .flame{font-family:"Inter";font-weight:800;font-size:30px;display:flex;align-items:center;gap:8px}
 .momentum .flame small{font-size:13px;color:var(--mid);font-weight:600}
 .momentum .goaltxt{font-family:"Fraunces";font-style:italic;font-size:14.5px;color:var(--golds);margin-top:10px;line-height:1.4}
 .week{display:flex;justify-content:space-between;gap:6px;margin-top:14px}
@@ -244,7 +244,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .week .dot{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;display:grid;place-items:center;border:1.5px solid var(--line);font-size:12px}
 .week .dot.full{background:var(--green);border-color:var(--green);color:#1A1206}
 .week .dot.part{border-color:var(--amber);color:var(--amber)}
-.week .dl{font-family:"JetBrains Mono";font-size:9px;color:var(--dim);text-transform:uppercase}
+.week .dl{font-family:"Inter";font-size:9px;color:var(--dim);text-transform:uppercase}
 .week .dot.today{box-shadow:0 0 0 2px var(--gold)}
 .week .dot.fut{opacity:.3}
 
@@ -253,12 +253,12 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .badge2{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:13px 6px;text-align:center;opacity:.4;transition:.2s}
 .badge2.earned{opacity:1;border-color:rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.12),var(--ink2))}
 .badge2 .be{font-size:24px}
-.badge2 .bn{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;margin-top:3px}
-.badge2 .bl{font-family:"JetBrains Mono";font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+.badge2 .bn{font-family:"Inter";font-weight:800;font-size:15px;margin-top:3px}
+.badge2 .bl{font-family:"Inter";font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
 
 /* PAYWALL */
 .pw{max-width:440px;margin:0 auto;padding:calc(40px + env(safe-area-inset-top)) 22px 40px;text-align:center}
-.pw .price{font-family:"Bricolage Grotesque";font-weight:800;font-size:44px;margin:8px 0}
+.pw .price{font-family:"Inter";font-weight:800;font-size:44px;margin:8px 0}
 .pw .feat{text-align:left;margin:18px 0}
 .pw .feat .f{display:flex;gap:10px;align-items:flex-start;margin-bottom:11px;font-size:14.5px}
 .pw .feat .f .ck{color:var(--green);flex:none;margin-top:2px}
@@ -269,21 +269,21 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .step .tx{font-size:14px;line-height:1.45}
 
 /* ADICCION */
-.sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
-.bignum{font-family:"Bricolage Grotesque";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#F6E4A6,#C4922E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Inter";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
+.bignum{font-family:"Inter";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#F6E4A6,#C4922E);-webkit-background-clip:text;background-clip:text;color:transparent}
 .trg{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
-.trg .dt{font-family:"JetBrains Mono";font-size:10.5px;color:var(--dim)}
+.trg .dt{font-family:"Inter";font-size:10.5px;color:var(--dim)}
 
 /* ADMIN */
 .adm{border:1px solid var(--line);border-radius:13px;background:var(--surface);padding:12px;margin-bottom:9px}
 .adm .del{color:var(--coral);font-size:12px}
-.badge{font-family:"JetBrains Mono";font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;color:var(--mid)}
+.badge{font-family:"Inter";font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;color:var(--mid)}
 
 .loader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(60% 40% at 50% 38%,#12101c,var(--ink) 70%);z-index:300}
 .loader .splash{text-align:center;animation:pulse 2s ease-in-out infinite}
 .loader .splash svg{margin:0 auto}
-.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;letter-spacing:.18em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:20px;animation:shimmer 4s linear infinite}
-.loader .lgsub{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;color:var(--mid);margin-top:10px}
+.loader .lg{font-family:"Inter";font-weight:800;font-size:30px;letter-spacing:.18em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:20px;animation:shimmer 4s linear infinite}
+.loader .lgsub{font-family:"Inter";font-size:9px;letter-spacing:.22em;color:var(--mid);margin-top:10px}
 .alfa{animation:alfaFloat 5s ease-in-out infinite}
 @keyframes alfaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes pulse{0%,100%{opacity:.55;transform:scale(.98)}50%{opacity:1;transform:scale(1)}}
@@ -585,7 +585,7 @@ function renderLanding(){
     <div style="height:calc(22px + env(safe-area-inset-top))"></div>
     <div class="alfa-hero">${alfaMark(98)}</div>
     <div class="logo">VIDA ALFA</div>
-    <div class="tag" style="font-family:'JetBrains Mono';font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--golds);opacity:.85;margin-top:12px">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
+    <div class="tag" style="font-family:'Inter';font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--golds);opacity:.85;margin-top:12px">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
     <div class="tri3">
       <div class="t"><div class="d" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
       <div class="t"><div class="d" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
@@ -697,7 +697,7 @@ function renderAuth(){
 function renderPaywall(){
   const trialOver = SUB && SUB.status==="trialing" && SUB.trial_ends_at && new Date(SUB.trial_ends_at)<=new Date();
   $("#app").innerHTML=`<div class="pw">
-    <div class="logo" style="font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">VIDA ALFA</div>
+    <div class="logo" style="font-family:'Inter';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">VIDA ALFA</div>
     <h2 style="margin-top:20px">${trialOver?'Tu prueba terminó':'Activa tu membresía'}</h2>
     <p class="dim" style="margin-top:8px">Sigue construyendo tu mejor versión — Mente, Cuerpo y Alma, todos los días.</p>
     <div class="card" style="margin-top:20px">
@@ -882,7 +882,7 @@ function viewCuerpo(){
   ${ritualSection("cuerpo")}
   <div class="sec-title">Nutrición · hoy</div>
   <div class="card">
-    <div class="row" style="margin-bottom:12px"><div><div class="eye">Calorías</div><div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:30px">${Math.round(eaten.kc)} <small class="dim" style="font-size:14px">/ ${g.kcal}</small></div></div>
+    <div class="row" style="margin-bottom:12px"><div><div class="eye">Calorías</div><div style="font-family:'Inter';font-weight:800;font-size:30px">${Math.round(eaten.kc)} <small class="dim" style="font-size:14px">/ ${g.kcal}</small></div></div>
       <button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
     ${bar("Proteína",eaten.p,g.p,"var(--cuerpo)")}
     ${bar("Carbohidratos",eaten.c,g.c,"var(--gold)")}
