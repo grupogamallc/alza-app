@@ -355,6 +355,18 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .mnum{font-family:"Inter";font-weight:800;font-size:17px;fill:#F7F3E8;text-anchor:middle}
 .mr .mg{font-family:"Inter";font-size:12px;color:var(--dim);margin-top:7px}
 .mr .ml{font-family:"Inter";font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-top:2px}
+.bodyrow{display:flex;align-items:stretch}
+.bstat{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 0}
+.bstat .bic{color:var(--gold);display:grid;place-items:center;filter:drop-shadow(0 2px 8px rgba(233,193,90,.3))}
+.bstat .bic .ico{width:22px;height:22px}
+.binwrap{display:flex;align-items:baseline;justify-content:center;gap:3px}
+.binp{width:100%;max-width:130px;text-align:center;font-family:"Inter";font-weight:800;font-size:25px;background:transparent;border:none;border-radius:0;padding:2px 0;color:var(--tx)}
+.binwrap .binp{width:auto;max-width:96px}
+.binp::placeholder{color:var(--dim);font-weight:800}
+.binp:focus{outline:none}
+.bu{font-family:"Inter";font-weight:700;font-size:14px;color:var(--dim)}
+.bl{font-family:"Inter";font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.bdiv{width:1px;background:var(--line);margin:6px 4px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -431,7 +443,9 @@ const ICONS={
  dice:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M16 8h.01"/><path d="M8 8h.01"/><path d="M8 16h.01"/><path d="M16 16h.01"/><path d="M12 12h.01"/>',
  pill:'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/>',
  coffee:'<path d="M10 2v2"/><path d="M14 2v2"/><path d="M6 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/>',
- heartcrack:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/><path d="M12 5 9.5 9.5l3 2.5-2 4"/>'
+ heartcrack:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/><path d="M12 5 9.5 9.5l3 2.5-2 4"/>',
+ footprints:'<path d="M4 16v-2.4C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0z"/><path d="M20 20v-2.4c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6C14.6 6 14 7.8 14 9.5c0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0z"/><path d="M16 17h4"/><path d="M4 13h4"/>',
+ weight:'<circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.7 12.1a1 1 0 0 1-1 1.1H5.8a1 1 0 0 1-1-1.1z"/>'
 };
 function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
 function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
@@ -936,8 +950,9 @@ function viewCuerpo(){
   const g=S.goals;const eaten=(S.foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p,c:a.c+ +f.c,f:a.f+ +f.f}),{kc:0,p:0,c:0,f:0});
   const rem=Math.round(g.kcal-eaten.kc);const over=rem<0;
   const MR=27,MC=2*Math.PI*MR;
-  const macroRing=(lbl,val,goal)=>{const pct=goal?Math.min(1,val/goal):0;const off=(MC*(1-pct)).toFixed(1);
-    return `<div class="mr"><svg viewBox="0 0 74 74"><circle class="mtrack" cx="37" cy="37" r="${MR}"/><circle class="mpr" cx="37" cy="37" r="${MR}" stroke="url(#ngold)" stroke-dasharray="${MC.toFixed(1)}" stroke-dashoffset="${off}"/><text class="mnum" x="37" y="42.5">${Math.round(val)}</text></svg><div class="mg">/ ${goal}g</div><div class="ml">${lbl}</div></div>`;};
+  const macroRing=(lbl,val,goal,col)=>{const pct=goal?Math.min(1,val/goal):0;const off=(MC*(1-pct)).toFixed(1);
+    return `<div class="mr"><svg viewBox="0 0 74 74"><circle class="mtrack" cx="37" cy="37" r="${MR}"/><circle class="mpr" cx="37" cy="37" r="${MR}" stroke="${col}" style="filter:drop-shadow(0 0 4px ${col})" stroke-dasharray="${MC.toFixed(1)}" stroke-dashoffset="${off}"/><text class="mnum" x="37" y="42.5">${Math.round(val)}</text></svg><div class="mg">/ ${goal}g</div><div class="ml" style="color:${col}">${lbl}</div></div>`;};
+  const steps=getDay().steps||"";const weight=S.weightKg||"";
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
   <div class="ph">
@@ -960,10 +975,18 @@ function viewCuerpo(){
         <div class="c"><div class="n${over?' over':''}">${rem}</div><div class="k">Quedan</div></div>
       </div>
     </div>
-    <div class="mrings">${macroRing("Prot",eaten.p,g.p)}${macroRing("Carbos",eaten.c,g.c)}${macroRing("Grasas",eaten.f,g.f)}</div>
+    <div class="mrings">${macroRing("Prot",eaten.p,g.p,"#F2CF6B")}${macroRing("Carbos",eaten.c,g.c,"#E0A63A")}${macroRing("Grasas",eaten.f,g.f,"#C0842E")}</div>
     <div class="row" style="margin-top:18px"><div class="eye">Comidas de hoy</div><button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
     ${(S.foods||[]).length?`<div style="margin-top:8px">${S.foods.map((f,i)=>`<div class="row" style="padding:9px 0;border-top:1px solid var(--line)"><div style="flex:1">${esc(f.n)}<div class="mono dim" style="font-size:11px">${f.p}P · ${f.c}C · ${f.f}G</div></div><div class="mono">${f.kc} kcal</div><button class="del" onclick="rmFood(${i})" style="color:var(--dim);width:28px">✕</button></div>`).join("")}</div>`:'<div class="empty">Agrega tu primera comida del día.</div>'}
     <div style="text-align:center;margin-top:10px"><span class="link" onclick="goalsSheet()">Editar mis metas</span></div>
+  </div>
+  <div class="sec-title">Actividad y peso · hoy</div>
+  <div class="card">
+    <div class="bodyrow">
+      <div class="bstat"><span class="bic">${svgIcon('footprints')}</span><input class="binp" type="number" inputmode="numeric" min="0" placeholder="0" value="${steps}" onchange="saveSteps(this.value)"><div class="bl">Pasos hoy</div></div>
+      <div class="bdiv"></div>
+      <div class="bstat"><span class="bic">${svgIcon('weight')}</span><div class="binwrap"><input class="binp" type="number" inputmode="decimal" min="0" step="0.1" placeholder="—" value="${weight}" onchange="saveWeight(this.value)"><span class="bu">kg</span></div><div class="bl">Peso actual</div></div>
+    </div>
   </div>
   <div class="sec-title">Wearable</div>
   <div class="card"><div class="row"><div><b>Conectar dispositivo</b><div class="dim" style="font-size:13px">WHOOP y otros — próximamente. Opcional.</div></div><span class="badge">Pronto</span></div></div>
@@ -989,6 +1012,8 @@ function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
   <div class="field"><label>Grasas (g)</label><input id="g_f" type="number" value="${g.f}"></div></div>
   <button class="pillbtn primary" onclick="saveGoals()">Guardar</button>`);}
 function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
+function saveSteps(v){getDay().steps=Math.max(0,parseInt(v)||0);save();toast("Pasos guardados");}
+function saveWeight(v){const w=parseFloat(v)||0;S.weightKg=w;S.weightAt=todayKey();save();toast(w?("Peso: "+w+" kg"):"Peso borrado");}
 
 /* ---- APOYO (adicciones) ---- */
 const ADDICTIONS=[
