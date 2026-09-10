@@ -3,10 +3,13 @@
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#7B5CFF"/><stop offset="0.5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/>
     </linearGradient>
+    <radialGradient id="bg" cx="0.5" cy="0.36" r="0.75">
+      <stop offset="0" stop-color="#17141F"/><stop offset="1" stop-color="#08080D"/>
+    </radialGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="#08080D"/>
-  <path d="M256 118 L150 372 L362 372 Z" fill="none" stroke="url(#g)" stroke-width="26" stroke-linjoin="round" stroke-linecap="round"/>
-  <circle cx="256" cy="150" r="20" fill="#7B5CFF"/>
-  <circle cx="154" cy="368" r="20" fill="#43D6A0"/>
-  <circle cx="358" cy="368" r="20" fill="#FFC15E"/>
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <path d="M256 150 L372 356 L140 356 Z" fill="none" stroke="url(#g)" stroke-width="24" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="256" cy="150" r="21" fill="#7B5CFF"/>
+  <circle cx="140" cy="356" r="21" fill="#43D6A0"/>
+  <circle cx="372" cy="356" r="21" fill="#FFC15E"/>
 </svg>

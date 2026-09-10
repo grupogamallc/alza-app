@@ -38,6 +38,27 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .tnum{font-variant-numeric:tabular-nums}
 .dim{color:var(--mid)}
 .eye{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+/* ICONS sizing */
+.ico{width:20px;height:20px;display:block;flex:none}
+.tri3 .d .ico{width:24px;height:24px}
+.lfeat .le .ico{width:24px;height:24px;margin:0 auto}
+.ph .em{display:flex}
+.ph .em .ico{width:32px;height:32px}
+.task .em{width:24px;display:flex;align-items:center;justify-content:center}
+.task .em .ico{width:21px;height:21px}
+.ob-p .obp-e{display:flex}
+.ob-p .obp-e .ico{width:26px;height:26px}
+.ob-hab .obh-e{display:flex;align-items:center}
+.ob-hab .obh-e .ico{width:20px;height:20px}
+.ob-em{display:flex;justify-content:center}
+.ob-em .ico{width:52px;height:52px}
+.ob-mark{display:flex;justify-content:center}
+.badges .be{display:flex;justify-content:center}
+.badges .be .ico{width:26px;height:26px}
+.momentum .flame .fi{display:inline-flex}
+.momentum .flame .fi .ico{width:26px;height:26px}
+.iconpick button .ico{width:20px;height:20px}
+.iconbtn .ico{width:19px;height:19px}
 
 #app{max-width:520px;margin:0 auto;min-height:100%;position:relative;padding-bottom:96px}
 .view{padding:14px 16px 8px;animation:fade .35s ease}
@@ -83,6 +104,9 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .stage .flow{fill:none;stroke:url(#edge);stroke-width:2;stroke-linecap:round;stroke-dasharray:5 12;opacity:.9;animation:flowe 2.6s linear infinite}
 @keyframes flowe{to{stroke-dashoffset:-102}}
 .stage .n-lab{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:.01em}
+.stage .ring-pct{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;letter-spacing:-.02em}
+.stage .ring-unit{font-family:"JetBrains Mono";font-weight:500;text-anchor:middle;opacity:.85}
+.stage .n-lab2{font-family:"JetBrains Mono";font-weight:600;text-anchor:middle;letter-spacing:.16em}
 .stage .n-pct{font-family:"JetBrains Mono";font-weight:500;text-anchor:middle;fill:var(--mid)}
 
 .ph{position:relative;border-radius:22px;overflow:hidden;padding:20px 18px;margin-bottom:14px;border:1px solid var(--line);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
@@ -240,14 +264,49 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .adm .del{color:var(--coral);font-size:12px}
 .badge{font-family:"JetBrains Mono";font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;color:var(--mid)}
 
-.loader{position:fixed;inset:0;display:grid;place-items:center;background:var(--ink);z-index:300}
-.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;letter-spacing:.06em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.loader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(60% 40% at 50% 38%,#12101c,var(--ink) 70%);z-index:300}
+.loader .splash{text-align:center;animation:pulse 2s ease-in-out infinite}
+.loader .splash svg{margin:0 auto}
+.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;letter-spacing:.14em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:16px}
+@keyframes pulse{0%,100%{opacity:.55;transform:scale(.98)}50%{opacity:1;transform:scale(1)}}
+
+/* ===== POLISH & ANIMACIONES ===== */
+.task{transition:transform .12s ease,border-color .2s,background .2s}
+.task:active{transform:scale(.985)}
+.task .box svg{transition:transform .25s cubic-bezier(.2,1.4,.4,1),opacity .2s}
+.task.done .box{animation:boxpop .32s ease}
+@keyframes boxpop{0%{transform:scale(.82)}55%{transform:scale(1.14)}100%{transform:scale(1)}}
+.pillbtn{transition:transform .12s ease,box-shadow .2s,filter .2s}
+.pillbtn:active{transform:scale(.98)}
+.primary:active{filter:brightness(1.06)}
+.chip{transition:transform .12s}.chip:active{transform:scale(.95)}
+.card,.momentum,.quote,.verse,.biblecard,.badge2{transition:transform .15s ease}
+.ob-hab{transition:transform .12s,opacity .15s,border-color .2s}
+.ob-hab:active{transform:scale(.99)}
+.iconpick button{transition:transform .12s,border-color .15s,background .15s}
+.iconpick button:active{transform:scale(.92)}
+.stage .track,.stage .pr{stroke-width:7}
+.stage .pr{transition:stroke-dashoffset 1.15s cubic-bezier(.22,.9,.24,1)}
+.momentum .fi .ico{animation:flick 2.6s ease-in-out infinite;transform-origin:center bottom}
+@keyframes flick{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08) rotate(2deg)}}
+.view{animation:fadeUp .4s cubic-bezier(.2,.7,.2,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.nav button{position:relative}
+.nav button.on::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:18px;height:3px;border-radius:3px;background:currentColor;box-shadow:0 0 8px currentColor}
+.week .dot{transition:transform .2s}
+.badge2.earned .be{animation:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
 <div id="app"></div>
-<div class="loader" id="loader"><div class="lg">ALZA</div></div>
+<div class="loader" id="loader"><div class="splash">
+  <svg viewBox="0 0 120 108" width="86" height="77" fill="none">
+    <defs><linearGradient id="splg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset=".5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
+    <path d="M60 14 L104 92 L16 92 Z" stroke="url(#splg)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="60" cy="14" r="7" fill="#7B5CFF"/><circle cx="16" cy="92" r="7" fill="#43D6A0"/><circle cx="104" cy="92" r="7" fill="#FFC15E"/>
+  </svg>
+  <div class="lg">ALZA</div>
+</div></div>
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <div class="vplayer" id="vplayer">
@@ -261,6 +320,50 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 const SB_URL="https://wgkwfctbwiwoaycbtuia.supabase.co";
 const SB_KEY="sb_publishable_sMZmlBkmDrdjeiNmmK7sMQ_XFIPrUFG";
 const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+/* ================= ICONOS (line icons) ================= */
+const ICONS={
+ dot:'<circle cx="12" cy="12" r="3"/>',
+ brain:'<path d="M12 5a3 3 0 0 0-5.9-.7A3 3 0 0 0 3 7c0 1 .4 1.8 1 2.4A3.5 3.5 0 0 0 5 16a3 3 0 0 0 4 2.8"/><path d="M12 5a3 3 0 0 1 5.9-.7A3 3 0 0 1 21 7c0 1-.4 1.8-1 2.4A3.5 3.5 0 0 1 19 16a3 3 0 0 1-4 2.8"/><path d="M12 5v14.8"/>',
+ lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+ activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+ sparkle:'<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/>',
+ heartpulse:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.2 12H7l1.5-3 2.5 6 2-4 1 1h3.6"/>',
+ book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+ bookopen:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+ target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+ pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+ dumbbell:'<path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>',
+ run:'<circle cx="17" cy="5" r="2"/><path d="M15 8l-3 3 2 4 3 2"/><path d="M12 11l-4 1-2 4"/><path d="M14 15l-3 1-2 4"/>',
+ apple:'<path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06z"/><path d="M10 2c1 .5 2 2 2 5"/>',
+ droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+ moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/>',
+ heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>',
+ cross:'<path d="M12 3v18"/><path d="M6.5 8.5h11"/>',
+ leaf:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+ flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ water:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+ zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+ smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/>',
+ phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+ sprout:'<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
+ star:'<path d="M11.5 3.2a.5.5 0 0 1 .9 0l2.3 4.7 5.2.7a.5.5 0 0 1 .3.9l-3.8 3.6.9 5.1a.5.5 0 0 1-.7.6L12 17l-4.6 2.4a.5.5 0 0 1-.7-.6l.9-5.1L3.8 10a.5.5 0 0 1 .3-.9l5.2-.7z"/>',
+ gem:'<path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
+ trophy:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.7V17c0 .5-.5 1-1 1.2C7.8 18.8 7 20.2 7 22"/><path d="M14 14.7V17c0 .5.5 1 1 1.2 1.2.5 2 1.9 2 2.8"/><path d="M18 2H6v7a6 6 0 0 0 12 0z"/>',
+ crown:'<path d="M11.6 3.3a.5.5 0 0 1 .9 0l2.9 5.6a1 1 0 0 0 1.5.3l4.3-3.7a.5.5 0 0 1 .8.5l-2.8 10.3a1 1 0 0 1-1 .7H5.8a1 1 0 0 1-1-.7L2 6a.5.5 0 0 1 .8-.5l4.3 3.7a1 1 0 0 0 1.5-.3z"/><path d="M5 21h14"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 4.6V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09A1.65 1.65 0 0 0 21 10h1a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+ shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
+};
+function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
+function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
+const HABIT_ICONS=["book","bookopen","target","pen","headphones","lightbulb","dumbbell","run","activity","apple","droplet","water","moon","sun","zap","heart","cross","leaf","sparkle","smile","flame","star"];
+function triMark(s){s=s||76;return `<svg viewBox="0 0 120 108" width="${s}" height="${s*.9}" fill="none" style="display:block">
+ <defs><linearGradient id="tmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset=".5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
+ <path d="M60 14 L104 92 L16 92 Z" stroke="url(#tmg)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+ <circle cx="60" cy="14" r="7" fill="#7B5CFF"/><circle cx="16" cy="92" r="7" fill="#43D6A0"/><circle cx="104" cy="92" r="7" fill="#FFC15E"/></svg>`;}
 
 /* ================= SEED ================= */
 const SEED_QUOTES=[
@@ -295,21 +398,21 @@ const SEED_AFF=[
  "Lo que resisto hoy me hace libre mañana."
 ];
 const SEED_HABITS=[
- {id:"read",em:"📖",lbl:"Leer / aprender 10 min",pillar:"mente"},
- {id:"visual",em:"🎯",lbl:"Visualizar mis metas",pillar:"mente"},
- {id:"journal",em:"✍️",lbl:"Journal del día",pillar:"mente"},
- {id:"train",em:"🏋️",lbl:"Entrenamiento",pillar:"cuerpo"},
- {id:"macros",em:"🥗",lbl:"Cumplir mis macros",pillar:"cuerpo"},
- {id:"water",em:"💧",lbl:"Tomar agua",pillar:"cuerpo"},
- {id:"sleep",em:"😴",lbl:"Dormir bien",pillar:"cuerpo"},
- {id:"medit",em:"🧘",lbl:"Meditar",pillar:"alma"},
- {id:"pray",em:"🙏",lbl:"Oración / la Palabra",pillar:"alma"},
- {id:"grat",em:"🕊️",lbl:"Gratitud",pillar:"alma"}
+ {id:"read",ic:"book",lbl:"Leer / aprender 10 min",pillar:"mente"},
+ {id:"visual",ic:"target",lbl:"Visualizar mis metas",pillar:"mente"},
+ {id:"journal",ic:"pen",lbl:"Journal del día",pillar:"mente"},
+ {id:"train",ic:"dumbbell",lbl:"Entrenamiento",pillar:"cuerpo"},
+ {id:"macros",ic:"apple",lbl:"Cumplir mis macros",pillar:"cuerpo"},
+ {id:"water",ic:"droplet",lbl:"Tomar agua",pillar:"cuerpo"},
+ {id:"sleep",ic:"moon",lbl:"Dormir bien",pillar:"cuerpo"},
+ {id:"medit",ic:"sun",lbl:"Meditar",pillar:"alma"},
+ {id:"pray",ic:"cross",lbl:"Oración / la Palabra",pillar:"alma"},
+ {id:"grat",ic:"heart",lbl:"Gratitud",pillar:"alma"}
 ];
 const PILLARS={
- mente:{name:"Mente",color:"#7B5CFF",em:"🧠",sub:"Mentalidad, foco y aprendizaje"},
- cuerpo:{name:"Cuerpo",color:"#43D6A0",em:"💪",sub:"Nutrición, energía y descanso"},
- alma:{name:"Alma",color:"#FFC15E",em:"✨",sub:"Fe, calma y propósito"}
+ mente:{name:"Mente",color:"#7B5CFF",ic:"lightbulb",sub:"Mentalidad, foco y aprendizaje"},
+ cuerpo:{name:"Cuerpo",color:"#43D6A0",ic:"activity",sub:"Nutrición, energía y descanso"},
+ alma:{name:"Alma",color:"#FFC15E",ic:"sparkle",sub:"Fe, calma y propósito"}
 };
 
 /* ================= STATE ================= */
@@ -452,49 +555,49 @@ function renderLanding(){
     <div class="logo">ALZA</div>
     <div class="tag">Construye tu mejor versión, un día a la vez.</div>
     <div class="tri3">
-      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">🧠</div><div class="n">Mente</div></div>
-      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">💪</div><div class="n">Cuerpo</div></div>
-      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">✨</div><div class="n">Alma</div></div>
+      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
     <div class="land-feats">
-      ${landFeat("🔥","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
-      ${landFeat("🥗","Cuerpo y nutrición","Lleva tus macros, tu composición y tu energía.")}
-      ${landFeat("🫂","Apoyo real","Un módulo para cuidar tu sobriedad, día a día.")}
-      ${landFeat("✨","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
+      ${landFeat("flame","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
+      ${landFeat("apple","Cuerpo y nutrición","Lleva tus macros, tu composición y tu energía.")}
+      ${landFeat("users","Apoyo real","Un módulo para cuidar tu sobriedad, día a día.")}
+      ${landFeat("sparkle","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
     </div>
     <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Empezar gratis</button>
     <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya tengo cuenta</button>
     <div class="fine">14 días de prueba gratis. ALZA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
   </div>`;
 }
-function landFeat(em,t,d){return `<div class="lfeat"><div class="le">${em}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
+function landFeat(ic,t,d){return `<div class="lfeat"><div class="le">${svgIcon(ic)}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
 
 function renderOnboarding(){
   if(!S._ob)S._ob={step:0,picked:{}};
   const step=S._ob.step;
   let body="";
   if(step===0){
-    body=`<div class="ob-hero"><div class="ob-em">🔺</div>
-      <h2 style="font-size:26px;margin-top:10px">Bienvenido a ALZA</h2>
+    body=`<div class="ob-hero"><div class="ob-mark">${triMark()}</div>
+      <h2 style="font-size:26px;margin-top:14px">Bienvenido a ALZA</h2>
       <p class="dim" style="margin-top:8px;font-size:15px">Tu vida se sostiene en tres pilares. Cuando los tres avanzan, tú avanzas.</p></div>
       <div class="ob-pillars">
-        <div class="ob-p" style="border-color:rgba(123,92,255,.35)"><div class="obp-e">🧠</div><div><b style="color:var(--mente)">Mente</b><div class="dim" style="font-size:13px">Mentalidad, foco y aprendizaje.</div></div></div>
-        <div class="ob-p" style="border-color:rgba(67,214,160,.35)"><div class="obp-e">💪</div><div><b style="color:var(--cuerpo)">Cuerpo</b><div class="dim" style="font-size:13px">Nutrición, energía y descanso.</div></div></div>
-        <div class="ob-p" style="border-color:rgba(255,193,94,.35)"><div class="obp-e">✨</div><div><b style="color:var(--alma)">Alma</b><div class="dim" style="font-size:13px">Fe, calma y propósito.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(123,92,255,.35)"><div class="obp-e" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div><b style="color:var(--mente)">Mente</b><div class="dim" style="font-size:13px">Mentalidad, foco y aprendizaje.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(67,214,160,.35)"><div class="obp-e" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div><b style="color:var(--cuerpo)">Cuerpo</b><div class="dim" style="font-size:13px">Nutrición, energía y descanso.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(255,193,94,.35)"><div class="obp-e" style="color:var(--alma)">${svgIcon('sparkle')}</div><div><b style="color:var(--alma)">Alma</b><div class="dim" style="font-size:13px">Fe, calma y propósito.</div></div></div>
       </div>
       <button class="pillbtn primary" onclick="obNext()">Continuar</button>`;
   } else if(step===1){
     const pk=S._ob.picked;
     const groups=["mente","cuerpo","alma"].map(p=>{
       const items=SEED_HABITS.filter(h=>h.pillar===p).concat((S.habits||[]).filter(h=>h.pillar===p&&!SEED_HABITS.find(s=>s.id===h.id)));
-      return `<div class="sec-title" style="color:${PILLARS[p].color}">${PILLARS[p].em} ${PILLARS[p].name}</div>
-        ${items.map(h=>`<div class="ob-hab ${pk[h.id]!==false?'on':''}" onclick="obTog('${h.id}')"><div class="obh-e">${h.em||"•"}</div><div class="obh-l">${esc(h.lbl)}</div><div class="obh-c">${pk[h.id]!==false?CK:''}</div></div>`).join("")}`;
+      return `<div class="sec-title" style="color:${PILLARS[p].color}">${PILLARS[p].name}</div>
+        ${items.map(h=>`<div class="ob-hab ${pk[h.id]!==false?'on':''}" onclick="obTog('${h.id}')"><div class="obh-e" style="color:${PILLARS[p].color}">${habitIcon(h)}</div><div class="obh-l">${esc(h.lbl)}</div><div class="obh-c">${pk[h.id]!==false?CK:''}</div></div>`).join("")}`;
     }).join("");
     body=`<div class="ob-head"><h2 style="font-size:23px">Elige tu ritual</h2><p class="dim" style="font-size:14px;margin-top:4px">Marca los hábitos que quieres seguir. Podrás cambiarlos cuando quieras.</p></div>
       ${groups}
       <button class="pillbtn primary" style="margin-top:14px" onclick="obNext()">Continuar</button>`;
   } else {
-    body=`<div class="ob-hero"><div class="ob-em">🎯</div>
+    body=`<div class="ob-hero"><div class="ob-em" style="color:var(--gold)">${svgIcon('target')}</div>
       <h2 style="font-size:24px;margin-top:10px">¿Cuál es tu meta?</h2>
       <p class="dim" style="margin-top:8px;font-size:15px">Una frase que te recuerde por qué empiezas. La verás cada día.</p></div>
       <div class="field" style="margin-top:16px"><textarea id="ob_goal" placeholder="Ej. Ser más fuerte, disciplinado y presente para mi familia." style="min-height:110px">${esc(S.goalText||"")}</textarea></div>
@@ -523,9 +626,9 @@ function renderAuth(){
     <div class="logo">ALZA</div>
     <div class="tag">Mente · Cuerpo · Alma</div>
     <div class="tri3">
-      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">🧠</div><div class="n">Mente</div></div>
-      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">💪</div><div class="n">Cuerpo</div></div>
-      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">✨</div><div class="n">Alma</div></div>
+      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
     <div class="card">
       <div class="tabs">
@@ -597,7 +700,7 @@ function render(){
   else if(tab==="admin")body=viewAdmin();
   $("#app").innerHTML=`
     <div class="appbar"><div class="brand">ALZA</div>
-      <button class="iconbtn" onclick="settingsSheet()">⚙</button></div>
+      <button class="iconbtn" onclick="settingsSheet()">${svgIcon('settings')}</button></div>
     <div class="view">${body}</div>
     ${navBar(tab)}`;
 }
@@ -619,7 +722,7 @@ function dayCompletion(k){const day=S.days[k];if(!day||!day.ritual)return 0;cons
 function computeStreak(){let s=0;const d=new Date();if(dayCompletion(keyOf(d))<0.5)d.setDate(d.getDate()-1);for(let i=0;i<400;i++){if(dayCompletion(keyOf(d))>=0.5){s++;d.setDate(d.getDate()-1);}else break;}return s;}
 function weekStrip(){const out=[];const today=keyOf(new Date());for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=keyOf(d);const c=dayCompletion(k);const cls=c>=1?'full':(c>0?'part':'');const wd=['D','L','M','M','J','V','S'][d.getDay()];out.push(`<div class="d"><div class="dot ${cls} ${k===today?'today':''}">${c>=1?'✓':(c>0?'·':'')}</div><div class="dl">${wd}</div></div>`);}return out.join("");}
 function momentumCard(){const s=computeStreak();return `<div class="momentum">
-  <div class="mt"><div class="flame">🔥 ${s} <small>${s===1?'día':'días'} de racha</small></div>
+  <div class="mt"><div class="flame"><span class="fi" style="color:${s>0?'var(--amber)':'var(--dim)'}">${svgIcon('flame')}</span>${s} <small>${s===1?'día':'días'} de racha</small></div>
     <div class="chip" onclick="go('mente')">Mi ritual ›</div></div>
   ${S.goalText?`<div class="goaltxt">"${esc(S.goalText)}"</div>`:''}
   <div class="week">${weekStrip()}</div>
@@ -648,23 +751,26 @@ function viewPanel(){
 function stageTriangle(){
   const P={mente:pillarPct("mente"),cuerpo:pillarPct("cuerpo"),alma:pillarPct("alma")};
   const overall=Math.round((P.mente+P.cuerpo+P.alma)/3*100);
-  const R=30,C=2*Math.PI*R;
-  const ring=(cx,cy,pct,col,lab)=>{
-    const off=C*(1-pct);
-    return `<circle class="track" cx="${cx}" cy="${cy}" r="${R}"/>
-      <circle class="pr" cx="${cx}" cy="${cy}" r="${R}" stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${off}"/>
-      <text class="n-lab" x="${cx}" y="${cy-2}" font-size="15" fill="${col}">${Math.round(pct*100)}</text>
-      <text class="n-pct" x="${cx}" y="${cy+13}" font-size="8">${lab}</text>`;
+  const R=37,C=2*Math.PI*R;
+  const ring=(cx,cy,pct,col,lab,labAbove)=>{
+    const off=C*(1-pct);const ly=labAbove?cy-R-12:cy+R+18;
+    return `<g>
+      <circle class="track" cx="${cx}" cy="${cy}" r="${R}"/>
+      <circle class="pr" cx="${cx}" cy="${cy}" r="${R}" stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${off}" style="filter:drop-shadow(0 0 6px ${col}66)"/>
+      <text class="ring-pct" x="${cx}" y="${cy+2}" font-size="21" fill="#fff">${Math.round(pct*100)}</text>
+      <text class="ring-unit" x="${cx}" y="${cy+15}" font-size="8.5" fill="${col}">%</text>
+      <text class="n-lab2" x="${cx}" y="${ly}" font-size="10" fill="${col}">${lab}</text>
+    </g>`;
   };
-  return `<div class="stage"><svg viewBox="0 0 340 250">
+  return `<div class="stage"><svg viewBox="0 0 340 270">
     <defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#7B5CFF"/><stop offset="0.5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
-    <path class="flow" d="M170 40 L70 200 L270 200 Z"/>
-    ${ring(170,54,P.mente,"#7B5CFF","MENTE")}
-    ${ring(74,196,P.cuerpo,"#43D6A0","CUERPO")}
-    ${ring(266,196,P.alma,"#FFC15E","ALMA")}
-    <text class="core-num" x="170" y="150" font-size="34">${overall}%</text>
-    <text class="core-cap" x="170" y="168" fill="var(--dim)">HOY</text>
+    <path class="flow" d="M170 62 L74 208 L266 208 Z"/>
+    ${ring(170,66,P.mente,"#7B5CFF","MENTE",true)}
+    ${ring(74,204,P.cuerpo,"#43D6A0","CUERPO",false)}
+    ${ring(266,204,P.alma,"#FFC15E","ALMA",false)}
+    <text class="core-num" x="170" y="150" font-size="38">${overall}%</text>
+    <text class="core-cap" x="170" y="169" fill="var(--dim)">HOY</text>
   </svg></div>`;
 }
 
@@ -675,7 +781,7 @@ function viewPillar(p){
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section===p);
   return `
   <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
-    <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2>
+    <div class="em" style="color:${P.color}">${svgIcon(P.ic)}</div><h2 style="color:${P.color}">${P.name}</h2>
     <div class="sub">${P.sub}</div>
   </div>
   ${ritualSection(p)}
@@ -683,25 +789,25 @@ function viewPillar(p){
   ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}
   ${p==="alma"?almaExtra():""}`;
 }
-let editRitual=false, pickEmoji="🎯";
+let editRitual=false, pickIcon="star";
 function ritualSection(p){
   const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
   return `<div class="sec-title" style="justify-content:space-between">Ritual de hoy
     <span class="link" style="font-size:11px;color:var(--gold);text-transform:none;letter-spacing:0" onclick="toggleEdit()">${editRitual?'✓ Listo':'✎ Editar'}</span></div>
   ${hs.length?hs.map(h=>`<div class="task ${(!editRitual&&r[h.id])?'done':''}" ${editRitual?'':`onclick="toggleHabit('${h.id}')"`}>
-    <div class="box">${CK}</div><div class="em">${h.em||'•'}</div><div class="lbl">${esc(h.lbl)}</div>
+    <div class="box">${CK}</div><div class="em" style="color:${PILLARS[p].color}">${habitIcon(h)}</div><div class="lbl">${esc(h.lbl)}</div>
     ${editRitual?`<button class="del" onclick="event.stopPropagation();rmHabit('${h.id}')" style="color:var(--coral);width:32px;font-size:16px">✕</button>`:''}</div>`).join(""):'<div class="empty">Sin hábitos aún. Agrega el primero.</div>'}
   ${editRitual?`<button class="addfood" style="border-color:${PILLARS[p].color}66;color:${PILLARS[p].color}" onclick="addHabitSheet('${p}')">+ Agregar hábito</button>`:''}`;
 }
 function toggleEdit(){editRitual=!editRitual;render();}
 function rmHabit(id){S.habits=S.habits.filter(h=>h.id!==id);save();render();}
-function addHabitSheet(p){pickEmoji="🎯";openSheet(`<h3>Nuevo hábito</h3>
+function addHabitSheet(p){pickIcon="star";openSheet(`<h3>Nuevo hábito</h3>
   <div class="field"><label>Nombre</label><input id="nh_l" placeholder="Ej. Estirar 5 minutos"></div>
-  <div class="field"><label>Icono</label><div class="iconpick" id="nh_icons">${EMOJIS.map(e=>`<button class="${e===pickEmoji?'on':''}" onclick="pickEm('${e}',this)">${e}</button>`).join("")}</div></div>
+  <div class="field"><label>Icono</label><div class="iconpick" id="nh_icons" style="grid-template-columns:repeat(6,1fr)">${HABIT_ICONS.map(n=>`<button class="${n===pickIcon?'on':''}" onclick="pickIc('${n}',this)">${svgIcon(n)}</button>`).join("")}</div></div>
   <input type="hidden" id="nh_p" value="${p}">
   <button class="pillbtn primary" onclick="addHabit()">Agregar hábito</button>`);}
-function pickEm(e,el){pickEmoji=e;[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
-function addHabit(){const l=$("#nh_l").value.trim();if(!l){toast("Escribe el nombre");return;}const p=$("#nh_p").value;S.habits.push({id:'h'+Date.now().toString(36),em:pickEmoji,lbl:l,pillar:p});save();closeSheet();render();toast("Hábito agregado");}
+function pickIc(n,el){pickIcon=n;[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function addHabit(){const l=$("#nh_l").value.trim();if(!l){toast("Escribe el nombre");return;}const p=$("#nh_p").value;S.habits.push({id:'h'+Date.now().toString(36),ic:pickIcon,lbl:l,pillar:p});save();closeSheet();render();toast("Hábito agregado");}
 function almaExtra(){
   const v=daily(SEED_VERSES);
   return `<div class="sec-title">Palabra del día</div>
@@ -730,7 +836,7 @@ function viewCuerpo(){
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
   <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
-    <div class="em">${P.em}</div><h2 style="color:${P.color}">${P.name}</h2><div class="sub">${P.sub}</div>
+    <div class="em" style="color:${P.color}">${svgIcon(P.ic)}</div><h2 style="color:${P.color}">${P.name}</h2><div class="sub">${P.sub}</div>
   </div>
   ${ritualSection("cuerpo")}
   <div class="sec-title">Nutrición · hoy</div>
@@ -773,7 +879,7 @@ function viewApoyo(){
   const a=S.addiction;
   if(!a.enabled){
     return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-      <div class="em">🫂</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Un día a la vez. Aquí encuentras herramientas para mantenerte firme.</div></div>
+      <div class="em" style="color:var(--apoyo)">${svgIcon('users')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Un día a la vez. Aquí encuentras herramientas para mantenerte firme.</div></div>
       <div class="card"><p>Este espacio te ayuda a llevar tu sobriedad: cuenta tus días limpios, recibe una afirmación diaria, un ejercicio SOS cuando llegue el antojo y una bitácora de lo que te detona.</p>
       <button class="pillbtn primary" style="margin-top:10px" onclick="startAddiction()">Empezar mi seguimiento</button>
       <div class="dim" style="font-size:12px;margin-top:12px;text-align:center">Esto es apoyo de acompañamiento, no tratamiento médico. Si estás en crisis, busca ayuda profesional.</div></div>`;
@@ -783,12 +889,12 @@ function viewApoyo(){
   const aff=daily(SEED_AFF);
   const next=MILESTONES.find(m=>m.d>days);
   return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-    <div class="em">🫂</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
+    <div class="em" style="color:var(--apoyo)">${svgIcon('users')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
     <div class="bignum">${days}</div>
     <div class="dim" style="font-size:13px;margin-top:4px">Mejor racha: ${a.best||days} días · desde ${a.since?new Date(a.since).toLocaleDateString("es-MX"):"hoy"}</div>
-    ${next?`<div class="dim" style="font-size:12px;margin-top:8px">${next.e} Faltan ${next.d-days} días para ${next.n}</div>`:''}
+    ${next?`<div class="dim" style="font-size:12px;margin-top:8px">Faltan ${next.d-days} días para ${next.n}</div>`:''}
     <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Reiniciar contador</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
@@ -804,9 +910,9 @@ function viewApoyo(){
     ${(a.triggers||[]).length?a.triggers.slice().reverse().map(t=>`<div class="trg"><div><b>${esc(t.what)}</b>${t.how?`<div class="dim" style="font-size:13px">${esc(t.how)}</div>`:""}</div><div class="dt">${new Date(t.at).toLocaleDateString("es-MX")}</div></div>`).join(""):'<div class="empty">Anota qué te detona y cómo lo superaste para ver tus patrones.</div>'}
   </div>`;
 }
-const MILESTONES=[{d:1,e:"🌱",n:"Día 1"},{d:7,e:"⭐",n:"1 semana"},{d:30,e:"🔥",n:"1 mes"},{d:90,e:"💎",n:"3 meses"},{d:180,e:"🏆",n:"6 meses"},{d:365,e:"👑",n:"1 año"}];
+const MILESTONES=[{d:1,ic:"sprout",n:"Día 1"},{d:7,ic:"star",n:"1 semana"},{d:30,ic:"flame",n:"1 mes"},{d:90,ic:"gem",n:"3 meses"},{d:180,ic:"trophy",n:"6 meses"},{d:365,ic:"crown",n:"1 año"}];
 function badgesCard(days){return `<div class="sec-title">Hitos</div>
-  <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${m.e}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
+  <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${svgIcon(m.ic)}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
 function planCard(){const pl=S.addiction.plan||{};const has=pl.why||pl.action||pl.contact;
   return `<div class="sec-title">Mi plan anti-recaída</div>
   <div class="card" onclick="planSheet()" style="cursor:pointer">
@@ -818,7 +924,7 @@ function planSheet(){const pl=S.addiction.plan||{};openSheet(`<h3>Mi plan anti-r
   <div class="field"><label>¿A quién puedo llamar?</label><input id="pl_c" placeholder="Nombre / teléfono de confianza" value="${esc(pl.contact||"")}"></div>
   <button class="pillbtn primary" onclick="savePlan()">Guardar mi plan</button>`);}
 function savePlan(){S.addiction.plan={why:$("#pl_w").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
-function celebrateCheck(days){const a=S.addiction;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`${top.e} ¡Llegaste a ${top.n} limpio!`),500);}}
+function celebrateCheck(days){const a=S.addiction;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`¡Llegaste a ${top.n} limpio! 🎉`),500);}}
 function startAddiction(){openSheet(`<h3>Empezar mi seguimiento</h3>
   <div class="field"><label>¿Qué quieres dejar? (privado)</label><input id="ad_l" placeholder="Ej. alcohol, azúcar, nicotina…"></div>
   <div class="field"><label>¿Desde qué fecha estás limpio?</label><input id="ad_d" type="date" value="${todayKey()}"></div>
@@ -850,7 +956,7 @@ function saveTrigger(){const w=$("#tg_w").value.trim();if(!w){toast("Escribe el 
 function viewAdmin(){
   if(!ME.is_admin)return '<div class="empty">Sin acceso.</div>';
   const vids=CONTENT.filter(c=>c.kind==="video"),affs=CONTENT.filter(c=>c.kind==="affirmation");
-  return `<div class="ph" style="background:linear-gradient(180deg,#5B49C922,var(--ink2))"><div class="em">🛠️</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
+  return `<div class="ph" style="background:linear-gradient(180deg,#5B49C922,var(--ink2))"><div class="em" style="color:var(--indigo)">${svgIcon('shield')}</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
   <div class="sec-title">Videos recomendados</div>
   <button class="chip" onclick="videoSheet()">+ Agregar video</button>
   <div style="margin-top:10px">${vids.length?vids.map(v=>`<div class="adm"><div class="row"><div style="flex:1"><span class="badge">${esc(v.section||'general')}</span> ${esc(v.title||v.url)}</div><button class="del" onclick="delContent('${v.id}')">Borrar</button></div></div>`).join(""):'<div class="empty">Sin videos aún.</div>'}</div>
