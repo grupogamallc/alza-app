@@ -1,11 +1,11 @@
-<title>ALZA</title>
+<title>VIDA ALFA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#08080D">
+<meta name="theme-color" content="#0A0A0B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ALZA">
-<meta name="description" content="Tu sistema diario: Mente, Cuerpo y Alma.">
+<meta name="apple-mobile-web-app-title" content="VIDA ALFA">
+<meta name="description" content="VIDA ALFA — Disciplina · Consistencia · Evolución.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -14,15 +14,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
 :root{
-  --ink:#08080D;--ink2:#0E0E16;--surface:#15151F;--surface2:#1C1C2A;
-  --glass:rgba(28,28,42,.55);
-  --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
-  --tx:#F5F6FA;--mid:#C6C9D2;--dim:#8C90A0;
-  --gold:#FFC15E;--golds:#F2C57C;--amber:#F2954B;--magenta:#C2447E;--indigo:#5B49C9;
-  --green:#43D6A0;--coral:#FF6B6B;--teal:#2FD1C6;
-  --mente:#7B5CFF;--cuerpo:#43D6A0;--alma:#FFC15E;--apoyo:#2FD1C6;
-  --sunh:linear-gradient(90deg,#7B5CFF,#43D6A0,#FFC15E);
-  --warm:linear-gradient(180deg,#FFCE7A,#F2954B);
+  --ink:#0A0A0B;--ink2:#100F11;--surface:#171519;--surface2:#221F25;
+  --glass:rgba(30,27,20,.55);
+  --line:rgba(233,197,110,.13);--line2:rgba(233,197,110,.26);
+  --tx:#F3EEE2;--mid:#B6AD9B;--dim:#7E7566;
+  --gold:#E9C15A;--golds:#F6E4A6;--amber:#C4922E;--magenta:#C4922E;--indigo:#C9A24A;
+  --green:#E9C15A;--coral:#C9564E;--teal:#D8C48A;
+  --mente:#F0DFA6;--cuerpo:#E3B23F;--alma:#C7862A;--apoyo:#D8C48A;
+  --sunh:linear-gradient(100deg,#B8862F 0%,#F6E4A6 34%,#FCF6DC 50%,#F6E4A6 66%,#B8862F 100%);
+  --goldgrad:linear-gradient(180deg,#FBEEB6,#E9C15A 46%,#B8862F);
+  --warm:linear-gradient(180deg,#F6E4A6,#C4922E);
+  --gglow:rgba(233,193,90,.45);
   --r:16px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -65,22 +67,25 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:linear-gradient(180deg,var(--ink) 70%,transparent);backdrop-filter:blur(6px)}
-.brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;letter-spacing:.02em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;letter-spacing:.14em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mid);background:var(--surface)}
 
 .card{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--surface),var(--ink2));padding:16px;margin-bottom:12px}
 .card.tight{padding:13px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pillbtn{display:inline-flex;align-items:center;gap:8px;justify-content:center;padding:13px 16px;border-radius:12px;font-weight:600;font-size:15px;width:100%}
-.primary{background:linear-gradient(90deg,var(--gold),var(--amber));color:var(--ink);box-shadow:0 10px 26px -12px var(--amber)}
+.primary{position:relative;overflow:hidden;background:linear-gradient(180deg,#F6E4A6,#E9C15A 46%,#C4922E);color:#1A1206;font-weight:700;box-shadow:0 12px 30px -12px var(--gglow),inset 0 1px 0 rgba(255,255,255,.5)}
+.primary::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);animation:sheen 4.5s ease-in-out infinite}
+@keyframes sheen{0%,100%{left:-60%}55%{left:130%}}
 .ghost{border:1px solid var(--line2);color:var(--tx);background:var(--surface)}
 .chip{font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--mid);background:var(--surface);white-space:nowrap}
 .link{color:var(--gold);text-decoration:underline;cursor:pointer}
 
-.quote{position:relative;border:1px solid var(--line);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(123,92,255,.12),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--mente),inset 0 1px 0 rgba(255,255,255,.05)}
+.quote{position:relative;border:1px solid var(--line);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(240,223,166,.12),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--mente),inset 0 1px 0 rgba(255,255,255,.05)}
 .quote::before{content:"\201C";position:absolute;top:2px;left:14px;font-family:"Fraunces";font-size:58px;color:var(--mente);opacity:.28;line-height:1}
-.quote .q{font-family:"Fraunces";font-style:italic;font-size:20px;line-height:1.42;color:#EFEBFF;position:relative}
-.quote .att{font-family:"JetBrains Mono";font-size:11px;color:#B9A9FF;margin-top:12px;letter-spacing:.05em}
+.quote .q{font-family:"Fraunces";font-style:italic;font-size:20px;line-height:1.42;color:#F3EEE2;position:relative}
+.quote .att{font-family:"JetBrains Mono";font-size:11px;color:#D8C48A;margin-top:12px;letter-spacing:.05em}
 .verse{position:relative;border:1px solid rgba(255,193,94,.22);border-radius:18px;padding:22px 20px;background:linear-gradient(180deg,rgba(255,193,94,.11),rgba(18,18,28,.6));box-shadow:0 24px 50px -34px var(--gold),inset 0 1px 0 rgba(255,255,255,.05)}
 .verse::before{content:"\271D";position:absolute;top:16px;right:18px;font-size:20px;color:var(--gold);opacity:.4}
 .verse .q{font-family:"Fraunces";font-style:italic;font-size:18px;line-height:1.42;color:#FBEBD3}
@@ -168,9 +173,12 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 
 /* AUTH / ONBOARDING */
 .auth{max-width:440px;margin:0 auto;min-height:100%;padding:calc(30px + env(safe-area-inset-top)) 22px 40px;display:flex;flex-direction:column}
-.auth .logo{font-family:"Bricolage Grotesque";font-weight:800;font-size:38px;letter-spacing:.04em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+.auth .logo{font-family:"Bricolage Grotesque";font-weight:800;font-size:40px;letter-spacing:.12em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;animation:shimmer 5s linear infinite}
 .auth .tag{text-align:center;color:var(--mid);font-family:"Fraunces";font-style:italic;font-size:16px;margin-top:6px}
-.auth .aur{position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 34% at 50% 0%,rgba(123,92,255,.22),transparent 60%),radial-gradient(50% 30% at 12% 100%,rgba(67,214,160,.16),transparent 62%),radial-gradient(50% 30% at 90% 100%,rgba(255,193,94,.18),transparent 62%)}
+.auth .aur{position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 42% at 50% 2%,rgba(233,193,90,.20),transparent 60%),radial-gradient(60% 34% at 50% 100%,rgba(196,146,46,.14),transparent 64%);animation:auroraB 9s ease-in-out infinite}
+@keyframes auroraB{0%,100%{opacity:.85}50%{opacity:1}}
+.auth .aur::after{content:"";position:fixed;left:0;right:0;bottom:0;height:34%;background:linear-gradient(0deg,rgba(233,193,90,.08),transparent);pointer-events:none}
+.alfa-hero{display:flex;justify-content:center;margin-bottom:14px}
 .auth .card{margin-top:22px}
 .auth .tabs{display:flex;gap:6px;margin-bottom:16px;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--surface)}
 .auth .tabs button{flex:1;padding:10px;border-radius:9px;color:var(--mid);font-weight:600;font-size:14px}
@@ -228,7 +236,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .week{display:flex;justify-content:space-between;gap:6px;margin-top:14px}
 .week .d{flex:1;text-align:center}
 .week .dot{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;display:grid;place-items:center;border:1.5px solid var(--line);font-size:12px}
-.week .dot.full{background:var(--green);border-color:var(--green);color:#05261a}
+.week .dot.full{background:var(--green);border-color:var(--green);color:#1A1206}
 .week .dot.part{border-color:var(--amber);color:var(--amber)}
 .week .dl{font-family:"JetBrains Mono";font-size:9px;color:var(--dim);text-transform:uppercase}
 .week .dot.today{box-shadow:0 0 0 2px var(--gold)}
@@ -236,7 +244,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 /* MEDALLAS */
 .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .badge2{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:13px 6px;text-align:center;opacity:.4;transition:.2s}
-.badge2.earned{opacity:1;border-color:rgba(47,209,198,.4);background:linear-gradient(180deg,rgba(47,209,198,.12),var(--ink2))}
+.badge2.earned{opacity:1;border-color:rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.12),var(--ink2))}
 .badge2 .be{font-size:24px}
 .badge2 .bn{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;margin-top:3px}
 .badge2 .bl{font-family:"JetBrains Mono";font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
@@ -254,8 +262,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .step .tx{font-size:14px;line-height:1.45}
 
 /* ADICCION */
-.sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(47,209,198,.4);background:linear-gradient(180deg,rgba(47,209,198,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
-.bignum{font-family:"Bricolage Grotesque";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#7FEFE4,#2FD1C6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
+.bignum{font-family:"Bricolage Grotesque";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#F6E4A6,#C4922E);-webkit-background-clip:text;background-clip:text;color:transparent}
 .trg{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
 .trg .dt{font-family:"JetBrains Mono";font-size:10.5px;color:var(--dim)}
 
@@ -267,7 +275,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .loader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(60% 40% at 50% 38%,#12101c,var(--ink) 70%);z-index:300}
 .loader .splash{text-align:center;animation:pulse 2s ease-in-out infinite}
 .loader .splash svg{margin:0 auto}
-.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;letter-spacing:.14em;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:16px}
+.loader .lg{font-family:"Bricolage Grotesque";font-weight:800;font-size:30px;letter-spacing:.18em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:20px;animation:shimmer 4s linear infinite}
+.loader .lgsub{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;color:var(--mid);margin-top:10px}
+.alfa{animation:alfaFloat 5s ease-in-out infinite}
+@keyframes alfaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes pulse{0%,100%{opacity:.55;transform:scale(.98)}50%{opacity:1;transform:scale(1)}}
 
 /* ===== POLISH & ANIMACIONES ===== */
@@ -300,12 +311,18 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 
 <div id="app"></div>
 <div class="loader" id="loader"><div class="splash">
-  <svg viewBox="0 0 120 108" width="86" height="77" fill="none">
-    <defs><linearGradient id="splg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset=".5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
-    <path d="M60 14 L104 92 L16 92 Z" stroke="url(#splg)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="60" cy="14" r="7" fill="#7B5CFF"/><circle cx="16" cy="92" r="7" fill="#43D6A0"/><circle cx="104" cy="92" r="7" fill="#FFC15E"/>
+  <svg viewBox="0 0 104 108" width="96" height="100" fill="none" style="overflow:visible;filter:drop-shadow(0 6px 26px rgba(233,193,90,.4))">
+    <defs>
+      <linearGradient id="spa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCF3CE"/><stop offset=".28" stop-color="#F0D67E"/><stop offset=".55" stop-color="#E3B23F"/><stop offset=".8" stop-color="#C4922E"/><stop offset="1" stop-color="#9A6E1E"/></linearGradient>
+      <linearGradient id="spb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDF7DA"/><stop offset=".5" stop-color="#F0CF6C"/><stop offset="1" stop-color="#C08E2C"/></linearGradient>
+    </defs>
+    <path fill="url(#spa)" fill-rule="evenodd" d="M52 5 L101 103 L4 103 Z M52 37 L84 103 L20 103 Z"/>
+    <rect fill="url(#spa)" x="30" y="70" width="44" height="13" rx="1.5"/>
+    <path fill="url(#spb)" d="M52 44 L64 63 L56 63 L56 101 L48 101 L48 63 L40 63 Z"/>
+    <path fill="url(#spb)" d="M38 101 L45 88 L45 101 Z M66 101 L59 88 L59 101 Z"/>
   </svg>
-  <div class="lg">ALZA</div>
+  <div class="lg">VIDA ALFA</div>
+  <div class="lgsub">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
 </div></div>
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
@@ -360,10 +377,17 @@ const ICONS={
 function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
 function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
 const HABIT_ICONS=["book","bookopen","target","pen","headphones","lightbulb","dumbbell","run","activity","apple","droplet","water","moon","sun","zap","heart","cross","leaf","sparkle","smile","flame","star"];
-function triMark(s){s=s||76;return `<svg viewBox="0 0 120 108" width="${s}" height="${s*.9}" fill="none" style="display:block">
- <defs><linearGradient id="tmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset=".5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
- <path d="M60 14 L104 92 L16 92 Z" stroke="url(#tmg)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
- <circle cx="60" cy="14" r="7" fill="#7B5CFF"/><circle cx="16" cy="92" r="7" fill="#43D6A0"/><circle cx="104" cy="92" r="7" fill="#FFC15E"/></svg>`;}
+function triMark(s){return alfaMark(s||88);}
+function alfaMark(s){s=s||88;const id='am'+Math.random().toString(36).slice(2,7);return `<svg class="alfa" viewBox="0 0 104 108" width="${s}" height="${(s*108/104).toFixed(0)}" fill="none" style="display:block;margin:0 auto;overflow:visible">
+ <defs>
+  <linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCF3CE"/><stop offset=".28" stop-color="#F0D67E"/><stop offset=".55" stop-color="#E3B23F"/><stop offset=".8" stop-color="#C4922E"/><stop offset="1" stop-color="#9A6E1E"/></linearGradient>
+  <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDF7DA"/><stop offset=".5" stop-color="#F0CF6C"/><stop offset="1" stop-color="#C08E2C"/></linearGradient>
+ </defs>
+ <path fill="url(#${id}a)" fill-rule="evenodd" d="M52 5 L101 103 L4 103 Z M52 37 L84 103 L20 103 Z"/>
+ <rect fill="url(#${id}a)" x="30" y="70" width="44" height="13" rx="1.5"/>
+ <path fill="url(#${id}b)" d="M52 44 L64 63 L56 63 L56 101 L48 101 L48 63 L40 63 Z"/>
+ <path fill="url(#${id}b)" d="M38 101 L45 88 L45 101 Z M66 101 L59 88 L59 101 Z"/>
+</svg>`;}
 
 /* ================= SEED ================= */
 const SEED_QUOTES=[
@@ -410,8 +434,8 @@ const SEED_HABITS=[
  {id:"grat",ic:"heart",lbl:"Gratitud",pillar:"alma"}
 ];
 const PILLARS={
- mente:{name:"Mente",color:"#7B5CFF",ic:"lightbulb",sub:"Mentalidad, foco y aprendizaje"},
- cuerpo:{name:"Cuerpo",color:"#43D6A0",ic:"activity",sub:"Nutrición, energía y descanso"},
+ mente:{name:"Mente",color:"#F0DFA6",ic:"lightbulb",sub:"Mentalidad, foco y aprendizaje"},
+ cuerpo:{name:"Cuerpo",color:"#E3B23F",ic:"activity",sub:"Nutrición, energía y descanso"},
  alma:{name:"Alma",color:"#FFC15E",ic:"sparkle",sub:"Fe, calma y propósito"}
 };
 
@@ -550,14 +574,15 @@ async function logout(){closeSheet();await sb.auth.signOut();}
 
 function goAuth(mode){authMode=mode;renderAuth();window.scrollTo(0,0);}
 function renderLanding(){
-  $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
-    <div style="height:calc(18px + env(safe-area-inset-top))"></div>
-    <div class="logo">ALZA</div>
-    <div class="tag">Construye tu mejor versión, un día a la vez.</div>
+  $("#app").innerHTML=`<div class="auth land"><div class="aur"></div>
+    <div style="height:calc(22px + env(safe-area-inset-top))"></div>
+    <div class="alfa-hero">${alfaMark(98)}</div>
+    <div class="logo">VIDA ALFA</div>
+    <div class="tag" style="font-family:'JetBrains Mono';font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--golds);opacity:.85;margin-top:12px">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
     <div class="tri3">
-      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
-      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
-      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
+      <div class="t"><div class="d" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
     <div class="land-feats">
       ${landFeat("flame","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
@@ -567,7 +592,7 @@ function renderLanding(){
     </div>
     <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Empezar gratis</button>
     <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya tengo cuenta</button>
-    <div class="fine">14 días de prueba gratis. ALZA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
+    <div class="fine">14 días de prueba gratis. VIDA ALFA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
   </div>`;
 }
 function landFeat(ic,t,d){return `<div class="lfeat"><div class="le">${svgIcon(ic)}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
@@ -578,11 +603,11 @@ function renderOnboarding(){
   let body="";
   if(step===0){
     body=`<div class="ob-hero"><div class="ob-mark">${triMark()}</div>
-      <h2 style="font-size:26px;margin-top:14px">Bienvenido a ALZA</h2>
+      <h2 style="font-size:26px;margin-top:14px">Bienvenido a VIDA ALFA</h2>
       <p class="dim" style="margin-top:8px;font-size:15px">Tu vida se sostiene en tres pilares. Cuando los tres avanzan, tú avanzas.</p></div>
       <div class="ob-pillars">
-        <div class="ob-p" style="border-color:rgba(123,92,255,.35)"><div class="obp-e" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div><b style="color:var(--mente)">Mente</b><div class="dim" style="font-size:13px">Mentalidad, foco y aprendizaje.</div></div></div>
-        <div class="ob-p" style="border-color:rgba(67,214,160,.35)"><div class="obp-e" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div><b style="color:var(--cuerpo)">Cuerpo</b><div class="dim" style="font-size:13px">Nutrición, energía y descanso.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(240,223,166,.35)"><div class="obp-e" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div><b style="color:var(--mente)">Mente</b><div class="dim" style="font-size:13px">Mentalidad, foco y aprendizaje.</div></div></div>
+        <div class="ob-p" style="border-color:rgba(227,178,63,.35)"><div class="obp-e" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div><b style="color:var(--cuerpo)">Cuerpo</b><div class="dim" style="font-size:13px">Nutrición, energía y descanso.</div></div></div>
         <div class="ob-p" style="border-color:rgba(255,193,94,.35)"><div class="obp-e" style="color:var(--alma)">${svgIcon('sparkle')}</div><div><b style="color:var(--alma)">Alma</b><div class="dim" style="font-size:13px">Fe, calma y propósito.</div></div></div>
       </div>
       <button class="pillbtn primary" onclick="obNext()">Continuar</button>`;
@@ -623,12 +648,12 @@ function renderAuth(){
   const signup=authMode==="signup";
   $("#app").innerHTML=`<div class="auth"><div class="aur"></div>
     <div style="text-align:left;margin-bottom:2px"><span class="link" style="color:var(--mid);text-decoration:none" onclick="renderLanding()">‹ Atrás</span></div>
-    <div class="logo">ALZA</div>
+    <div class="logo">VIDA ALFA</div>
     <div class="tag">Mente · Cuerpo · Alma</div>
     <div class="tri3">
-      <div class="t"><div class="d" style="color:var(--mente);border-color:rgba(123,92,255,.4)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
-      <div class="t"><div class="d" style="color:var(--cuerpo);border-color:rgba(67,214,160,.4)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
-      <div class="t"><div class="d" style="color:var(--alma);border-color:rgba(255,193,94,.4)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
+      <div class="t"><div class="d" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
+      <div class="t"><div class="d" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
+      <div class="t"><div class="d" style="color:var(--alma)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
     <div class="card">
       <div class="tabs">
@@ -645,7 +670,7 @@ function renderAuth(){
         <div class="field"><label>Contraseña</label><input id="a_pass" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
         <div class="chkline">
           <div class="chkbox ${pendingTerms?'on':''}" id="a_terms" onclick="pendingTerms=!pendingTerms;this.classList.toggle('on')">${CK}</div>
-          <div>Acepto los <span class="link" onclick="showTerms()">Términos</span> y el <span class="link" onclick="showPrivacy()">Aviso de Privacidad</span>. Entiendo que ALZA <b>no es consejo médico</b>.</div>
+          <div>Acepto los <span class="link" onclick="showTerms()">Términos</span> y el <span class="link" onclick="showPrivacy()">Aviso de Privacidad</span>. Entiendo que VIDA ALFA <b>no es consejo médico</b>.</div>
         </div>
         <div class="err" id="a_err"></div>
         <button class="pillbtn primary" id="a_btn" onclick="doSignup()">Crear cuenta</button>
@@ -657,7 +682,7 @@ function renderAuth(){
         <div style="text-align:center;margin-top:12px"><span class="link" onclick="doReset()">Olvidé mi contraseña</span></div>
       `}
     </div>
-    <div class="fine">Al continuar aceptas nuestros términos. ALZA es una herramienta de desarrollo personal y bienestar; no sustituye atención médica ni psicológica profesional.</div>
+    <div class="fine">Al continuar aceptas nuestros términos. VIDA ALFA es una herramienta de desarrollo personal y bienestar; no sustituye atención médica ni psicológica profesional.</div>
   </div>`;
 }
 
@@ -665,7 +690,7 @@ function renderAuth(){
 function renderPaywall(){
   const trialOver = SUB && SUB.status==="trialing" && SUB.trial_ends_at && new Date(SUB.trial_ends_at)<=new Date();
   $("#app").innerHTML=`<div class="pw">
-    <div class="logo" style="font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">ALZA</div>
+    <div class="logo" style="font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent">VIDA ALFA</div>
     <h2 style="margin-top:20px">${trialOver?'Tu prueba terminó':'Activa tu membresía'}</h2>
     <p class="dim" style="margin-top:8px">Sigue construyendo tu mejor versión — Mente, Cuerpo y Alma, todos los días.</p>
     <div class="card" style="margin-top:20px">
@@ -699,7 +724,7 @@ function render(){
   else if(tab==="apoyo")body=viewApoyo();
   else if(tab==="admin")body=viewAdmin();
   $("#app").innerHTML=`
-    <div class="appbar"><div class="brand">ALZA</div>
+    <div class="appbar"><div class="brand">VIDA ALFA</div>
       <button class="iconbtn" onclick="settingsSheet()">${svgIcon('settings')}</button></div>
     <div class="view">${body}</div>
     ${navBar(tab)}`;
@@ -740,9 +765,9 @@ function viewPanel(){
   </div>
   ${stageTriangle()}
   ${momentumCard()}
-  <div class="card" style="border-color:rgba(47,209,198,.25);background:linear-gradient(180deg,rgba(47,209,198,.10),var(--ink2))">
+  <div class="card" style="border-color:rgba(216,196,138,.25);background:linear-gradient(180deg,rgba(216,196,138,.10),var(--ink2))">
     <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
-    <div class="serif" style="font-style:italic;font-size:18px;margin-top:8px;color:#E8FBF8">"${esc(affTxt)}"</div>
+    <div class="serif" style="font-style:italic;font-size:18px;margin-top:8px;color:#F3EEE2">"${esc(affTxt)}"</div>
   </div>
   <div class="quote"><div class="q">${esc(q.t)}</div><div class="att">— ${esc(q.a)}</div></div>
   <div style="height:12px"></div>
@@ -764,10 +789,10 @@ function stageTriangle(){
   };
   return `<div class="stage"><svg viewBox="0 0 340 270">
     <defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7B5CFF"/><stop offset="0.5" stop-color="#43D6A0"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
+      <stop offset="0" stop-color="#F0DFA6"/><stop offset="0.5" stop-color="#E3B23F"/><stop offset="1" stop-color="#FFC15E"/></linearGradient></defs>
     <path class="flow" d="M170 62 L74 208 L266 208 Z"/>
-    ${ring(170,66,P.mente,"#7B5CFF","MENTE",true)}
-    ${ring(74,204,P.cuerpo,"#43D6A0","CUERPO",false)}
+    ${ring(170,66,P.mente,"#F0DFA6","MENTE",true)}
+    ${ring(74,204,P.cuerpo,"#E3B23F","CUERPO",false)}
     ${ring(266,204,P.alma,"#FFC15E","ALMA",false)}
     <text class="core-num" x="170" y="150" font-size="38">${overall}%</text>
     <text class="core-cap" x="170" y="169" fill="var(--dim)">HOY</text>
@@ -900,7 +925,7 @@ function viewApoyo(){
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
   ${badgesCard(days)}
   ${planCard()}
-  <div class="card" style="border-color:rgba(47,209,198,.25);margin-top:12px">
+  <div class="card" style="border-color:rgba(216,196,138,.25);margin-top:12px">
     <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
     <div class="serif" style="font-style:italic;font-size:17px;margin-top:8px">"${esc(aff)}"</div>
   </div>
@@ -939,7 +964,7 @@ function resetClean(){openSheet(`<h3>Reiniciar contador</h3><p class="dim">Una r
 function doReset2(){const a=S.addiction;const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;if(days>(a.best||0))a.best=days;a.since=todayKey();save();closeSheet();render();}
 function sosSheet(){S.addiction.sos=(S.addiction.sos||0)+1;save();
   openSheet(`<h3>Respira. Esto va a pasar.</h3>
-  <div class="card" style="border-color:rgba(47,209,198,.3)"><b>1 · Respiración 4-7-8</b><div class="dim" style="font-size:14px;margin-top:4px">Inhala 4s, sostén 7s, exhala 8s. Repite 4 veces. El antojo es una ola — sube y baja en minutos.</div></div>
+  <div class="card" style="border-color:rgba(216,196,138,.3)"><b>1 · Respiración 4-7-8</b><div class="dim" style="font-size:14px;margin-top:4px">Inhala 4s, sostén 7s, exhala 8s. Repite 4 veces. El antojo es una ola — sube y baja en minutos.</div></div>
   <div class="card"><b>2 · Recuerda tu porqué</b><div class="dim" style="font-size:14px;margin-top:4px">${esc(daily(SEED_AFF))}</div></div>
   <div class="card"><b>3 · Cambia de escena</b><div class="dim" style="font-size:14px;margin-top:4px">Levántate, toma agua, sal a caminar 5 minutos o llama a alguien de confianza.</div></div>
   <button class="pillbtn primary" onclick="closeSheet();toast('Lo lograste. Un momento a la vez.')">Ya estoy mejor</button>`);}
@@ -956,7 +981,7 @@ function saveTrigger(){const w=$("#tg_w").value.trim();if(!w){toast("Escribe el 
 function viewAdmin(){
   if(!ME.is_admin)return '<div class="empty">Sin acceso.</div>';
   const vids=CONTENT.filter(c=>c.kind==="video"),affs=CONTENT.filter(c=>c.kind==="affirmation");
-  return `<div class="ph" style="background:linear-gradient(180deg,#5B49C922,var(--ink2))"><div class="em" style="color:var(--indigo)">${svgIcon('shield')}</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
+  return `<div class="ph" style="background:linear-gradient(180deg,#C4922E22,var(--ink2))"><div class="em" style="color:var(--indigo)">${svgIcon('shield')}</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
   <div class="sec-title">Videos recomendados</div>
   <button class="chip" onclick="videoSheet()">+ Agregar video</button>
   <div style="margin-top:10px">${vids.length?vids.map(v=>`<div class="adm"><div class="row"><div style="flex:1"><span class="badge">${esc(v.section||'general')}</span> ${esc(v.title||v.url)}</div><button class="del" onclick="delContent('${v.id}')">Borrar</button></div></div>`).join(""):'<div class="empty">Sin videos aún.</div>'}</div>
@@ -1002,21 +1027,21 @@ function settingsSheet(){
 
 function installSheet(){
   const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  openSheet(`<h3>Instalar ALZA</h3>
+  openSheet(`<h3>Instalar VIDA ALFA</h3>
   <p class="dim" style="margin-bottom:14px">Agrégala a tu pantalla de inicio para abrirla como una app, a pantalla completa.</p>
   ${ios?`
     <div class="step"><div class="no">1</div><div class="tx">Toca el botón <b>Compartir</b> ⬆️ en la barra de Safari.</div></div>
     <div class="step"><div class="no">2</div><div class="tx">Desliza y elige <b>"Agregar a inicio"</b>.</div></div>
-    <div class="step"><div class="no">3</div><div class="tx">Toca <b>Agregar</b>. Listo — ALZA aparece en tu pantalla.</div></div>
+    <div class="step"><div class="no">3</div><div class="tx">Toca <b>Agregar</b>. Listo — VIDA ALFA aparece en tu pantalla.</div></div>
   `:`
     <div class="step"><div class="no">1</div><div class="tx">Toca el menú <b>⋮</b> arriba a la derecha de Chrome.</div></div>
     <div class="step"><div class="no">2</div><div class="tx">Elige <b>"Instalar app"</b> o <b>"Agregar a pantalla principal"</b>.</div></div>
-    <div class="step"><div class="no">3</div><div class="tx">Confirma. ALZA queda en tu pantalla de inicio.</div></div>
+    <div class="step"><div class="no">3</div><div class="tx">Confirma. VIDA ALFA queda en tu pantalla de inicio.</div></div>
   `}
   <button class="pillbtn primary" style="margin-top:8px" onclick="closeSheet()">Entendido</button>`);}
 
 function showTerms(){openSheet(`<h3>Términos de uso</h3><div class="dim" style="font-size:13.5px;line-height:1.6">
-  <p>ALZA es una herramienta de desarrollo personal, hábitos y bienestar. Al usarla aceptas usarla de forma personal y responsable.</p>
+  <p>VIDA ALFA es una herramienta de desarrollo personal, hábitos y bienestar. Al usarla aceptas usarla de forma personal y responsable.</p>
   <p><b>No es consejo médico.</b> El contenido (nutrición, ejercicio, apoyo emocional, módulo de adicciones) es informativo y de acompañamiento; no sustituye la atención de un médico, nutriólogo o profesional de salud mental. Consulta siempre a un profesional antes de cambiar tu dieta, ejercicio o tratamiento.</p>
   <p><b>Emergencias.</b> Si estás en crisis o en peligro, contacta servicios de emergencia o una línea de ayuda local de inmediato.</p>
   <p>La membresía es personal e intransferible. Nos reservamos el derecho de suspender cuentas que compartan acceso.</p></div>
