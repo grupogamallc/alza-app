@@ -337,6 +337,24 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .addtab .ti .ico{width:16px;height:16px}
 .addtab.on{border-color:var(--apoyo);color:var(--tx);background:linear-gradient(180deg,rgba(216,196,138,.14),var(--surface))}
 .addtab.more{color:var(--apoyo);font-size:17px;font-weight:700;padding:8px 15px}
+.nutcard{position:relative}
+.nut-rem{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nut-big{font-family:"Inter";font-weight:800;font-size:42px;line-height:1;letter-spacing:-.02em;background:var(--goldgrad);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(233,193,90,.25)}
+.nut-big.over{background:none;-webkit-text-fill-color:var(--coral);color:var(--coral)}
+.nkrow{display:flex;gap:5px;align-items:center;justify-content:flex-end}
+.nkrow .c{text-align:center;min-width:44px}
+.nkrow .c .n{font-family:"Inter";font-weight:800;font-size:17px;color:var(--tx)}
+.nkrow .c .n.over{color:var(--coral)}
+.nkrow .c .k{font-family:"Inter";font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.nkrow .op{color:var(--dim);font-size:15px;font-weight:700}
+.mrings{display:flex;justify-content:space-around;gap:6px;margin-top:20px}
+.mr{text-align:center;flex:1}
+.mr svg{width:74px;height:74px;overflow:visible}
+.mtrack{fill:none;stroke:rgba(233,197,110,.09);stroke-width:7}
+.mpr{fill:none;stroke-width:7;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transform-box:fill-box;filter:drop-shadow(0 0 4px rgba(233,193,90,.45));transition:stroke-dashoffset 1s cubic-bezier(.22,.9,.24,1)}
+.mnum{font-family:"Inter";font-weight:800;font-size:17px;fill:#F7F3E8;text-anchor:middle}
+.mr .mg{font-family:"Inter";font-size:12px;color:var(--dim);margin-top:7px}
+.mr .ml{font-family:"Inter";font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-top:2px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -916,7 +934,10 @@ function closeVideo(){$("#vplayer").classList.remove("on");$("#vpframe").innerHT
 function viewCuerpo(){
   const P=PILLARS.cuerpo;const hs=S.habits.filter(h=>h.pillar==="cuerpo");const r=getDay().ritual;
   const g=S.goals;const eaten=(S.foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p,c:a.c+ +f.c,f:a.f+ +f.f}),{kc:0,p:0,c:0,f:0});
-  const bar=(lbl,val,goal,col)=>{const pct=goal?Math.min(100,val/goal*100):0;return `<div class="macrobar"><div class="r"><span>${lbl}</span><span>${Math.round(val)} / ${goal} g</span></div><div class="bar"><i style="width:${pct}%;background:${col}"></i></div></div>`;};
+  const rem=Math.round(g.kcal-eaten.kc);const over=rem<0;
+  const MR=27,MC=2*Math.PI*MR;
+  const macroRing=(lbl,val,goal)=>{const pct=goal?Math.min(1,val/goal):0;const off=(MC*(1-pct)).toFixed(1);
+    return `<div class="mr"><svg viewBox="0 0 74 74"><circle class="mtrack" cx="37" cy="37" r="${MR}"/><circle class="mpr" cx="37" cy="37" r="${MR}" stroke="url(#ngold)" stroke-dasharray="${MC.toFixed(1)}" stroke-dashoffset="${off}"/><text class="mnum" x="37" y="42.5">${Math.round(val)}</text></svg><div class="mg">/ ${goal}g</div><div class="ml">${lbl}</div></div>`;};
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
   <div class="ph">
@@ -924,12 +945,23 @@ function viewCuerpo(){
   </div>
   ${ritualSection("cuerpo")}
   <div class="sec-title">Nutrición · hoy</div>
-  <div class="card">
-    <div class="row" style="margin-bottom:12px"><div><div class="eye">Calorías</div><div style="font-family:'Inter';font-weight:800;font-size:30px">${Math.round(eaten.kc)} <small class="dim" style="font-size:14px">/ ${g.kcal}</small></div></div>
-      <button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
-    ${bar("Proteína",eaten.p,g.p,"var(--cuerpo)")}
-    ${bar("Carbohidratos",eaten.c,g.c,"var(--gold)")}
-    ${bar("Grasas",eaten.f,g.f,"var(--magenta)")}
+  <div class="card nutcard">
+    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="ngold" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#F6E4A6"/><stop offset=".5" stop-color="#E3B23F"/><stop offset="1" stop-color="#B9852C"/></linearGradient></defs></svg>
+    <div class="nut-rem">
+      <div style="text-align:center;flex:none">
+        <div class="nut-big${over?' over':''}">${over?"−"+(-rem):rem}</div>
+        <div class="eye" style="margin-top:5px">${over?"Te pasaste (kcal)":"Restantes (kcal)"}</div>
+      </div>
+      <div class="nkrow">
+        <div class="c"><div class="n">${g.kcal}</div><div class="k">Meta</div></div>
+        <div class="op">−</div>
+        <div class="c"><div class="n">${Math.round(eaten.kc)}</div><div class="k">Comida</div></div>
+        <div class="op">=</div>
+        <div class="c"><div class="n${over?' over':''}">${rem}</div><div class="k">Quedan</div></div>
+      </div>
+    </div>
+    <div class="mrings">${macroRing("Prot",eaten.p,g.p)}${macroRing("Carbos",eaten.c,g.c)}${macroRing("Grasas",eaten.f,g.f)}</div>
+    <div class="row" style="margin-top:18px"><div class="eye">Comidas de hoy</div><button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
     ${(S.foods||[]).length?`<div style="margin-top:8px">${S.foods.map((f,i)=>`<div class="row" style="padding:9px 0;border-top:1px solid var(--line)"><div style="flex:1">${esc(f.n)}<div class="mono dim" style="font-size:11px">${f.p}P · ${f.c}C · ${f.f}G</div></div><div class="mono">${f.kc} kcal</div><button class="del" onclick="rmFood(${i})" style="color:var(--dim);width:28px">✕</button></div>`).join("")}</div>`:'<div class="empty">Agrega tu primera comida del día.</div>'}
     <div style="text-align:center;margin-top:10px"><span class="link" onclick="goalsSheet()">Editar mis metas</span></div>
   </div>
