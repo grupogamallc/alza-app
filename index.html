@@ -316,6 +316,19 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .nav button.on::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:18px;height:3px;border-radius:3px;background:currentColor;box-shadow:0 0 8px currentColor}
 .week .dot{transition:transform .2s}
 .badge2.earned .be{animation:none}
+.addgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.addopt{display:flex;flex-direction:column;align-items:center;gap:9px;padding:17px 10px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--tx);font-size:13px;font-weight:600;text-align:center;cursor:pointer;transition:transform .12s,border-color .12s}
+.addopt:active{transform:scale(.97);border-color:var(--apoyo)}
+.addopt .ai{width:30px;height:30px;display:grid;place-items:center}
+.addopt .ai .ico{width:26px;height:26px}
+.addopt .al{line-height:1.2}
+.addtabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.addtabs::-webkit-scrollbar{display:none}
+.addtab{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:8px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--mid);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer}
+.addtab .ti{display:grid;place-items:center}
+.addtab .ti .ico{width:16px;height:16px}
+.addtab.on{border-color:var(--apoyo);color:var(--tx);background:linear-gradient(180deg,rgba(216,196,138,.14),var(--surface))}
+.addtab.more{color:var(--apoyo);font-size:17px;font-weight:700;padding:8px 15px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -382,7 +395,16 @@ const ICONS={
  crown:'<path d="M11.6 3.3a.5.5 0 0 1 .9 0l2.9 5.6a1 1 0 0 0 1.5.3l4.3-3.7a.5.5 0 0 1 .8.5l-2.8 10.3a1 1 0 0 1-1 .7H5.8a1 1 0 0 1-1-.7L2 6a.5.5 0 0 1 .8-.5l4.3 3.7a1 1 0 0 0 1.5-.3z"/><path d="M5 21h14"/>',
  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 10 4.6V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09A1.65 1.65 0 0 0 21 10h1a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
- shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
+ shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ wine:'<path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-1-8H8c-.5 4-1 6-1 8a5 5 0 0 0 5 5z"/>',
+ cigarette:'<rect x="2" y="12" width="18" height="4" rx="1"/><path d="M18 8c0-2.5-2-2.5-2-5"/><path d="M22 8c0-2.5-2-2.5-2-5"/><path d="M7 12v4"/>',
+ eyeoff:'<path d="M10.7 5.1A9 9 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3 7 10 7a9 9 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+ cookie:'<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/>',
+ smartphone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',
+ gamepad:'<line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6C2.6 9.4 2 14.5 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.4-1.4a2 2 0 0 1 1.4-.6h4.3a2 2 0 0 1 1.5.6L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.5-.6-6.6-.7-7.4A4 4 0 0 0 17.3 5z"/>',
+ dice:'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M16 8h.01"/><path d="M8 8h.01"/><path d="M8 16h.01"/><path d="M16 16h.01"/><path d="M12 12h.01"/>',
+ pill:'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/>',
+ coffee:'<path d="M10 2v2"/><path d="M14 2v2"/><path d="M6 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/>'
 };
 function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
 function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
@@ -457,6 +479,7 @@ const DEFAULT_STATE={
   days:{}, foods:[],
   inbody:{weight:{c:null,p:null},smm:{c:null,p:null},pbf:{c:null,p:null}},
   addiction:{enabled:false,label:"",since:null,best:0,triggers:[],sos:0,plan:{why:"",trigger:"",action:"",contact:""}},
+  addictions:[], addUi:{cur:null},
   bible:{streak:0,lastRead:null},
   ui:{tab:"panel"}
 };
@@ -518,6 +541,8 @@ async function loadAccount(){
     S=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), (st&&st.data)||{});
     if(!S.ui)S.ui={tab:"panel"};
     if(!S.addiction)S.addiction=JSON.parse(JSON.stringify(DEFAULT_STATE.addiction));
+    if(!S.addictions){S.addictions=[];if(S.addiction&&S.addiction.enabled){S.addictions.push({id:'legacy',type:'otra',label:S.addiction.label||'Mi proceso',ic:'shield',since:S.addiction.since,best:S.addiction.best||0,plan:S.addiction.plan||{},triggers:S.addiction.triggers||[],celebrated:S.addiction.celebrated||[]});}}
+    if(!S.addUi)S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};
     // content
     const {data:ct}=await sb.from("alza_content").select("*").eq("active",true).order("sort",{ascending:true});
     CONTENT=ct||[];
@@ -597,7 +622,7 @@ function renderLanding(){
     <div class="land-feats">
       ${landFeat("flame","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
       ${landFeat("apple","Cuerpo y nutrición","Lleva tus macros, tu composición y tu energía.")}
-      ${landFeat("users","Apoyo real","Un módulo para cuidar tu sobriedad, día a día.")}
+      ${landFeat("users","Apoyo real","Un módulo para vencer tus adicciones, día a día.")}
       ${landFeat("sparkle","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
     </div>
     <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Crear cuenta</button>
@@ -918,21 +943,39 @@ function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
 function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
 
 /* ---- APOYO (adicciones) ---- */
+const ADDICTIONS=[
+ {id:'alcohol',label:'Alcohol',ic:'wine'},
+ {id:'tabaco',label:'Tabaco / Vapeo',ic:'cigarette'},
+ {id:'porno',label:'Pornografía',ic:'eyeoff'},
+ {id:'masturbacion',label:'Masturbación',ic:'shield'},
+ {id:'azucar',label:'Azúcar / Comida chatarra',ic:'cookie'},
+ {id:'redes',label:'Redes sociales',ic:'smartphone'},
+ {id:'videojuegos',label:'Videojuegos',ic:'gamepad'},
+ {id:'apuestas',label:'Apuestas',ic:'dice'},
+ {id:'drogas',label:'Drogas',ic:'pill'},
+ {id:'cafeina',label:'Cafeína',ic:'coffee'}
+];
+function curAdd(){const l=S.addictions||[];if(!l.length)return null;return l.find(x=>x.id===(S.addUi&&S.addUi.cur))||l[0];}
+function addPicker(cb){return `<div class="addgrid">${ADDICTIONS.map(a=>`<button class="addopt" onclick="${cb}('${a.id}')"><span class="ai" style="color:var(--apoyo)">${svgIcon(a.ic)}</span><span class="al">${a.label}</span></button>`).join('')}<button class="addopt" onclick="${cb}('otra')"><span class="ai" style="color:var(--apoyo)">${svgIcon('pen')}</span><span class="al">Otra</span></button></div>`;}
 function viewApoyo(){
-  const a=S.addiction;
-  if(!a.enabled){
+  const list=S.addictions||[];
+  if(!list.length){
     return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-      <div class="em" style="color:var(--apoyo)">${svgIcon('users')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Un día a la vez. Aquí encuentras herramientas para mantenerte firme.</div></div>
-      <div class="card"><p>Este espacio te ayuda a llevar tu sobriedad: cuenta tus días limpios, recibe una afirmación diaria, un ejercicio SOS cuando llegue el antojo y una bitácora de lo que te detona.</p>
-      <button class="pillbtn primary" style="margin-top:10px" onclick="startAddiction()">Empezar mi seguimiento</button>
-      <div class="dim" style="font-size:12px;margin-top:12px;text-align:center">Esto es apoyo de acompañamiento, no tratamiento médico. Si estás en crisis, busca ayuda profesional.</div></div>`;
+      <div class="em" style="color:var(--apoyo)">${svgIcon('shield')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Elige tu batalla. Un día a la vez.</div></div>
+      <div class="card"><p>Este espacio te acompaña a <b>vencer tus adicciones</b>: elige con cuál(es) estás luchando y lleva tus días limpio, un ejercicio SOS para el antojo, tu plan anti-recaída y una bitácora de lo que te detona.</p></div>
+      <div class="sec-title">¿Con qué estás luchando?</div>
+      ${addPicker('pickAddiction')}
+      <div class="dim" style="font-size:12px;margin-top:14px;text-align:center">Puedes elegir varias. Solo tú ves esta información. Esto es acompañamiento, no tratamiento médico; si estás en crisis, busca ayuda profesional.</div>`;
   }
+  const a=curAdd();
   const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;
   celebrateCheck(days);
   const aff=daily(SEED_AFF);
   const next=MILESTONES.find(m=>m.d>days);
+  const tabs=`<div class="addtabs">${list.map(x=>`<button class="addtab ${x.id===a.id?'on':''}" onclick="setAdd('${x.id}')"><span class="ti">${svgIcon(x.ic)}</span>${esc(x.label)}</button>`).join('')}<button class="addtab more" onclick="addMore()">＋</button></div>`;
   return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-    <div class="em" style="color:var(--apoyo)">${svgIcon('users')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
+    <div class="em" style="color:var(--apoyo)">${svgIcon(a.ic)}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
+  ${tabs}
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
     <div class="bignum">${days}</div>
@@ -951,36 +994,49 @@ function viewApoyo(){
   <div class="card">
     <button class="chip" onclick="triggerSheet()">+ Anotar un detonante</button>
     ${(a.triggers||[]).length?a.triggers.slice().reverse().map(t=>`<div class="trg"><div><b>${esc(t.what)}</b>${t.how?`<div class="dim" style="font-size:13px">${esc(t.how)}</div>`:""}</div><div class="dt">${new Date(t.at).toLocaleDateString("es-MX")}</div></div>`).join(""):'<div class="empty">Anota qué te detona y cómo lo superaste para ver tus patrones.</div>'}
-  </div>`;
+  </div>
+  <div style="text-align:center;margin-top:16px"><span class="link" style="color:var(--dim);font-size:13px" onclick="removeAddiction('${a.id}')">Dejar de seguir "${esc(a.label)}"</span></div>`;
 }
 const MILESTONES=[{d:1,ic:"sprout",n:"Día 1"},{d:7,ic:"star",n:"1 semana"},{d:30,ic:"flame",n:"1 mes"},{d:90,ic:"gem",n:"3 meses"},{d:180,ic:"trophy",n:"6 meses"},{d:365,ic:"crown",n:"1 año"}];
 function badgesCard(days){return `<div class="sec-title">Hitos</div>
   <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${svgIcon(m.ic)}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
-function planCard(){const pl=S.addiction.plan||{};const has=pl.why||pl.action||pl.contact;
+function planCard(){const pl=(curAdd()||{}).plan||{};const has=pl.why||pl.action||pl.contact;
   return `<div class="sec-title">Mi plan anti-recaída</div>
   <div class="card" onclick="planSheet()" style="cursor:pointer">
     ${has?`${pl.why?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Mi porqué</div><div style="font-size:14px;margin-top:3px">${esc(pl.why)}</div></div>`:''}${pl.action?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Ante el antojo</div><div style="font-size:14px;margin-top:3px">${esc(pl.action)}</div></div>`:''}${pl.contact?`<div><div class="eye" style="color:var(--teal)">A quién llamo</div><div style="font-size:14px;margin-top:3px">${esc(pl.contact)}</div></div>`:''}<div class="link" style="margin-top:10px;display:inline-block">Editar plan</div>`:`<b>Arma tu plan anti-recaída</b><div class="dim" style="font-size:13px;margin-top:4px">Tu porqué, qué harás ante el antojo y a quién llamar. Tenerlo listo te salva en el momento difícil.</div><div class="link" style="margin-top:8px;display:inline-block">Crear mi plan ›</div>`}
   </div>`;}
-function planSheet(){const pl=S.addiction.plan||{};openSheet(`<h3>Mi plan anti-recaída</h3>
+function planSheet(){const pl=(curAdd()||{}).plan||{};openSheet(`<h3>Mi plan anti-recaída</h3>
   <div class="field"><label>¿Por qué quiero lograrlo?</label><textarea id="pl_w" placeholder="Mi razón más fuerte…">${esc(pl.why||"")}</textarea></div>
   <div class="field"><label>¿Qué haré cuando llegue el antojo?</label><textarea id="pl_a" placeholder="Ej. respirar, salir a caminar, tomar agua…">${esc(pl.action||"")}</textarea></div>
   <div class="field"><label>¿A quién puedo llamar?</label><input id="pl_c" placeholder="Nombre / teléfono de confianza" value="${esc(pl.contact||"")}"></div>
   <button class="pillbtn primary" onclick="savePlan()">Guardar mi plan</button>`);}
-function savePlan(){S.addiction.plan={why:$("#pl_w").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
-function celebrateCheck(days){const a=S.addiction;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`¡Llegaste a ${top.n} limpio! 🎉`),500);}}
-function startAddiction(){openSheet(`<h3>Empezar mi seguimiento</h3>
-  <div class="field"><label>¿Qué quieres dejar? (privado)</label><input id="ad_l" placeholder="Ej. alcohol, azúcar, nicotina…"></div>
+function savePlan(){const a=curAdd();if(!a)return;a.plan={why:$("#pl_w").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
+function celebrateCheck(days){const a=curAdd();if(!a)return;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`¡Llegaste a ${top.n} limpio! 🎉`),500);}}
+function setAdd(id){S.addUi=S.addUi||{};S.addUi.cur=id;save();render();window.scrollTo(0,0);}
+function addMore(){openSheet(`<h3>Agregar otra batalla</h3>${addPicker('pickFromSheet')}`);}
+function pickFromSheet(id){closeSheet();pickAddiction(id);}
+function pickAddiction(id){const cat=ADDICTIONS.find(a=>a.id===id);
+  openSheet(`<h3>${cat?esc(cat.label):'Otra adicción'}</h3>
+  ${cat?'':'<div class="field"><label>¿Qué quieres dejar? (privado)</label><input id="ad_l" placeholder="Escríbelo…"></div>'}
   <div class="field"><label>¿Desde qué fecha estás limpio?</label><input id="ad_d" type="date" value="${todayKey()}"></div>
-  <button class="pillbtn primary" onclick="saveAddiction()">Empezar</button>
+  <button class="pillbtn primary" onclick="saveNewAddiction('${id}')">Empezar</button>
   <div class="dim" style="font-size:12px;margin-top:10px;text-align:center">Solo tú ves esta información.</div>`);}
-function saveAddiction(){const l=$("#ad_l").value.trim();const d=$("#ad_d").value||todayKey();
-  S.addiction.enabled=true;S.addiction.label=l;S.addiction.since=d;S.addiction.best=Math.floor((Date.now()-new Date(d))/864e5)||0;
-  save();closeSheet();render();toast("Vamos contigo 💪");}
+function saveNewAddiction(id){const cat=ADDICTIONS.find(a=>a.id===id);
+  const label=cat?cat.label:(($("#ad_l")&&$("#ad_l").value.trim())||'Mi proceso');
+  const ic=cat?cat.ic:'shield';const d=($("#ad_d")&&$("#ad_d").value)||todayKey();
+  if(!S.addictions)S.addictions=[];
+  const uid=id+'_'+Date.now().toString(36);
+  S.addictions.push({id:uid,type:id,label,ic,since:d,best:Math.floor((Date.now()-new Date(d))/864e5)||0,plan:{},triggers:[],celebrated:[]});
+  S.addUi={cur:uid};save();closeSheet();render();window.scrollTo(0,0);toast("Vamos contigo 💪");}
+function removeAddiction(id){openSheet(`<h3>Dejar de seguir</h3><p class="dim">Se quitará este seguimiento y su bitácora. Tu progreso en las demás no se toca. ¿Continuar?</p>
+  <button class="pillbtn primary" style="margin-top:12px" onclick="doRemoveAdd('${id}')">Sí, quitar</button>
+  <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
+function doRemoveAdd(id){S.addictions=(S.addictions||[]).filter(x=>x.id!==id);S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};save();closeSheet();render();window.scrollTo(0,0);}
 function resetClean(){openSheet(`<h3>Reiniciar contador</h3><p class="dim">Una recaída no borra tu progreso. Volver a empezar es de valientes. ¿Reiniciamos desde hoy?</p>
   <button class="pillbtn primary" style="margin-top:12px" onclick="doReset2()">Sí, reiniciar desde hoy</button>
   <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
-function doReset2(){const a=S.addiction;const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;if(days>(a.best||0))a.best=days;a.since=todayKey();save();closeSheet();render();}
-function sosSheet(){S.addiction.sos=(S.addiction.sos||0)+1;save();
+function doReset2(){const a=curAdd();if(!a)return;const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;if(days>(a.best||0))a.best=days;a.since=todayKey();save();closeSheet();render();}
+function sosSheet(){const a=curAdd();if(a){a.sos=(a.sos||0)+1;save();}
   openSheet(`<h3>Respira. Esto va a pasar.</h3>
   <div class="card" style="border-color:rgba(216,196,138,.3)"><b>1 · Respiración 4-7-8</b><div class="dim" style="font-size:14px;margin-top:4px">Inhala 4s, sostén 7s, exhala 8s. Repite 4 veces. El antojo es una ola — sube y baja en minutos.</div></div>
   <div class="card"><b>2 · Recuerda tu porqué</b><div class="dim" style="font-size:14px;margin-top:4px">${esc(daily(SEED_AFF))}</div></div>
@@ -991,8 +1047,8 @@ function triggerSheet(){openSheet(`<h3>Anotar detonante</h3>
   <div class="field"><label>¿Cómo lo superaste? (opcional)</label><textarea id="tg_h" placeholder="Qué hiciste para resistir"></textarea></div>
   <button class="pillbtn primary" onclick="saveTrigger()">Guardar</button>`);}
 function saveTrigger(){const w=$("#tg_w").value.trim();if(!w){toast("Escribe el detonante");return;}
-  if(!S.addiction.triggers)S.addiction.triggers=[];
-  S.addiction.triggers.push({what:w,how:$("#tg_h").value.trim(),at:Date.now()});
+  const a=curAdd();if(!a)return;if(!a.triggers)a.triggers=[];
+  a.triggers.push({what:w,how:$("#tg_h").value.trim(),at:Date.now()});
   save();closeSheet();render();}
 
 /* ---- ADMIN ---- */
