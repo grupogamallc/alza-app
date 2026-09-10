@@ -111,6 +111,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .stage .core-num{font-family:"Bricolage Grotesque";font-weight:800;fill:#fff;text-anchor:middle;letter-spacing:-.02em}
 .stage .core-cap{font-family:"JetBrains Mono";font-size:9px;letter-spacing:.22em;text-anchor:middle}
 .stage .edge{fill:none;stroke:rgba(233,197,110,.10);stroke-width:1}
+.stage .flow{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:8 92;filter:drop-shadow(0 0 5px rgba(246,228,166,.75));animation:triflow 5s linear infinite}
+.stage .flow2{animation-delay:-2.5s;opacity:.7}
+@keyframes triflow{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.stage .flow{animation:none;opacity:.25}}
 .stage .ring-num{font-family:"Bricolage Grotesque";font-weight:800;text-anchor:middle;fill:#F7F3E8;letter-spacing:-.02em}
 .stage .ring-u{font-family:"Bricolage Grotesque";font-weight:700;text-anchor:middle;fill:var(--dim)}
 .stage .n-lab2{font-family:"JetBrains Mono";font-weight:700;text-anchor:middle;letter-spacing:.2em;fill:var(--mid)}
@@ -801,6 +805,8 @@ function stageTriangle(){
       <radialGradient id="rg" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="rgba(233,193,90,.13)"/><stop offset="1" stop-color="rgba(233,193,90,0)"/></radialGradient>
     </defs>
     <path class="edge" d="M170 66 L74 206 L266 206 Z"/>
+    <path class="flow" d="M170 66 L74 206 L266 206 Z" pathLength="100" stroke="url(#gold)"/>
+    <path class="flow flow2" d="M170 66 L74 206 L266 206 Z" pathLength="100" stroke="url(#gold)"/>
     ${ring(170,66,P.mente,"MENTE",true)}
     ${ring(74,206,P.cuerpo,"CUERPO",false)}
     ${ring(266,206,P.alma,"ALMA",false)}
