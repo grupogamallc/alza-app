@@ -123,11 +123,15 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .stage .n-lab2{font-family:"Inter";font-weight:700;text-anchor:middle;letter-spacing:.2em;fill:var(--mid)}
 .stage .n-lab{font-family:"Inter";font-weight:800;text-anchor:middle;letter-spacing:.01em}
 
-.ph{position:relative;border-radius:22px;overflow:hidden;padding:20px 18px;margin-bottom:14px;border:1px solid var(--line);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
+.ph{position:relative;border-radius:22px;overflow:hidden;padding:26px 18px 22px;margin-bottom:14px;border:1px solid var(--line);text-align:center;background:radial-gradient(130% 100% at 50% 0%,rgba(233,193,90,.15),var(--ink2) 68%);box-shadow:0 26px 54px -42px #000,inset 0 1px 0 rgba(255,255,255,.05)}
+.ph::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(115deg,transparent 34%,rgba(246,228,166,.10) 48%,transparent 62%);background-size:250% 100%;animation:phsheen 6s linear infinite}
+@keyframes phsheen{0%{background-position:170% 0}100%{background-position:-70% 0}}
 .ph>*{position:relative;z-index:2}
-.ph .em{font-size:30px}
-.ph h2{font-size:26px;margin-top:4px}
-.ph .sub{color:var(--mid);font-size:13.5px;margin-top:2px}
+.ph .em{font-size:30px;display:flex;justify-content:center;color:var(--gold);filter:drop-shadow(0 3px 11px rgba(233,193,90,.38));animation:phfloat 4.2s ease-in-out infinite}
+@keyframes phfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.ph .em .ico{width:34px;height:34px}
+.ph h2{font-size:27px;margin-top:9px;letter-spacing:.005em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite}
+.ph .sub{color:var(--mid);font-size:13.5px;margin-top:5px}
 
 .task{display:flex;align-items:center;gap:12px;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--surface);margin-bottom:8px;transition:.2s;cursor:pointer}
 .task .box{width:22px;height:22px;border-radius:7px;border:1.6px solid var(--dim);flex:none;display:grid;place-items:center;transition:.2s}
@@ -849,8 +853,8 @@ function viewPillar(p){
   const P=PILLARS[p];const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section===p);
   return `
-  <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
-    <div class="em" style="color:${P.color}">${svgIcon(P.ic)}</div><h2 style="color:${P.color}">${P.name}</h2>
+  <div class="ph">
+    <div class="em">${svgIcon(P.ic)}</div><h2>${P.name}</h2>
     <div class="sub">${P.sub}</div>
   </div>
   ${ritualSection(p)}
@@ -904,8 +908,8 @@ function viewCuerpo(){
   const bar=(lbl,val,goal,col)=>{const pct=goal?Math.min(100,val/goal*100):0;return `<div class="macrobar"><div class="r"><span>${lbl}</span><span>${Math.round(val)} / ${goal} g</span></div><div class="bar"><i style="width:${pct}%;background:${col}"></i></div></div>`;};
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
-  <div class="ph" style="background:linear-gradient(180deg,${P.color}22,var(--ink2))">
-    <div class="em" style="color:${P.color}">${svgIcon(P.ic)}</div><h2 style="color:${P.color}">${P.name}</h2><div class="sub">${P.sub}</div>
+  <div class="ph">
+    <div class="em">${svgIcon(P.ic)}</div><h2>${P.name}</h2><div class="sub">${P.sub}</div>
   </div>
   ${ritualSection("cuerpo")}
   <div class="sec-title">Nutrición · hoy</div>
@@ -961,8 +965,8 @@ function addPicker(cb){return `<div class="addgrid">${ADDICTIONS.map(a=>`<button
 function viewApoyo(){
   const list=S.addictions||[];
   if(!list.length){
-    return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-      <div class="em" style="color:var(--apoyo)">${svgIcon('shield')}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">Elige tu batalla. Un día a la vez.</div></div>
+    return `<div class="ph">
+      <div class="em">${svgIcon('shield')}</div><h2>Apoyo</h2><div class="sub">Elige tu batalla. Un día a la vez.</div></div>
       <div class="card"><p>Este espacio te acompaña a <b>vencer tus adicciones</b>: elige con cuál(es) estás luchando y lleva tus días limpio, un ejercicio SOS para el antojo, tu plan anti-recaída y una bitácora de lo que te detona.</p></div>
       <div class="sec-title">¿Con qué estás luchando?</div>
       ${addPicker('pickAddiction')}
@@ -974,8 +978,8 @@ function viewApoyo(){
   const aff=daily(SEED_AFF);
   const next=MILESTONES.find(m=>m.d>days);
   const tabs=`<div class="addtabs">${list.map(x=>`<button class="addtab ${x.id===a.id?'on':''}" onclick="setAdd('${x.id}')"><span class="ti">${svgIcon(x.ic)}</span>${esc(x.label)}</button>`).join('')}<button class="addtab more" onclick="addMore()">＋</button></div>`;
-  return `<div class="ph" style="background:linear-gradient(180deg,var(--apoyo)22,var(--ink2))">
-    <div class="em" style="color:var(--apoyo)">${svgIcon(a.ic)}</div><h2 style="color:var(--apoyo)">Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
+  return `<div class="ph">
+    <div class="em">${svgIcon(a.ic)}</div><h2>Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
   ${tabs}
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
@@ -1056,7 +1060,7 @@ function saveTrigger(){const w=$("#tg_w").value.trim();if(!w){toast("Escribe el 
 function viewAdmin(){
   if(!ME.is_admin)return '<div class="empty">Sin acceso.</div>';
   const vids=CONTENT.filter(c=>c.kind==="video"),affs=CONTENT.filter(c=>c.kind==="affirmation");
-  return `<div class="ph" style="background:linear-gradient(180deg,#C4922E22,var(--ink2))"><div class="em" style="color:var(--indigo)">${svgIcon('shield')}</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
+  return `<div class="ph"><div class="em">${svgIcon('shield')}</div><h2>Admin</h2><div class="sub">Cura el contenido que ve todo el mundo.</div></div>
   <div class="sec-title">Videos recomendados</div>
   <button class="chip" onclick="videoSheet()">+ Agregar video</button>
   <div style="margin-top:10px">${vids.length?vids.map(v=>`<div class="adm"><div class="row"><div style="flex:1"><span class="badge">${esc(v.section||'general')}</span> ${esc(v.title||v.url)}</div><button class="del" onclick="delContent('${v.id}')">Borrar</button></div></div>`).join(""):'<div class="empty">Sin videos aún.</div>'}</div>
