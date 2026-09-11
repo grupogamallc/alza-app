@@ -499,6 +499,15 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .wrow .ws{font-family:"Inter";font-weight:800;font-size:15px;color:var(--golds);flex:none}
 .wrow .ws .wk{font-family:"Inter";font-weight:600;font-size:10px;color:var(--dim);margin-left:2px}
 .wrow.me{background:rgba(233,193,90,.08);border-radius:10px;margin:0 -9px;padding-left:9px;padding-right:9px}
+.wrow .wpr{display:inline-flex;align-items:center;gap:4px;font-family:"Inter";font-size:11px;font-weight:700;color:var(--gold);background:rgba(233,193,90,.14);border-radius:999px;padding:3px 8px;flex:none}
+.wrow .wpr .ico{width:11px;height:11px}
+.proptip{font-size:11.5px;color:var(--dim);margin-top:9px;text-align:center}
+.propline{display:flex;align-items:center;gap:10px;margin-top:14px;border:1px solid rgba(233,193,90,.32);border-radius:13px;padding:11px 13px;background:rgba(233,193,90,.10);font-size:13.5px;color:var(--tx);line-height:1.4}
+.propline .ico{width:17px;height:17px;color:var(--gold);flex:none}
+.propline b{color:var(--golds)}
+.propgrid{display:grid;gap:9px;margin-top:8px}
+.propb{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:14px;padding:14px 15px;background:var(--surface);color:var(--tx);font-family:"Inter";font-size:15px;font-weight:600;text-align:left}
+.propb .ico{width:18px;height:18px;color:var(--gold);flex:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1173,10 +1182,30 @@ function commTick(){
   pushPresence();
   if(!COMM||Date.now()-_commAt>60000){
     loadCommunity(true).then(()=>{if(S&&S.ui&&S.ui.tab==="panel")render();});}}
+const PROPS=[{k:"vi",l:"Te vi",ic:"sparkle"},{k:"fuerte",l:"Vas fuerte",ic:"flame"},
+  {k:"contigo",l:"Estoy contigo",ic:"users"},{k:"igual",l:"Yo también voy en eso",ic:"target"}];
+function sentToday(a){return (((COMM&&COMM.sent_today)||[]).indexOf(a)>=0);}
 function wallRow(x,i){const me=!!(S.alias&&x.alias===S.alias);
-  return `<div class="wrow ${me?'me':''}"><span class="wp ${i<3?'top':''}">${i+1}</span><span class="wdot ${x.done?'':'off'}"></span>
+  const tap=(!me&&commOn());
+  return `<div class="wrow ${me?'me':''} ${tap?'tap':''}" ${tap?`onclick="propSheetAt(${i})"`:""}>
+    <span class="wp ${i<3?'top':''}">${i+1}</span><span class="wdot ${x.done?'':'off'}"></span>
     <span class="wa">${esc(x.alias)}${me?' · tú':''}</span>
+    ${(x.props>0)?`<span class="wpr">${svgIcon('users')}${x.props}</span>`:""}
     <span class="ws">${x.streak}<span class="wk">d</span></span></div>`;}
+function propSheetAt(i){const x=((COMM&&COMM.wall)||[])[i];if(!x||!commOn())return;
+  if(x.alias===S.alias){toast("Ese eres tú 💪");return;}
+  const sent=sentToday(x.alias);
+  openSheet(`<h3>Respaldar a ${esc(x.alias)}</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px;line-height:1.5">Una señal, sin texto. Él ve cuántos hombres lo respaldaron hoy — nunca quién fue. No se puede escribir nada más que esto.</p>
+  <div class="propgrid">${PROPS.map(p=>`<button class="propb" onclick="sendPropAt(${i},'${p.k}')">${svgIcon(p.ic)}${p.l}</button>`).join("")}</div>
+  ${sent?`<div class="dim" style="font-size:12.5px;margin-top:13px;text-align:center">Ya lo respaldaste hoy. Si eliges otra señal, reemplaza la anterior.</div>`:""}`);}
+async function sendPropAt(i,kind){const x=((COMM&&COMM.wall)||[])[i];if(!x)return;
+  closeSheet();
+  try{const r=await sb.rpc("alza_prop",{p_alias:x.alias,p_kind:kind});
+    if(r.error)throw r.error;
+    toast("Respaldo enviado 💪");
+    await loadCommunity(true);render();
+  }catch(e){console.warn("prop",e);toast("No se pudo enviar el respaldo");}}
 function avInit(a){const s=String(a||"").replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/g,"");return (s.slice(0,2)||"??").toUpperCase();}
 function avStack(wall){
   const ord=wall.slice().sort((a,b)=>(b.done?1:0)-(a.done?1:0));
@@ -1207,9 +1236,11 @@ function communityCard(){
       ${c.clean_total>0?`<span class="commchip"><b>${c.clean_total}</b> días limpios entre todos</span>`:""}
       ${c.waves_total>0?`<span class="commchip"><b>${c.waves_total}</b> olas superadas</span>`:""}
     </div>
+    ${(c.my_props>0)?`<div class="propline">${svgIcon('users')}<div><b>${c.my_props}</b> ${c.my_props===1?"hombre te respaldó":"hombres te respaldaron"} hoy${(c.my_props_all>c.my_props)?` · ${c.my_props_all} en total`:""}</div></div>`:""}
     ${w.length?`<div class="wall">${w.map((x,i)=>wallRow(x,i)).join("")}</div>
       ${(mine>=5)?`<div class="wall" style="border-top:0;margin-top:0;padding-top:0">${wallRow(all[mine],mine)}</div>`:""}
-      <button class="chip" style="margin-top:14px" onclick="wallSheet()">Ver el muro completo</button>`:""}
+      ${(all.length>1)?'<div class="proptip">Toca a alguien para respaldarlo</div>':""}
+      <button class="chip" style="margin-top:12px" onclick="wallSheet()">Ver el muro completo</button>`:""}
   </div>`;}
 let _commShown=-1;
 function commCountUp(){const el=document.getElementById("commbig");if(!el)return;
@@ -1219,7 +1250,7 @@ function commCountUp(){const el=document.getElementById("commbig");if(!el)return
   clearInterval(el._t);el._t=setInterval(()=>{i+=step;if(i>=t){i=t;clearInterval(el._t);}el.textContent=i;},32);}
 function wallSheet(){const w=(COMM&&COMM.wall)||[];
   openSheet(`<h3>El muro</h3>
-  <p class="dim" style="font-size:13px;margin-top:-6px">Hombres activos en los últimos 21 días, ordenados por racha. El punto encendido es quien ya cerró su día de hoy.</p>
+  <p class="dim" style="font-size:13px;margin-top:-6px;line-height:1.5">Hombres activos en los últimos 21 días, ordenados por racha. El punto encendido es quien ya cerró su día de hoy. Toca a alguien para respaldarlo.</p>
   <div class="wall">${w.length?w.map((x,i)=>wallRow(x,i)).join(""):'<div class="empty">Todavía no hay nadie en el muro.</div>'}</div>
   <button class="pillbtn ghost" style="margin-top:16px" onclick="aliasSheet()">Mi alias</button>`);}
 function aliasSheet(){openSheet(`<h3>Tu alias en la comunidad</h3>
