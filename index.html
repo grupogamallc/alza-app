@@ -418,6 +418,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .pbl{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
 .pbi{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:12.5px;color:var(--tx);background:var(--surface)}
 .pbi .ico{width:13px;height:13px;color:var(--gold);flex:none}
+.mutebtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:9px 16px;background:var(--surface);color:var(--mid);font-family:"Inter";font-size:12.5px;font-weight:600}
+.mutebtn .ico{width:16px;height:16px;color:var(--gold)}
+.voicebtn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(233,193,90,.3);border-radius:999px;padding:6px 12px;background:rgba(233,193,90,.10);color:var(--golds);font-family:"Inter";font-size:12px;font-weight:700}
+.voicebtn .ico{width:12px;height:12px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -499,7 +503,10 @@ const ICONS={
  weight:'<circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.7 12.1a1 1 0 0 1-1 1.1H5.8a1 1 0 0 1-1-1.1z"/>',
  unlink:'<path d="m18.8 12.3 1.7-1.7a4.2 4.2 0 0 0-6-6l-1.7 1.7"/><path d="m5.2 11.8-1.7 1.7a4.2 4.2 0 0 0 6 6l1.7-1.7"/><path d="M8 2v3"/><path d="M2 8h3"/><path d="M16 19v3"/><path d="M19 16h3"/>',
  anchor:'<circle cx="12" cy="5" r="3"/><path d="M12 22V8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
- lifebuoy:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3"/><path d="m14.8 9.2 4.3-4.3"/><path d="m14.8 14.8 4.3 4.3"/><path d="m9.2 14.8-4.3 4.3"/>'
+ lifebuoy:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3"/><path d="m14.8 9.2 4.3-4.3"/><path d="m14.8 14.8 4.3 4.3"/><path d="m9.2 14.8-4.3 4.3"/>',
+ volume:'<path d="M11 4.7 6.5 9H3v6h3.5l4.5 4.3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>',
+ volumeoff:'<path d="M11 4.7 6.5 9H3v6h3.5l4.5 4.3z"/><path d="m16 9 5 6"/><path d="m21 9-5 6"/>',
+ play:'<path d="M6 4v16l14-8z"/>'
 };
 function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
 function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
@@ -895,7 +902,8 @@ function viewPanel(){
   ${stageTriangle()}
   ${momentumCard()}
   <div class="card" style="border-color:rgba(216,196,138,.25);background:linear-gradient(180deg,rgba(216,196,138,.10),var(--ink2))">
-    <div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
+    <div class="row"><div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
+      <button class="voicebtn" onclick="playClip('dia')">${svgIcon('play')}Escuchar</button></div>
     <div class="serif" style="font-style:italic;font-size:18px;margin-top:8px;color:#F3EEE2">"${esc(affTxt)}"</div>
   </div>
   <div class="quote"><div class="q">${esc(q.t)}</div><div class="att">— ${esc(q.a)}</div></div>
@@ -1239,7 +1247,7 @@ function planSheet(){const pl=(curAdd()||{}).plan||{};openSheet(`<h3>Mi plan ant
   <div class="field"><label>¿A quién puedo llamar?</label><input id="pl_c" placeholder="Nombre / teléfono de confianza" value="${esc(pl.contact||"")}"></div>
   <button class="pillbtn primary" onclick="savePlan()">Guardar mi plan</button>`);}
 function savePlan(){const a=curAdd();if(!a)return;a.plan={why:$("#pl_w").value.trim(),lose:$("#pl_l").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
-function celebrateCheck(days){const a=curAdd();if(!a)return;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`¡Llegaste a ${top.n} limpio! 🎉`),500);}}
+function celebrateCheck(days){const a=curAdd();if(!a)return;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>{toast(`¡Llegaste a ${top.n} limpio! 🎉`);playClip('hito');},500);}}
 function setAdd(id){S.addUi=S.addUi||{};S.addUi.cur=id;save();render();window.scrollTo(0,0);}
 function addMore(){openSheet(`<h3>Agregar otra batalla</h3>${addPicker('pickFromSheet')}`);}
 function pickFromSheet(id){closeSheet();pickAddiction(id);}
@@ -1276,12 +1284,24 @@ function doRelapse(){const a=curAdd();if(!a)return;
   if(!a.relapses)a.relapses=[];a.relapses.push({at:Date.now(),what:w,trigger:t,diff:df});
   if(t){if(!a.triggers)a.triggers=[];a.triggers.push({what:t,how:df,at:Date.now()});}
   a.since=todayKey();a.celebrated=[];
-  save();closeSheet();render();window.scrollTo(0,0);toast("Sigues en el camino. Día 1 de nuevo 💪");}
+  save();closeSheet();render();window.scrollTo(0,0);playClip('recaida');toast("Sigues en el camino. Día 1 de nuevo 💪");}
+/* --- Notas de voz (se activan solas cuando existen los MP3 en /audio) --- */
+let _au=null,_auOk={};
+function audioOn(){return !(S&&S.audioOff);}
+function playClip(n){if(!audioOn())return;
+  try{if(!_au){_au=new Audio();_au.preload="auto";}
+    _au.pause();_au.src="audio/"+n+".mp3";_au.currentTime=0;
+    const p=_au.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}}
+function stopClip(){try{if(_au)_au.pause();}catch(e){}}
+function audioBtn(){return `<button class="mutebtn" id="mutebtn" onclick="toggleAudio()">${svgIcon(audioOn()?'volume':'volumeoff')}<span>${audioOn()?'Voz activada':'Voz silenciada'}</span></button>`;}
+function toggleAudio(){S.audioOff=!S.audioOff;save();if(!audioOn())stopClip();
+  const b=document.getElementById("mutebtn");
+  if(b)b.innerHTML=svgIcon(audioOn()?'volume':'volumeoff')+`<span>${audioOn()?'Voz activada':'Voz silenciada'}</span>`;}
 /* --- SOS: surfear la ola del antojo --- */
-let _sosT=null,_sosLeft=0,_sosTot=300;
+let _sosT=null,_sosLeft=0,_sosTot=300,_sosEl=0;
 const SOS_PH=[[0,"Respira","Inhala 4 · sostén 7 · exhala 8. Repite."],[60,"Observa","No pelees con el antojo. Míralo como una ola que sube."],[150,"Nota","¿Dónde lo sientes en el cuerpo? Solo es una sensación. No tienes que actuar."],[240,"Baja","La ola ya va bajando. Lo estás logrando."]];
 function sosSheet(){const a=curAdd();if(a){a.sos=(a.sos||0)+1;save();}
-  const pl=(a&&a.plan)||{};_sosLeft=300;_sosTot=300;
+  const pl=(a&&a.plan)||{};_sosLeft=300;_sosTot=300;_sosEl=0;
   const C=(2*Math.PI*52).toFixed(1);
   openSheet(`<h3>El antojo es una ola</h3>
   <p class="dim" style="font-size:13.5px;margin-top:-6px">Sube, llega a su punto más alto y baja. No tienes que hacer nada — solo dejarla pasar.</p>
@@ -1293,22 +1313,25 @@ function sosSheet(){const a=curAdd();if(a){a.sos=(a.sos||0)+1;save();}
   <button class="pillbtn primary" style="width:100%" onclick="sosWon()">La superé ✓</button>
   <button class="pillbtn ghost" style="width:100%;margin-top:8px" onclick="sosMore()">Necesito 3 minutos más</button>
   ${pl.contact?`<div class="dim" style="font-size:12.5px;margin-top:12px;text-align:center">Si lo necesitas, llama a <b style="color:var(--golds)">${esc(pl.contact)}</b></div>`:''}
+  <div style="text-align:center;margin-top:12px">${audioBtn()}</div>
   <div class="dim" style="font-size:11.5px;margin-top:10px;text-align:center">Esto es acompañamiento, no tratamiento médico. Si estás en crisis o en peligro, busca ayuda profesional de inmediato.</div>`);
+  playClip('sos1');
   if(_sosT)clearInterval(_sosT);_sosT=setInterval(sosTick,1000);sosTick();}
 function sosTick(){const n=document.getElementById("sosnum");
-  if(!n){if(_sosT)clearInterval(_sosT);_sosT=null;return;}
-  const el=_sosTot-_sosLeft;const ph=SOS_PH.filter(p=>el>=p[0]).pop()||SOS_PH[0];
+  if(!n){if(_sosT)clearInterval(_sosT);_sosT=null;stopClip();return;}
+  const el=_sosEl;const ph=SOS_PH.filter(p=>el>=p[0]).pop()||SOS_PH[0];
+  if(el===60)playClip('sos2');if(el===150)playClip('sos3');if(el===240)playClip('sos4');
   const m=Math.floor(Math.max(0,_sosLeft)/60),s=Math.max(0,_sosLeft)%60;
   n.textContent=m+":"+String(s).padStart(2,"0");
   const p=document.getElementById("sosph");if(p)p.textContent=_sosLeft<=0?"Pasó":ph[1];
   const g=document.getElementById("sosmsg");if(g)g.textContent=_sosLeft<=0?"La ola pasó. Sigues de pie.":ph[2];
   const arc=document.getElementById("sosarc");
   if(arc){const C=2*Math.PI*52;arc.setAttribute("stroke-dashoffset",(C*(1-Math.max(0,_sosLeft)/_sosTot)).toFixed(1));}
-  if(_sosLeft>0)_sosLeft--;}
+  if(_sosLeft>0){_sosLeft--;_sosEl++;}}
 function sosMore(){_sosLeft+=180;_sosTot+=180;sosTick();toast("3 minutos más. Aquí sigo contigo.");}
 function sosWon(){const a=curAdd();if(a){a.sosWon=(a.sosWon||0)+1;save();}
   if(_sosT)clearInterval(_sosT);_sosT=null;closeSheet();render();
-  toast("La ola pasó. Ganaste esta 💪");}
+  playClip('sosgane');toast("La ola pasó. Ganaste esta 💪");}
 function triggerSheet(){openSheet(`<h3>Anotar detonante</h3>
   <div class="field"><label>¿Qué lo detonó?</label><input id="tg_w" placeholder="Ej. estrés, una fiesta, aburrimiento"></div>
   <div class="field"><label>¿Cómo lo superaste? (opcional)</label><textarea id="tg_h" placeholder="Qué hiciste para resistir"></textarea></div>
@@ -1357,6 +1380,7 @@ function settingsSheet(){
   const trial = (SUB&&(SUB.status==="active"||SUB.status==="trialing"))?"Membresía activa":"Sin membresía";
   openSheet(`<h3>Mi cuenta</h3>
   <div class="card tight"><div><b>${esc(ME.full_name||"")}</b></div><div class="dim" style="font-size:13px">${esc(ME.email||"")}</div><div class="mono" style="font-size:11px;margin-top:6px;color:var(--gold)">${trial}</div></div>
+  <div style="margin:10px 0">${audioBtn()}</div>
   <button class="pillbtn ghost" onclick="closeSheet();go('cuerpo')">🥗 Mis metas y nutrición</button>
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="closeSheet();installSheet()">📲 Instalar en mi teléfono</button>
