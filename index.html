@@ -422,6 +422,28 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .mutebtn .ico{width:16px;height:16px;color:var(--gold)}
 .voicebtn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(233,193,90,.3);border-radius:999px;padding:6px 12px;background:rgba(233,193,90,.10);color:var(--golds);font-family:"Inter";font-size:12px;font-weight:700}
 .voicebtn .ico{width:12px;height:12px}
+.ckcard{border:1px solid rgba(233,193,90,.24);border-radius:16px;padding:15px 16px;background:linear-gradient(180deg,rgba(233,193,90,.08),var(--ink2))}
+.ckhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ckbars{display:flex;align-items:flex-end;gap:4px;height:46px;margin-top:13px}
+.ckbars .cb{flex:1;border-radius:3px;background:linear-gradient(180deg,var(--golds),var(--amber))}
+.ckbars .cb.n{background:rgba(255,255,255,.07)}
+.ckbars .cb.hi{background:linear-gradient(180deg,#E8907F,var(--coral))}
+.ckax{display:flex;justify-content:space-between;font-family:"Inter";font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:7px}
+.ckins{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);margin-top:13px;padding-top:12px;font-size:13.5px;line-height:1.45;color:var(--tx)}
+.ckins .ico{width:16px;height:16px;color:var(--gold);flex:none;margin-top:2px}
+.ckins b{color:var(--golds)}
+.riskban{display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(201,86,78,.38);border-radius:16px;padding:13px 15px;background:linear-gradient(180deg,rgba(201,86,78,.12),rgba(18,18,28,.5));margin-bottom:12px;font-size:13.5px;line-height:1.45;color:var(--tx)}
+.riskban .ico{width:19px;height:19px;color:var(--coral);flex:none;margin-top:1px}
+.riskban b{color:#F4DCD7}
+.cvrange{width:100%;-webkit-appearance:none;appearance:none;height:8px;border-radius:999px;background:linear-gradient(90deg,#7FB39A,var(--gold) 55%,var(--coral));outline:none;margin:4px 0 2px}
+.cvrange::-webkit-slider-thumb{-webkit-appearance:none;width:27px;height:27px;border-radius:50%;background:#F7F3E8;border:2px solid var(--gold);box-shadow:0 5px 14px -3px #000}
+.cvrange::-moz-range-thumb{width:27px;height:27px;border-radius:50%;background:#F7F3E8;border:2px solid var(--gold)}
+.cvnum{font-family:"Inter";font-weight:800;font-size:46px;letter-spacing:-.03em;text-align:center;line-height:1.1;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.haltg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.haltb{display:flex;align-items:center;gap:9px;border:1px solid var(--line2);border-radius:13px;padding:11px 12px;background:var(--surface);color:var(--mid);font-family:"Inter";font-size:13px;font-weight:600;text-align:left}
+.haltb .ico{width:16px;height:16px;color:var(--dim);flex:none}
+.haltb.on{border-color:rgba(233,193,90,.55);background:rgba(233,193,90,.12);color:var(--golds)}
+.haltb.on .ico{color:var(--gold)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1181,6 +1203,7 @@ function viewApoyo(){
   return `<div class="ph">
     <div class="em">${svgIcon(a.ic)}</div><h2>Apoyo</h2><div class="sub">${esc(a.label||"Mi proceso")}</div></div>
   ${tabs}
+  ${riskBanner()}
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
     <div class="bignum">${days}</div>
@@ -1194,6 +1217,7 @@ function viewApoyo(){
     <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Tuve una recaída</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
+  ${checkinCard()}
   ${playbookCard()}
   ${badgesCard(days)}
   ${planCard()}
@@ -1268,6 +1292,77 @@ function removeAddiction(id){openSheet(`<h3>Dejar de seguir</h3><p class="dim">S
   <button class="pillbtn primary" style="margin-top:12px" onclick="doRemoveAdd('${id}')">Sí, quitar</button>
   <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
 function doRemoveAdd(id){S.addictions=(S.addictions||[]).filter(x=>x.id!==id);S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};save();closeSheet();render();window.scrollTo(0,0);}
+/* --- Check-in diario de 20 segundos + mapa de riesgo --- */
+const HALT=[{k:"h",l:"Hambriento",ic:"apple"},{k:"a",l:"Enojado",ic:"flame"},{k:"l",l:"Solo",ic:"users"},{k:"t",l:"Cansado",ic:"moon"}];
+const DOWN=["domingos","lunes","martes","miércoles","jueves","viernes","sábados"];
+const BANDS=["en la madrugada","en la mañana","en la tarde","en la noche"];
+let _ckH=[];
+function bandOf(h){return h<6?0:h<12?1:h<18?2:3;}
+function checksOf(a){if(!a.checks)a.checks=[];return a.checks;}
+function todayCheck(a){const k=todayKey();return checksOf(a).find(c=>c.d===k)||null;}
+function avgOf(x){return x.reduce((s,v)=>s+v,0)/x.length;}
+function ckSheet(){const a=curAdd();if(!a)return;const c=todayCheck(a)||{c:5,halt:[]};
+  _ckH=(c.halt||[]).slice();
+  openSheet(`<h3>Check-in de hoy</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">20 segundos. Solo tú lo ves — sirve para encontrar tu patrón.</p>
+  <div class="eye" style="color:var(--teal)">¿Qué tan fuerte está el antojo?</div>
+  <div class="cvnum" id="ckn">${c.c}</div>
+  <input class="cvrange" id="ckr" type="range" min="0" max="10" step="1" value="${c.c}" oninput="document.getElementById('ckn').textContent=this.value">
+  <div class="ckax"><span>Nada</span><span>Insoportable</span></div>
+  <div class="eye" style="color:var(--teal);margin-top:18px">¿Cómo estás ahorita?</div>
+  <div class="haltg">${HALT.map(h=>`<button class="haltb ${_ckH.indexOf(h.k)>=0?'on':''}" id="hb_${h.k}" onclick="ckHalt('${h.k}')">${svgIcon(h.ic)}${h.l}</button>`).join("")}</div>
+  <button class="pillbtn primary" style="width:100%;margin-top:18px" onclick="saveCheck()">Guardar check-in</button>`);}
+function ckHalt(k){const i=_ckH.indexOf(k);if(i<0)_ckH.push(k);else _ckH.splice(i,1);
+  const b=document.getElementById("hb_"+k);if(b)b.classList.toggle("on",_ckH.indexOf(k)>=0);}
+function saveCheck(){const a=curAdd();if(!a)return;
+  const v=parseInt(($("#ckr")&&$("#ckr").value)||"0")||0;const k=todayKey();const now=new Date();
+  const l=checksOf(a).filter(c=>c.d!==k);
+  l.push({d:k,c:v,halt:_ckH.slice(),dow:now.getDay(),bd:bandOf(now.getHours())});
+  l.sort((x,y)=>x.d<y.d?-1:1);a.checks=l.slice(-180);
+  save();closeSheet();render();window.scrollTo(0,0);
+  toast(v>=7?"Anotado. Hoy pesa — ten tu plan a la mano 💪":"Check-in guardado 💪");}
+function riskMap(a){const cs=checksOf(a);if(cs.length<5)return null;
+  const all=avgOf(cs.map(c=>c.c));const byD={},byB={};
+  cs.forEach(c=>{const d=(c.dow==null?new Date(c.d+"T12:00:00").getDay():c.dow);(byD[d]=byD[d]||[]).push(c.c);
+    if(c.bd!=null)(byB[c.bd]=byB[c.bd]||[]).push(c.c);});
+  let day=null;Object.keys(byD).forEach(d=>{if(byD[d].length<2)return;const m=avgOf(byD[d]);
+    if(m>=5&&m-all>=1.2&&(!day||m>day.m))day={d:+d,m:m};});
+  let band=null;Object.keys(byB).forEach(b=>{if(byB[b].length<3)return;const m=avgOf(byB[b]);
+    if(m-all>=1.2&&(!band||m>band.m))band={b:+b,m:m};});
+  let halt=null;HALT.forEach(h=>{const y=cs.filter(c=>(c.halt||[]).indexOf(h.k)>=0).map(c=>c.c);
+    const n=cs.filter(c=>(c.halt||[]).indexOf(h.k)<0).map(c=>c.c);
+    if(y.length<3||n.length<2)return;const dl=avgOf(y)-avgOf(n);
+    if(dl>=1.2&&(!halt||dl>halt.dl))halt={h:h,dl:dl,y:avgOf(y),n:avgOf(n)};});
+  const rc={};(a.relapses||[]).forEach(r=>{const d=new Date(r.at).getDay();rc[d]=(rc[d]||0)+1;});
+  let rel=null;Object.keys(rc).forEach(d=>{if(rc[d]<2)return;if(!rel||rc[d]>rel.n)rel={d:+d,n:rc[d]};});
+  if(!day&&!band&&!halt&&!rel)return null;
+  return {avg:all,day:day,band:band,halt:halt,rel:rel,n:cs.length};}
+function riskText(r){if(!r)return null;const o=[];
+  if(r.day)o.push(`Los <b>${DOWN[r.day.d]}</b> tu antojo promedia <b>${r.day.m.toFixed(1)}/10</b>, contra ${r.avg.toFixed(1)} el resto de la semana.`);
+  if(r.band&&!r.day)o.push(`Tu antojo pega más fuerte <b>${BANDS[r.band.b]}</b> (${r.band.m.toFixed(1)}/10).`);
+  if(r.halt)o.push(`Cuando estás <b>${r.halt.h.l.toLowerCase()}</b> sube a <b>${r.halt.y.toFixed(1)}</b> contra ${r.halt.n.toFixed(1)} el resto del tiempo.`);
+  if(r.rel&&o.length<2)o.push(`${r.rel.n} de tus recaídas cayeron en <b>${DOWN[r.rel.d]}</b>.`);
+  return o.slice(0,2).join(" ");}
+function riskBanner(){const a=curAdd();if(!a)return"";const r=riskMap(a);if(!r)return"";
+  const d=new Date().getDay();const hoy=(r.day&&r.day.d===d)?r.day:null;const rel=(r.rel&&r.rel.d===d)?r.rel:null;
+  if(!hoy&&!rel)return"";const pl=a.plan||{};
+  return `<div class="riskban">${svgIcon('zap')}<div><b>Hoy es de tus días difíciles.</b> ${hoy?`Los ${DOWN[d]} tu antojo promedia ${hoy.m.toFixed(1)}/10.`:`${rel.n} de tus recaídas cayeron en ${DOWN[d]}.`} ${pl.action?`Tu plan para el antojo: <b>${esc(pl.action)}</b>`:`Deja listo tu plan antes de que llegue.`}
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="chip" onclick="sosSheet()">Ejercicio SOS</button><button class="chip" onclick="planSheet()">${pl.action?'Ver mi plan':'Crear mi plan'}</button></div></div></div>`;}
+function checkinCard(){const a=curAdd();if(!a)return"";
+  const t=todayCheck(a);const cs=checksOf(a);const map={};cs.forEach(c=>map[c.d]=c.c);
+  const ks=[];for(let i=13;i>=0;i--){const dt=new Date();dt.setDate(dt.getDate()-i);ks.push(keyOf(dt));}
+  const bars=`<div class="ckbars">${ks.map(k=>{const v=map[k];
+    if(v==null)return '<div class="cb n" style="height:4px"></div>';
+    return `<div class="cb ${v>=7?'hi':''}" style="height:${Math.max(6,Math.round(v/10*46))}px"></div>`;}).join("")}</div>
+    <div class="ckax"><span>Hace 14 días</span><span>Hoy</span></div>`;
+  const r=riskMap(a);const ins=riskText(r);
+  const head=t
+    ?`<div><div class="eye" style="color:var(--teal)">Check-in de hoy</div><div style="font-size:14px;margin-top:4px">Antojo <b style="color:var(--golds)">${t.c}/10</b>${(t.halt||[]).length?` · ${t.halt.map(k=>{const h=HALT.filter(x=>x.k===k)[0];return h?h.l.toLowerCase():"";}).filter(Boolean).join(", ")}`:""}</div></div><button class="chip" onclick="ckSheet()">Editar</button>`
+    :`<div><div class="eye" style="color:var(--teal)">Check-in de hoy</div><div class="dim" style="font-size:13px;margin-top:4px">20 segundos. Así encontramos tu patrón.</div></div><button class="chip" onclick="ckSheet()">Hacerlo</button>`;
+  const foot=ins?`<div class="ckins">${svgIcon('lightbulb')}<div>${ins}</div></div>`
+    :(cs.length?`<div class="ckins">${svgIcon('lightbulb')}<div>Llevas <b>${cs.length}</b> ${cs.length===1?'check-in':'check-ins'}. Con 5 empiezo a mostrarte cuándo y por qué te pega más fuerte.</div></div>`:"");
+  return `<div class="sec-title">Check-in diario</div>
+  <div class="ckcard"><div class="ckhead">${head}</div>${cs.length?bars:""}${foot}</div>`;}
 /* --- Recaída sin vergüenza --- */
 function daysOf(a){return (a&&a.since)?Math.floor((Date.now()-new Date(a.since))/864e5):0;}
 function resetClean(){const a=curAdd();if(!a)return;const d=daysOf(a);const tot=(a.totalDays||0)+d;
