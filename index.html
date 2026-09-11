@@ -396,6 +396,19 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .brnav{display:flex;gap:9px}
 .brnav .bnav{flex:1;padding:11px;border-radius:11px;border:1px solid var(--line2);background:var(--surface);color:var(--tx);font-size:13px;font-weight:600}
 .brnav .bnav:disabled{opacity:.35}
+.sstats{display:flex;justify-content:center;gap:4px;margin-top:14px}
+.sstats .ss{flex:1;max-width:110px}
+.sstats .ss .v{font-family:"Inter";font-weight:800;font-size:19px;color:var(--golds)}
+.sstats .ss .k{font-family:"Inter";font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.whycard{border:1px solid rgba(233,193,90,.28);border-radius:14px;padding:13px 15px;background:linear-gradient(180deg,rgba(233,193,90,.10),var(--ink2));margin-bottom:14px}
+.whycard .wt{font-family:"Fraunces",serif;font-style:italic;font-size:15.5px;line-height:1.4;color:#FBEBD3;margin-top:4px}
+.sostimer{position:relative;width:180px;height:180px;margin:4px auto 10px}
+.sostimer svg{width:180px;height:180px;transform:rotate(-90deg)}
+.sostimer .sst{fill:none;stroke:rgba(233,197,110,.10);stroke-width:7}
+.sostimer .ssp{fill:none;stroke:var(--gold);stroke-width:7;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(233,193,90,.5));transition:stroke-dashoffset 1s linear}
+.sosin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.sosnum{font-family:"Inter";font-weight:800;font-size:38px;letter-spacing:-.02em;color:#F7F3E8}
+.sosmsg{text-align:center;font-family:"Fraunces",serif;font-style:italic;font-size:16px;line-height:1.45;color:#F3EEE2;margin:0 6px 16px;min-height:46px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1138,9 +1151,14 @@ function viewApoyo(){
   <div class="card" style="text-align:center;padding:24px 16px">
     <div class="eye" style="color:var(--teal)">Días limpio</div>
     <div class="bignum">${days}</div>
-    <div class="dim" style="font-size:13px;margin-top:4px">Mejor racha: ${a.best||days} días · desde ${a.since?new Date(a.since).toLocaleDateString("es-MX"):"hoy"}</div>
-    ${next?`<div class="dim" style="font-size:12px;margin-top:8px">Faltan ${next.d-days} días para ${next.n}</div>`:''}
-    <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Reiniciar contador</button>
+    <div class="dim" style="font-size:13px;margin-top:4px">desde ${a.since?new Date(a.since).toLocaleDateString("es-MX"):"hoy"}</div>
+    <div class="sstats">
+      <div class="ss"><div class="v">${Math.max(a.best||0,days)}</div><div class="k">Mejor racha</div></div>
+      <div class="ss"><div class="v">${(a.totalDays||0)+days}</div><div class="k">Total acumulado</div></div>
+      <div class="ss"><div class="v">${a.sosWon||0}</div><div class="k">Olas superadas</div></div>
+    </div>
+    ${next?`<div class="dim" style="font-size:12px;margin-top:12px">Faltan ${next.d-days} días para ${next.n}</div>`:''}
+    <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Tuve una recaída</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
   ${badgesCard(days)}
@@ -1159,17 +1177,20 @@ function viewApoyo(){
 const MILESTONES=[{d:1,ic:"sprout",n:"Día 1"},{d:7,ic:"star",n:"1 semana"},{d:30,ic:"flame",n:"1 mes"},{d:90,ic:"gem",n:"3 meses"},{d:180,ic:"trophy",n:"6 meses"},{d:365,ic:"crown",n:"1 año"}];
 function badgesCard(days){return `<div class="sec-title">Hitos</div>
   <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${svgIcon(m.ic)}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
-function planCard(){const pl=(curAdd()||{}).plan||{};const has=pl.why||pl.action||pl.contact;
+function planCard(){const pl=(curAdd()||{}).plan||{};const has=pl.why||pl.lose||pl.action||pl.contact;
+  const row=(t,v)=>v?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">${t}</div><div style="font-size:14px;margin-top:3px">${esc(v)}</div></div>`:'';
   return `<div class="sec-title">Mi plan anti-recaída</div>
   <div class="card" onclick="planSheet()" style="cursor:pointer">
-    ${has?`${pl.why?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Mi porqué</div><div style="font-size:14px;margin-top:3px">${esc(pl.why)}</div></div>`:''}${pl.action?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Ante el antojo</div><div style="font-size:14px;margin-top:3px">${esc(pl.action)}</div></div>`:''}${pl.contact?`<div><div class="eye" style="color:var(--teal)">A quién llamo</div><div style="font-size:14px;margin-top:3px">${esc(pl.contact)}</div></div>`:''}<div class="link" style="margin-top:10px;display:inline-block">Editar plan</div>`:`<b>Arma tu plan anti-recaída</b><div class="dim" style="font-size:13px;margin-top:4px">Tu porqué, qué harás ante el antojo y a quién llamar. Tenerlo listo te salva en el momento difícil.</div><div class="link" style="margin-top:8px;display:inline-block">Crear mi plan ›</div>`}
+    ${has?`${row('Lo que gano si sigo firme',pl.why)}${row('Lo que pierdo si recaigo',pl.lose)}${row('Ante el antojo',pl.action)}${row('A quién llamo',pl.contact)}<div class="link" style="margin-top:2px;display:inline-block">Editar plan</div>`:`<b>Arma tu plan anti-recaída</b><div class="dim" style="font-size:13px;margin-top:4px">Lo que ganas, lo que pierdes, qué harás ante el antojo y a quién llamar. Tenerlo listo te salva en el momento difícil.</div><div class="link" style="margin-top:8px;display:inline-block">Crear mi plan ›</div>`}
   </div>`;}
 function planSheet(){const pl=(curAdd()||{}).plan||{};openSheet(`<h3>Mi plan anti-recaída</h3>
-  <div class="field"><label>¿Por qué quiero lograrlo?</label><textarea id="pl_w" placeholder="Mi razón más fuerte…">${esc(pl.why||"")}</textarea></div>
-  <div class="field"><label>¿Qué haré cuando llegue el antojo?</label><textarea id="pl_a" placeholder="Ej. respirar, salir a caminar, tomar agua…">${esc(pl.action||"")}</textarea></div>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Esto es lo que verás primero cuando llegue un antojo.</p>
+  <div class="field"><label>¿Qué gano si sigo firme?</label><textarea id="pl_w" placeholder="Mi razón más fuerte…">${esc(pl.why||"")}</textarea></div>
+  <div class="field"><label>¿Qué pierdo si recaigo?</label><textarea id="pl_l" placeholder="Lo que está en juego…">${esc(pl.lose||"")}</textarea></div>
+  <div class="field"><label>¿Qué haré cuando llegue el antojo?</label><textarea id="pl_a" placeholder="Ej. salir a caminar, llamar a alguien, tomar agua…">${esc(pl.action||"")}</textarea></div>
   <div class="field"><label>¿A quién puedo llamar?</label><input id="pl_c" placeholder="Nombre / teléfono de confianza" value="${esc(pl.contact||"")}"></div>
   <button class="pillbtn primary" onclick="savePlan()">Guardar mi plan</button>`);}
-function savePlan(){const a=curAdd();if(!a)return;a.plan={why:$("#pl_w").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
+function savePlan(){const a=curAdd();if(!a)return;a.plan={why:$("#pl_w").value.trim(),lose:$("#pl_l").value.trim(),action:$("#pl_a").value.trim(),contact:$("#pl_c").value.trim(),trigger:""};save();closeSheet();render();toast("Plan guardado 💪");}
 function celebrateCheck(days){const a=curAdd();if(!a)return;if(!a.celebrated)a.celebrated=[];const hit=MILESTONES.filter(m=>days>=m.d&&!a.celebrated.includes(m.d));if(hit.length){hit.forEach(m=>a.celebrated.push(m.d));const top=hit[hit.length-1];save();setTimeout(()=>toast(`¡Llegaste a ${top.n} limpio! 🎉`),500);}}
 function setAdd(id){S.addUi=S.addUi||{};S.addUi.cur=id;save();render();window.scrollTo(0,0);}
 function addMore(){openSheet(`<h3>Agregar otra batalla</h3>${addPicker('pickFromSheet')}`);}
@@ -1191,16 +1212,55 @@ function removeAddiction(id){openSheet(`<h3>Dejar de seguir</h3><p class="dim">S
   <button class="pillbtn primary" style="margin-top:12px" onclick="doRemoveAdd('${id}')">Sí, quitar</button>
   <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
 function doRemoveAdd(id){S.addictions=(S.addictions||[]).filter(x=>x.id!==id);S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};save();closeSheet();render();window.scrollTo(0,0);}
-function resetClean(){openSheet(`<h3>Reiniciar contador</h3><p class="dim">Una recaída no borra tu progreso. Volver a empezar es de valientes. ¿Reiniciamos desde hoy?</p>
-  <button class="pillbtn primary" style="margin-top:12px" onclick="doReset2()">Sí, reiniciar desde hoy</button>
-  <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
-function doReset2(){const a=curAdd();if(!a)return;const days=a.since?Math.floor((Date.now()-new Date(a.since))/864e5):0;if(days>(a.best||0))a.best=days;a.since=todayKey();save();closeSheet();render();}
+/* --- Recaída sin vergüenza --- */
+function daysOf(a){return (a&&a.since)?Math.floor((Date.now()-new Date(a.since))/864e5):0;}
+function resetClean(){const a=curAdd();if(!a)return;const d=daysOf(a);const tot=(a.totalDays||0)+d;
+  openSheet(`<h3>Una caída no borra tu camino</h3>
+  <p class="dim" style="font-size:13.5px;margin-top:-6px">Llevas <b style="color:var(--gold)">${d}</b> ${d===1?'día':'días'} en este intento y <b style="color:var(--gold)">${tot}</b> acumulados en total. Eso no se borra — sigues en el mismo camino.</p>
+  <div class="field"><label>¿Qué pasó?</label><textarea id="rl_w" placeholder="Sin juzgarte. Solo los hechos."></textarea></div>
+  <div class="field"><label>¿Qué lo detonó?</label><input id="rl_t" placeholder="Ej. estrés, una fiesta, estar solo"></div>
+  <div class="field"><label>¿Qué harías diferente la próxima vez?</label><textarea id="rl_d" placeholder="Tu plan para ese momento"></textarea></div>
+  <button class="pillbtn primary" style="width:100%" onclick="doRelapse()">Guardar y seguir</button>
+  <button class="pillbtn ghost" style="width:100%;margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
+function doRelapse(){const a=curAdd();if(!a)return;
+  const d=daysOf(a);if(d>(a.best||0))a.best=d;a.totalDays=(a.totalDays||0)+d;
+  const w=($("#rl_w")&&$("#rl_w").value.trim())||"",t=($("#rl_t")&&$("#rl_t").value.trim())||"",df=($("#rl_d")&&$("#rl_d").value.trim())||"";
+  if(!a.relapses)a.relapses=[];a.relapses.push({at:Date.now(),what:w,trigger:t,diff:df});
+  if(t){if(!a.triggers)a.triggers=[];a.triggers.push({what:t,how:df,at:Date.now()});}
+  a.since=todayKey();a.celebrated=[];
+  save();closeSheet();render();window.scrollTo(0,0);toast("Sigues en el camino. Día 1 de nuevo 💪");}
+/* --- SOS: surfear la ola del antojo --- */
+let _sosT=null,_sosLeft=0,_sosTot=300;
+const SOS_PH=[[0,"Respira","Inhala 4 · sostén 7 · exhala 8. Repite."],[60,"Observa","No pelees con el antojo. Míralo como una ola que sube."],[150,"Nota","¿Dónde lo sientes en el cuerpo? Solo es una sensación. No tienes que actuar."],[240,"Baja","La ola ya va bajando. Lo estás logrando."]];
 function sosSheet(){const a=curAdd();if(a){a.sos=(a.sos||0)+1;save();}
-  openSheet(`<h3>Respira. Esto va a pasar.</h3>
-  <div class="card" style="border-color:rgba(216,196,138,.3)"><b>1 · Respiración 4-7-8</b><div class="dim" style="font-size:14px;margin-top:4px">Inhala 4s, sostén 7s, exhala 8s. Repite 4 veces. El antojo es una ola — sube y baja en minutos.</div></div>
-  <div class="card"><b>2 · Recuerda tu porqué</b><div class="dim" style="font-size:14px;margin-top:4px">${esc(daily(SEED_AFF))}</div></div>
-  <div class="card"><b>3 · Cambia de escena</b><div class="dim" style="font-size:14px;margin-top:4px">Levántate, toma agua, sal a caminar 5 minutos o llama a alguien de confianza.</div></div>
-  <button class="pillbtn primary" onclick="closeSheet();toast('Lo lograste. Un momento a la vez.')">Ya estoy mejor</button>`);}
+  const pl=(a&&a.plan)||{};_sosLeft=300;_sosTot=300;
+  const C=(2*Math.PI*52).toFixed(1);
+  openSheet(`<h3>El antojo es una ola</h3>
+  <p class="dim" style="font-size:13.5px;margin-top:-6px">Sube, llega a su punto más alto y baja. No tienes que hacer nada — solo dejarla pasar.</p>
+  ${(pl.why||pl.lose)?`<div class="whycard">${pl.why?`<div class="eye" style="color:var(--gold)">Lo que gano</div><div class="wt">${esc(pl.why)}</div>`:''}${pl.lose?`<div class="eye" style="color:var(--gold);margin-top:${pl.why?'10px':'0'}">Lo que pierdo</div><div class="wt">${esc(pl.lose)}</div>`:''}</div>`:''}
+  <div class="sostimer"><svg viewBox="0 0 120 120"><circle class="sst" cx="60" cy="60" r="52"/><circle class="ssp" id="sosarc" cx="60" cy="60" r="52" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg>
+    <div class="sosin"><div class="sosnum" id="sosnum">5:00</div><div class="eye" id="sosph">Respira</div></div></div>
+  <div class="sosmsg" id="sosmsg">Inhala 4 · sostén 7 · exhala 8. Repite.</div>
+  ${pl.action?`<div class="card" style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">Mi plan</div><div style="font-size:14px;margin-top:3px">${esc(pl.action)}</div></div>`:''}
+  <button class="pillbtn primary" style="width:100%" onclick="sosWon()">La superé ✓</button>
+  <button class="pillbtn ghost" style="width:100%;margin-top:8px" onclick="sosMore()">Necesito 3 minutos más</button>
+  ${pl.contact?`<div class="dim" style="font-size:12.5px;margin-top:12px;text-align:center">Si lo necesitas, llama a <b style="color:var(--golds)">${esc(pl.contact)}</b></div>`:''}
+  <div class="dim" style="font-size:11.5px;margin-top:10px;text-align:center">Esto es acompañamiento, no tratamiento médico. Si estás en crisis o en peligro, busca ayuda profesional de inmediato.</div>`);
+  if(_sosT)clearInterval(_sosT);_sosT=setInterval(sosTick,1000);sosTick();}
+function sosTick(){const n=document.getElementById("sosnum");
+  if(!n){if(_sosT)clearInterval(_sosT);_sosT=null;return;}
+  const el=_sosTot-_sosLeft;const ph=SOS_PH.filter(p=>el>=p[0]).pop()||SOS_PH[0];
+  const m=Math.floor(Math.max(0,_sosLeft)/60),s=Math.max(0,_sosLeft)%60;
+  n.textContent=m+":"+String(s).padStart(2,"0");
+  const p=document.getElementById("sosph");if(p)p.textContent=_sosLeft<=0?"Pasó":ph[1];
+  const g=document.getElementById("sosmsg");if(g)g.textContent=_sosLeft<=0?"La ola pasó. Sigues de pie.":ph[2];
+  const arc=document.getElementById("sosarc");
+  if(arc){const C=2*Math.PI*52;arc.setAttribute("stroke-dashoffset",(C*(1-Math.max(0,_sosLeft)/_sosTot)).toFixed(1));}
+  if(_sosLeft>0)_sosLeft--;}
+function sosMore(){_sosLeft+=180;_sosTot+=180;sosTick();toast("3 minutos más. Aquí sigo contigo.");}
+function sosWon(){const a=curAdd();if(a){a.sosWon=(a.sosWon||0)+1;save();}
+  if(_sosT)clearInterval(_sosT);_sosT=null;closeSheet();render();
+  toast("La ola pasó. Ganaste esta 💪");}
 function triggerSheet(){openSheet(`<h3>Anotar detonante</h3>
   <div class="field"><label>¿Qué lo detonó?</label><input id="tg_w" placeholder="Ej. estrés, una fiesta, aburrimiento"></div>
   <div class="field"><label>¿Cómo lo superaste? (opcional)</label><textarea id="tg_h" placeholder="Qué hiciste para resistir"></textarea></div>
