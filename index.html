@@ -468,6 +468,22 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .prow:first-of-type{border-top:0}
 .prow .pk{color:var(--dim)}
 .prow .pv{color:var(--tx);font-weight:600;text-align:right}
+.commhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.commhead .cbig{font-family:"Inter";font-weight:800;font-size:31px;letter-spacing:-.02em;line-height:1;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.commhead .ctx{font-size:14px;color:var(--mid);line-height:1.4}
+.commbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.commchip{border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:12px;color:var(--mid);background:var(--surface)}
+.commchip b{color:var(--golds);font-weight:700}
+.wall{margin-top:14px;border-top:1px solid var(--line);padding-top:4px}
+.wrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.wrow:first-child{border-top:0}
+.wrow .wp{font-family:"Inter";font-size:11px;font-weight:700;color:var(--dim);width:18px;flex:none}
+.wrow .wdot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 7px var(--gold);flex:none}
+.wrow .wdot.off{background:rgba(255,255,255,.13);box-shadow:none}
+.wrow .wa{flex:1;min-width:0;font-size:14px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wrow .ws{font-family:"Inter";font-weight:800;font-size:15px;color:var(--golds);flex:none}
+.wrow .ws .wk{font-family:"Inter";font-weight:600;font-size:10px;color:var(--dim);margin-left:2px}
+.wrow.me{background:rgba(233,193,90,.08);border-radius:10px;margin:0 -9px;padding-left:9px;padding-right:9px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -913,6 +929,7 @@ function render(){
       <button class="iconbtn" onclick="go('perfil')">${svgIcon('settings')}</button></div>
     <div class="view">${body}</div>
     ${navBar(tab)}`;
+  if(tab==="panel")commTick();
 }
 function navBar(tab){
   const item=(id,cls,label,svg)=>`<button class="${cls} ${tab===id?'on':''}" onclick="go('${id}')">${svg}<span>${label}</span></button>`;
@@ -951,6 +968,7 @@ function viewPanel(){
   </div>
   ${stageTriangle()}
   ${momentumCard()}
+  ${communityCard()}
   <div class="card" style="border-color:rgba(216,196,138,.25);background:linear-gradient(180deg,rgba(216,196,138,.10),var(--ink2))">
     <div class="row"><div class="eye" style="color:var(--teal)">Afirmación de hoy</div>
       <button class="voicebtn" onclick="playClip('dia')">${svgIcon('play')}Escuchar</button></div>
@@ -1111,6 +1129,81 @@ function playVideo(url,title){const yid=ytId(url);
 }
 function closeVideo(){$("#vplayer").classList.remove("on");$("#vpframe").innerHTML="";}
 
+/* ---- COMUNIDAD (presencia anónima: alias + racha, nada más) ---- */
+let COMM=null,_commAt=0,_presAt=0,_presSig="";
+function commOn(){return !!(S&&S.alias&&!S.commOff);}
+async function pushPresence(){
+  if(!ME||!S||!sb)return;
+  if(!commOn()){
+    if(_presSig!=="off"){_presSig="off";
+      try{await sb.from("alza_presence").delete().eq("user_id",ME.user_id);}catch(e){}}
+    return;}
+  const body={alias:String(S.alias||"").trim().slice(0,24),streak:computeStreak(),
+    ritual_done:dayCompletion(todayKey())>=1,ritual_day:todayKey(),
+    clean_days:cleanTotal(),waves:wavesTotal()};
+  const sig=JSON.stringify(body);
+  if(sig===_presSig&&Date.now()-_presAt<120000)return;
+  _presSig=sig;_presAt=Date.now();
+  try{await sb.from("alza_presence").upsert(Object.assign({user_id:ME.user_id,updated_at:new Date().toISOString()},body));}
+  catch(e){console.warn("presence",e);}}
+async function loadCommunity(force){
+  if(!sb)return COMM;
+  if(!force&&COMM&&Date.now()-_commAt<60000)return COMM;
+  try{const r=await sb.rpc("alza_community");if(r.error)throw r.error;COMM=r.data;_commAt=Date.now();}
+  catch(e){console.warn("community",e);}
+  return COMM;}
+function commTick(){
+  if(!ME||!S)return;
+  pushPresence();
+  if(!COMM||Date.now()-_commAt>60000){
+    loadCommunity(true).then(()=>{if(S&&S.ui&&S.ui.tab==="panel")render();});}}
+function wallRow(x,i){const me=!!(S.alias&&x.alias===S.alias);
+  return `<div class="wrow ${me?'me':''}"><span class="wp">${i+1}</span><span class="wdot ${x.done?'':'off'}"></span>
+    <span class="wa">${esc(x.alias)}${me?' · tú':''}</span>
+    <span class="ws">${x.streak}<span class="wk">d</span></span></div>`;}
+function communityCard(){
+  if(!commOn())return `<div class="sec-title">Comunidad</div>
+    <div class="card"><b>No estás en el muro</b>
+    <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">Elige un alias y aparecerás junto a los demás con tu racha. Nunca se comparte tu adicción, tu peso ni tu journal — solo el alias que tú escribas y tus días seguidos.</div>
+    <button class="chip" style="margin-top:13px" onclick="aliasSheet()">Elegir mi alias</button></div>`;
+  const c=COMM;
+  if(!c)return `<div class="sec-title">Comunidad</div><div class="card"><div class="dim" style="font-size:13px">Cargando la comunidad…</div></div>`;
+  const w=(c.wall||[]).slice(0,5);
+  const mine=(c.wall||[]).findIndex(x=>x.alias===S.alias);
+  const few=(c.members||0)<5;
+  return `<div class="sec-title">Comunidad</div>
+  <div class="card">
+    ${few?`<b>Estás entre los primeros</b>
+      <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">Van ${c.members} ${c.members===1?"hombre":"hombres"} en VIDA ALFA. Cuando sean más, aquí verás cuántos ya cerraron su día.</div>`
+     :`<div class="commhead"><span class="cbig">${c.done_today}</span><span class="ctx">de ${c.members} hombres ya cerraron su día de hoy</span></div>`}
+    <div class="commbar">
+      ${c.week1>0?`<span class="commchip"><b>${c.week1}</b> en su primera semana limpios</span>`:""}
+      ${c.clean_total>0?`<span class="commchip"><b>${c.clean_total}</b> días limpios entre todos</span>`:""}
+      ${c.waves_total>0?`<span class="commchip"><b>${c.waves_total}</b> olas superadas</span>`:""}
+    </div>
+    ${w.length?`<div class="wall">${w.map((x,i)=>wallRow(x,i)).join("")}</div>
+      ${(mine>=5)?`<div class="wall" style="border-top:0;margin-top:0;padding-top:0">${wallRow(c.wall[mine],mine)}</div>`:""}
+      <button class="chip" style="margin-top:13px" onclick="wallSheet()">Ver el muro completo</button>`:""}
+  </div>`;}
+function wallSheet(){const w=(COMM&&COMM.wall)||[];
+  openSheet(`<h3>El muro</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Hombres activos en los últimos 21 días, ordenados por racha. El punto encendido es quien ya cerró su día de hoy.</p>
+  <div class="wall">${w.length?w.map((x,i)=>wallRow(x,i)).join(""):'<div class="empty">Todavía no hay nadie en el muro.</div>'}</div>
+  <button class="pillbtn ghost" style="margin-top:16px" onclick="aliasSheet()">Mi alias</button>`);}
+function aliasSheet(){openSheet(`<h3>Tu alias en la comunidad</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px;line-height:1.5">Así te ven los demás. No tienes que usar tu nombre real. Lo único que sale de tu cuenta es el alias y tu racha de días — tu adicción, tu peso y tu journal nunca se comparten.</p>
+  <div class="field"><label>Alias</label><input id="al_a" maxlength="24" placeholder="Ej. ElToro, JM77, Lobo" value="${esc(S.alias||"")}"></div>
+  <button class="pillbtn primary" onclick="saveAlias()">${S.alias?"Guardar alias":"Entrar al muro"}</button>
+  ${commOn()?`<button class="pillbtn ghost" style="margin-top:8px" onclick="leaveWall()">Salir del muro</button>`:""}`);}
+function saveAlias(){const v=(($("#al_a")&&$("#al_a").value)||"").trim();
+  if(v.length<2){toast("Escribe al menos 2 letras");return;}
+  S.alias=v.slice(0,24);S.commOff=false;save();_presSig="";
+  closeSheet();toast("Estás en el muro 💪");
+  pushPresence().then(()=>loadCommunity(true)).then(()=>render());}
+function leaveWall(){S.commOff=true;save();_presSig="";
+  closeSheet();toast("Saliste del muro");
+  pushPresence().then(()=>loadCommunity(true)).then(()=>render());}
+
 /* ---- PERFIL ---- */
 function initialsOf(n){const p=(n||"").trim().split(/\s+/).filter(Boolean);
   if(!p.length)return "VA";return (p[0][0]+(p[1]?p[1][0]:"")).toUpperCase();}
@@ -1170,6 +1263,13 @@ function viewPerfil(){
     ${stat(wavesTotal(),"Olas superadas")}
     ${stat(badgesTotal(),"Hitos ganados")}
     ${stat(bibleRead(),"Días de Biblia")}
+  </div>
+
+  <div class="sec-title">Comunidad</div>
+  <div class="card">
+    <div class="prow"><span class="pk">Mi alias en el muro</span><span class="pv">${commOn()?esc(S.alias):"Fuera del muro"}</span></div>
+    <div class="dim" style="font-size:12.5px;margin-top:10px;line-height:1.5">Solo se comparte tu alias y tu racha de días. Tu adicción, tu peso y tu journal nunca salen de tu cuenta.</div>
+    <button class="chip" style="margin-top:12px" onclick="aliasSheet()">${commOn()?"Cambiar alias o salir":"Entrar al muro"}</button>
   </div>
 
   <div class="sec-title">Mi peso</div>
