@@ -474,7 +474,10 @@ const ICONS={
  coffee:'<path d="M10 2v2"/><path d="M14 2v2"/><path d="M6 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/>',
  heartcrack:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/><path d="M12 5 9.5 9.5l3 2.5-2 4"/>',
  footprints:'<path d="M4 16v-2.4C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0z"/><path d="M20 20v-2.4c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6C14.6 6 14 7.8 14 9.5c0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0z"/><path d="M16 17h4"/><path d="M4 13h4"/>',
- weight:'<circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.7 12.1a1 1 0 0 1-1 1.1H5.8a1 1 0 0 1-1-1.1z"/>'
+ weight:'<circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.7 12.1a1 1 0 0 1-1 1.1H5.8a1 1 0 0 1-1-1.1z"/>',
+ unlink:'<path d="m18.8 12.3 1.7-1.7a4.2 4.2 0 0 0-6-6l-1.7 1.7"/><path d="m5.2 11.8-1.7 1.7a4.2 4.2 0 0 0 6 6l1.7-1.7"/><path d="M8 2v3"/><path d="M2 8h3"/><path d="M16 19v3"/><path d="M19 16h3"/>',
+ anchor:'<circle cx="12" cy="5" r="3"/><path d="M12 22V8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/>',
+ lifebuoy:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3"/><path d="m14.8 9.2 4.3-4.3"/><path d="m14.8 14.8 4.3 4.3"/><path d="m9.2 14.8-4.3 4.3"/>'
 };
 function svgIcon(name,cls){const p=ICONS[name]||ICONS.dot;return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
 function habitIcon(h){return h.ic?svgIcon(h.ic):(h.em?`<span style="font-size:18px;line-height:1">${h.em}</span>`:svgIcon('dot'));}
@@ -840,7 +843,7 @@ function navBar(tab){
     ${item("mente","mente","Mente",'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>')}
     ${item("cuerpo","cuerpo","Cuerpo",'<svg viewBox="0 0 24 24"><path d="M20 12h-4l-3 9L9 3l-3 9H2"/></svg>')}
     ${item("alma","alma","Alma",'<svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>')}
-    ${item("apoyo","apoyo","Apoyo",'<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 000-7.8z"/></svg>')}
+    ${item("apoyo","apoyo","Apoyo",'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>')}
   </div>`;
 }
 
