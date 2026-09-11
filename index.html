@@ -952,7 +952,7 @@ function viewCuerpo(){
   const MR=27,MC=2*Math.PI*MR;
   const macroRing=(lbl,val,goal,col)=>{const pct=goal?Math.min(1,val/goal):0;const off=(MC*(1-pct)).toFixed(1);
     return `<div class="mr"><svg viewBox="0 0 74 74"><circle class="mtrack" cx="37" cy="37" r="${MR}"/><circle class="mpr" cx="37" cy="37" r="${MR}" stroke="${col}" style="filter:drop-shadow(0 0 4px ${col})" stroke-dasharray="${MC.toFixed(1)}" stroke-dashoffset="${off}"/><text class="mnum" x="37" y="42.5">${Math.round(val)}</text></svg><div class="mg">/ ${goal}g</div><div class="ml" style="color:${col}">${lbl}</div></div>`;};
-  const steps=getDay().steps||"";const weight=S.weightKg||"";
+  const steps=getDay().steps||"";const weight=S.weightLbs||S.weightKg||"";
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
   <div class="ph">
@@ -985,7 +985,7 @@ function viewCuerpo(){
     <div class="bodyrow">
       <div class="bstat"><span class="bic">${svgIcon('footprints')}</span><input class="binp" type="number" inputmode="numeric" min="0" placeholder="0" value="${steps}" onchange="saveSteps(this.value)"><div class="bl">Pasos hoy</div></div>
       <div class="bdiv"></div>
-      <div class="bstat"><span class="bic">${svgIcon('weight')}</span><div class="binwrap"><input class="binp" type="number" inputmode="decimal" min="0" step="0.1" placeholder="—" value="${weight}" onchange="saveWeight(this.value)"><span class="bu">kg</span></div><div class="bl">Peso actual</div></div>
+      <div class="bstat"><span class="bic">${svgIcon('weight')}</span><div class="binwrap"><input class="binp" type="number" inputmode="decimal" min="0" step="0.1" placeholder="—" value="${weight}" onchange="saveWeight(this.value)"><span class="bu">lbs</span></div><div class="bl">Peso actual</div></div>
     </div>
   </div>
   <div class="sec-title">Wearable</div>
@@ -1013,7 +1013,7 @@ function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
   <button class="pillbtn primary" onclick="saveGoals()">Guardar</button>`);}
 function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
 function saveSteps(v){getDay().steps=Math.max(0,parseInt(v)||0);save();toast("Pasos guardados");}
-function saveWeight(v){const w=parseFloat(v)||0;S.weightKg=w;S.weightAt=todayKey();save();toast(w?("Peso: "+w+" kg"):"Peso borrado");}
+function saveWeight(v){const w=parseFloat(v)||0;S.weightLbs=w;delete S.weightKg;S.weightAt=todayKey();save();toast(w?("Peso: "+w+" lbs"):"Peso borrado");}
 
 /* ---- APOYO (adicciones) ---- */
 const ADDICTIONS=[
