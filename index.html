@@ -409,6 +409,15 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .sosin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .sosnum{font-family:"Inter";font-weight:800;font-size:38px;letter-spacing:-.02em;color:#F7F3E8}
 .sosmsg{text-align:center;font-family:"Fraunces",serif;font-style:italic;font-size:16px;line-height:1.45;color:#F3EEE2;margin:0 6px 16px;min-height:46px}
+.factcard{border:1px solid rgba(233,193,90,.25);border-radius:14px;padding:13px 15px;background:linear-gradient(180deg,rgba(233,193,90,.09),var(--ink2));margin-top:10px}
+.factcard .ft{font-family:"Fraunces",serif;font-style:italic;font-size:15.5px;line-height:1.42;color:#FBEBD3;margin-top:4px}
+.medwarn{display:flex;gap:11px;align-items:flex-start;border:1px solid rgba(201,86,78,.4);border-radius:14px;padding:12px 14px;background:rgba(201,86,78,.10);margin-bottom:10px;font-size:13px;line-height:1.45;color:var(--tx)}
+.medwarn .ico{width:20px;height:20px;color:var(--coral);flex:none;margin-top:1px}
+.pbg{margin-bottom:14px}
+.pbg:last-of-type{margin-bottom:4px}
+.pbl{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.pbi{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:12.5px;color:var(--tx);background:var(--surface)}
+.pbi .ico{width:13px;height:13px;color:var(--gold);flex:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1127,6 +1136,22 @@ const ADDICTIONS=[
  {id:'drogas',label:'Drogas',ic:'pill'},
  {id:'infidelidad',label:'Infidelidad',ic:'heartcrack'}
 ];
+const PB={
+alcohol:{t:["Fiestas y reuniones","Estrés del trabajo","Viernes por la noche","Discusiones en casa"],s:["Agua mineral con limón en la mano","Sal a caminar 10 minutos","Llama a tu contacto de confianza"],e:["Saca el alcohol de tu casa","Avisa a un amigo que no estás tomando","Evita la ruta que pasa por el bar"],med:1,f:{1:"Tu cuerpo empieza a eliminar el alcohol.",7:"El sueño profundo empieza a regresar.",30:"Hígado y presión mejoran; más energía al despertar.",90:"Piel, peso y claridad mental notablemente mejores.",180:"Tu cerebro recupera capacidad de concentración.",365:"Tu riesgo cardiovascular y hepático baja muchísimo."}},
+tabaco:{t:["El café de la mañana","Después de comer","Estrés","Cuando otros fuman"],s:["Respira 4-7-8 tres veces","Toma agua fría","Lávate los dientes","Camina 5 minutos"],e:["Tira cigarros, encendedores y ceniceros","Cambia la rutina del café","Evita el área de fumadores"],med:0,f:{1:"A los 20 minutos tu pulso y presión ya bajaron.",7:"La nicotina salió de tu cuerpo; el antojo baja desde aquí.",30:"Olfato y gusto regresan; toses menos.",90:"Circulación y capacidad pulmonar claramente mejores.",180:"Respiras como no lo hacías en años.",365:"Tu riesgo de infarto baja a la mitad."}},
+porno:{t:["Estar solo con el celular","De noche en la cama","Aburrimiento","Estrés o tristeza"],s:["Sal del cuarto ahora","Haz 20 lagartijas","Escribe qué estás sintiendo","Llama a alguien"],e:["Instala un bloqueador de contenido","Deja el celular fuera de la recámara","Nada de pantallas en la cama"],med:0,f:{1:"Hoy es decisión, no fuerza de voluntad.",7:"Menos niebla mental y más energía.",30:"Tu cerebro empieza a recalibrar su sistema de recompensa.",90:"Más motivación real y mejor conexión con personas.",180:"Tu atención y tu deseo vuelven a su lugar.",365:"Un año de libertad."}},
+masturbacion:{t:["Soledad","La noche","Aburrimiento","Estrés"],s:["Levántate y cambia de cuarto","Ejercicio corto","Ducha fría","Ora o escribe"],e:["Duerme sin el celular cerca","No te quedes despierto en la cama","Ten un plan para las noches"],med:0,f:{1:"Empieza la disciplina.",7:"Más energía y claridad.",30:"El autocontrol se nota en otras áreas.",90:"Disciplina consolidada.",180:"Dominio propio real.",365:"Un año de dominio propio."}},
+azucar:{t:["El antojo de la tarde","Estrés","El postre después de comer","Refrescos"],s:["Toma agua y espera 10 minutos","Come proteína o fruta","Lávate los dientes"],e:["No tengas dulces en casa","Haz el súper con lista y ya comido","Ten snacks de proteína a la mano"],med:0,note:"Aquí la meta no es cero — son reglas claras.",f:{1:"El primer día es el más consciente.",7:"Los antojos más fuertes ya pasaron.",30:"Tu paladar cambia: la fruta sabe más dulce.",90:"Mejor composición corporal y menos inflamación.",180:"Energía estable todo el día.",365:"Una relación nueva con la comida."}},
+redes:{t:["El primer momento del día","Aburrimiento","Filas y esperas","Antes de dormir"],s:["Deja el celular boca abajo","Lee dos páginas","Sal a caminar","Escribe una idea"],e:["Quita las apps de la pantalla principal","Apaga las notificaciones","Celular fuera de la recámara"],med:0,note:"Aquí la meta no es cero — son límites de tiempo.",f:{1:"Hoy notarás cuántas veces buscabas el celular.",7:"Más atención sostenida.",30:"Recuperas horas reales de tu semana.",90:"Tu concentración cambia de nivel.",180:"Piensas con más profundidad.",365:"Un año con tu atención de vuelta."}},
+videojuegos:{t:["Llegar cansado a casa","Aburrimiento","Los amigos en línea","La noche"],s:["Pon un temporizador antes de empezar","Sal a caminar","Haz una tarea de 10 minutos"],e:["Desconecta la consola después de usarla","Nada de juego entre semana","Acuerda horarios con alguien"],med:0,f:{1:"Hoy decides tú, no el juego.",7:"Recuperas horas de sueño.",30:"Más tiempo real para tus metas.",90:"Tu vida fuera de la pantalla se ve distinta.",180:"Otros proyectos avanzan.",365:"Un año recuperado."}},
+apuestas:{t:["El día de pago","Eventos deportivos","Estrés financiero","El alcohol"],s:["Cierra la app ya","Llama a tu contacto","Sal del lugar","Relee tu porqué"],e:["Autoexclúyete de casas de apuesta","Borra las apps","Deja que alguien de confianza maneje el dinero","Bloquea pagos y tarjetas"],med:0,f:{1:"Cerrar el acceso es la mitad de la batalla.",7:"La urgencia baja cuando el acceso se cierra.",30:"Empiezas a ver tu dinero real.",90:"Recuperas control financiero y calma.",180:"La deuda deja de crecer.",365:"Un año sin apostar."}},
+drogas:{t:["Ciertas personas y lugares","Estrés","Fiestas","Soledad"],s:["Sal del lugar ahora","Llama a tu contacto","Respira 4-7-8","Ve a un espacio seguro"],e:["Cambia de ruta y de círculo","Bloquea contactos de venta","No te quedes solo en momentos de riesgo"],med:1,f:{1:"Hoy ya es un logro.",7:"El sueño y el apetito empiezan a regularse.",30:"Claridad mental notablemente mejor.",90:"Tu cerebro sigue reparando su sistema de recompensa.",180:"Tu vida vuelve a tener estructura.",365:"Un año. El riesgo de recaída baja mucho desde aquí."}},
+infidelidad:{t:["Conversaciones privadas","Viajes solo","El alcohol","Distancia con tu pareja"],s:["Cierra la conversación","Cuéntale a tu contacto de confianza","Llama a tu pareja"],e:["Nada de mensajes privados con esa persona","Transparencia con tu pareja","Evita los contextos de riesgo"],med:0,f:{1:"Hoy elegiste integridad.",7:"La honestidad empieza a reconstruir.",30:"Los límites claros ya son hábito.",90:"La confianza se reconstruye con consistencia.",180:"Tu palabra vuelve a valer.",365:"Un año de integridad."}},
+otra:{t:["Estrés","Soledad","Aburrimiento","Cansancio"],s:["Respira 4-7-8","Cambia de lugar","Llama a alguien","Camina 10 minutos"],e:["Quita el acceso fácil","Avísale a alguien de confianza","Cambia la rutina donde aparece"],med:0,f:{1:"Hoy empieza.",7:"Una semana cambia el patrón.",30:"Un mes construye identidad.",90:"Tres meses es un hábito nuevo.",180:"Medio año te cambia.",365:"Un año."}}
+};
+function pbOf(a){return PB[(a&&a.type)||'otra']||PB.otra;}
+function pbUser(a){if(!a.pb){const d=pbOf(a);a.pb={t:d.t.slice(),s:d.s.slice(),e:d.e.slice()};}return a.pb;}
+function factFor(a,days){const f=pbOf(a).f||{};let cur=null;Object.keys(f).map(Number).sort((x,y)=>x-y).forEach(k=>{if(days>=k)cur=k;});return cur?f[cur]:null;}
 function curAdd(){const l=S.addictions||[];if(!l.length)return null;return l.find(x=>x.id===(S.addUi&&S.addUi.cur))||l[0];}
 function addPicker(cb){return `<div class="addgrid">${ADDICTIONS.map(a=>`<button class="addopt" onclick="${cb}('${a.id}')"><span class="ai" style="color:var(--apoyo)">${svgIcon(a.ic)}</span><span class="al">${a.label}</span></button>`).join('')}<button class="addopt" onclick="${cb}('otra')"><span class="ai" style="color:var(--apoyo)">${svgIcon('pen')}</span><span class="al">Otra</span></button></div>`;}
 function viewApoyo(){
@@ -1161,6 +1186,7 @@ function viewApoyo(){
     <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Tuve una recaída</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
+  ${playbookCard()}
   ${badgesCard(days)}
   ${planCard()}
   <div class="card" style="border-color:rgba(216,196,138,.25);margin-top:12px">
@@ -1175,8 +1201,30 @@ function viewApoyo(){
   <div style="text-align:center;margin-top:16px"><span class="link" style="color:var(--dim);font-size:13px" onclick="removeAddiction('${a.id}')">Dejar de seguir "${esc(a.label)}"</span></div>`;
 }
 const MILESTONES=[{d:1,ic:"sprout",n:"Día 1"},{d:7,ic:"star",n:"1 semana"},{d:30,ic:"flame",n:"1 mes"},{d:90,ic:"gem",n:"3 meses"},{d:180,ic:"trophy",n:"6 meses"},{d:365,ic:"crown",n:"1 año"}];
-function badgesCard(days){return `<div class="sec-title">Hitos</div>
-  <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${svgIcon(m.ic)}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>`;}
+function badgesCard(days){const a=curAdd();const ft=a?factFor(a,days):null;
+  return `<div class="sec-title">Hitos</div>
+  <div class="badges">${MILESTONES.map(m=>`<div class="badge2 ${days>=m.d?'earned':''}"><div class="be">${svgIcon(m.ic)}</div><div class="bn">${m.d}</div><div class="bl">${m.n}</div></div>`).join("")}</div>
+  ${ft?`<div class="factcard"><div class="eye" style="color:var(--gold)">Lo que está pasando en ti</div><div class="ft">${esc(ft)}</div></div>`:''}`;}
+function playbookCard(){const a=curAdd();if(!a)return"";const d=pbOf(a),p=pbUser(a);
+  const grp=(t,arr,ic)=>`<div class="pbg"><div class="eye" style="color:var(--teal)">${t}</div><div class="pbl">${arr.length?arr.map(x=>`<span class="pbi">${svgIcon(ic)}${esc(x)}</span>`).join(""):'<span class="dim" style="font-size:13px">—</span>'}</div></div>`;
+  return `<div class="sec-title">Mi playbook · ${esc(a.label||"")}</div>
+  ${d.med?`<div class="medwarn">${svgIcon('shield')}<div><b>Ojo con dejarlo de golpe.</b> Suspender ${a.type==='alcohol'?'el alcohol':'esta sustancia'} de forma abrupta puede ser médicamente peligroso. Habla con un médico antes de dejarlo solo.</div></div>`:''}
+  ${d.note?`<div class="dim" style="font-size:12.5px;margin:-4px 2px 10px">${esc(d.note)}</div>`:''}
+  <div class="card" onclick="pbSheet()" style="cursor:pointer">
+    ${grp('Mis detonantes',p.t,'zap')}
+    ${grp('Qué hago en su lugar',p.s,'activity')}
+    ${grp('Cambios de ambiente',p.e,'shield')}
+    <div class="link" style="margin-top:12px;display:inline-block">Editar mi playbook</div>
+  </div>`;}
+function pbSheet(){const a=curAdd();if(!a)return;const p=pbUser(a);
+  openSheet(`<h3>Mi playbook</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Uno por línea. Empezamos con lo típico de ${esc(a.label||"esta batalla")} — ajústalo a tu vida real.</p>
+  <div class="field"><label>Mis detonantes</label><textarea id="pb_t" style="min-height:78px">${esc(p.t.join("\n"))}</textarea></div>
+  <div class="field"><label>Qué hago en su lugar</label><textarea id="pb_s" style="min-height:78px">${esc(p.s.join("\n"))}</textarea></div>
+  <div class="field"><label>Cambios de ambiente</label><textarea id="pb_e" style="min-height:78px">${esc(p.e.join("\n"))}</textarea></div>
+  <button class="pillbtn primary" style="width:100%" onclick="savePb()">Guardar playbook</button>`);}
+function savePb(){const a=curAdd();if(!a)return;const ln=id=>(($("#"+id)&&$("#"+id).value)||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  a.pb={t:ln("pb_t"),s:ln("pb_s"),e:ln("pb_e")};save();closeSheet();render();toast("Playbook guardado 💪");}
 function planCard(){const pl=(curAdd()||{}).plan||{};const has=pl.why||pl.lose||pl.action||pl.contact;
   const row=(t,v)=>v?`<div style="margin-bottom:10px"><div class="eye" style="color:var(--teal)">${t}</div><div style="font-size:14px;margin-top:3px">${esc(v)}</div></div>`:'';
   return `<div class="sec-title">Mi plan anti-recaída</div>
