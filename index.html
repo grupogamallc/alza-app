@@ -1232,7 +1232,7 @@ function viewApoyo(){
     ${(a.triggers||[]).length?a.triggers.slice().reverse().map(t=>`<div class="trg"><div><b>${esc(t.what)}</b>${t.how?`<div class="dim" style="font-size:13px">${esc(t.how)}</div>`:""}</div><div class="dt">${new Date(t.at).toLocaleDateString("es-MX")}</div></div>`).join(""):'<div class="empty">Anota qué te detona y cómo lo superaste para ver tus patrones.</div>'}
   </div>
   ${apoyoVideos()}
-  <div style="text-align:center;margin-top:16px"><span class="link" style="color:var(--dim);font-size:13px" onclick="removeAddiction('${a.id}')">Dejar de seguir "${esc(a.label)}"</span></div>`;
+  <div style="text-align:center;margin-top:18px"><span class="link" style="color:var(--dim);font-size:13px" onclick="addSettings()">Ajustar o reiniciar "${esc(a.label)}"</span></div>`;
 }
 function apoyoVideos(){const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="adiccion");
   if(!vids.length)return"";
@@ -1295,6 +1295,43 @@ function saveNewAddiction(id){const cat=ADDICTIONS.find(a=>a.id===id);
   const uid=id+'_'+Date.now().toString(36);
   S.addictions.push({id:uid,type:id,label,ic,since:d,best:Math.floor((Date.now()-new Date(d))/864e5)||0,plan:{},triggers:[],celebrated:[]});
   S.addUi={cur:uid};save();closeSheet();render();window.scrollTo(0,0);toast("Vamos contigo 💪");}
+/* --- Ajustes / reinicio de una batalla --- */
+function addSettings(){const a=curAdd();if(!a)return;
+  openSheet(`<h3>Ajustar "${esc(a.label)}"</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Corrige lo que necesites. Solo tú ves esto.</p>
+  <div class="field"><label>Nombre</label><input id="as_l" value="${esc(a.label||"")}" placeholder="Cómo la llamas"></div>
+  <div class="field"><label>Estoy limpio desde</label><input id="as_d" type="date" value="${esc(a.since||todayKey())}" max="${todayKey()}"></div>
+  <button class="pillbtn primary" onclick="saveAddSettings()">Guardar cambios</button>
+  <div class="sec-title" style="margin-top:20px">Si te equivocaste al elegir</div>
+  <button class="pillbtn ghost" onclick="changeAddType()">Cambiar de adicción</button>
+  <button class="pillbtn ghost" style="margin-top:8px" onclick="confirmResetAll()">Empezar de cero</button>
+  <button class="pillbtn ghost" style="margin-top:8px;color:var(--coral);border-color:rgba(201,86,78,.4)" onclick="removeAddiction('${a.id}')">Dejar de seguir</button>`);}
+function fixCelebrated(a){const d=daysOf(a);a.celebrated=MILESTONES.filter(m=>d>=m.d).map(m=>m.d);}
+function saveAddSettings(){const a=curAdd();if(!a)return;
+  const l=(($("#as_l")&&$("#as_l").value)||"").trim();
+  const d=($("#as_d")&&$("#as_d").value)||a.since;
+  if(l)a.label=l;
+  if(d&&d!==a.since){a.since=d;fixCelebrated(a);}
+  save();closeSheet();render();window.scrollTo(0,0);toast("Actualizado");}
+function changeAddType(){openSheet(`<h3>Cambiar de adicción</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Conservas tu racha y tu historial. El playbook se ajusta a la nueva batalla.</p>
+  ${addPicker('doChangeType')}
+  <button class="pillbtn ghost" style="margin-top:12px" onclick="addSettings()">Volver</button>`);}
+function doChangeType(id){const a=curAdd();if(!a)return;
+  const cat=ADDICTIONS.filter(x=>x.id===id)[0];
+  a.type=id;a.ic=cat?cat.ic:'shield';if(cat)a.label=cat.label;
+  delete a.pb;
+  save();closeSheet();render();window.scrollTo(0,0);
+  toast(cat?("Ahora sigues: "+cat.label):"Ponle nombre en Ajustar");}
+function confirmResetAll(){const a=curAdd();if(!a)return;
+  openSheet(`<h3>Empezar de cero</h3>
+  <p class="dim" style="font-size:13.5px;margin-top:-6px">Se borra todo lo de <b style="color:var(--golds)">${esc(a.label)}</b>: días limpio, mejor racha, total acumulado, check-ins, recaídas y bitácora. Tu plan anti-recaída y tu playbook se conservan. Esto no se puede deshacer.</p>
+  <button class="pillbtn primary" style="margin-top:14px" onclick="doResetAll()">Sí, empezar de cero</button>
+  <button class="pillbtn ghost" style="margin-top:8px" onclick="addSettings()">Cancelar</button>`);}
+function doResetAll(){const a=curAdd();if(!a)return;
+  a.since=todayKey();a.best=0;a.totalDays=0;a.sos=0;a.sosWon=0;
+  a.checks=[];a.relapses=[];a.triggers=[];a.celebrated=[];
+  save();closeSheet();render();window.scrollTo(0,0);toast("Listo. Empiezas limpio desde hoy 💪");}
 function removeAddiction(id){openSheet(`<h3>Dejar de seguir</h3><p class="dim">Se quitará este seguimiento y su bitácora. Tu progreso en las demás no se toca. ¿Continuar?</p>
   <button class="pillbtn primary" style="margin-top:12px" onclick="doRemoveAdd('${id}')">Sí, quitar</button>
   <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cancelar</button>`);}
