@@ -468,7 +468,21 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .prow:first-of-type{border-top:0}
 .prow .pk{color:var(--dim)}
 .prow .pv{color:var(--tx);font-weight:600;text-align:right}
-.commhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.commcard{position:relative;overflow:hidden;border-radius:20px;padding:17px 16px 16px;margin-top:14px;
+  border:1px solid rgba(233,193,90,.34);
+  background:radial-gradient(125% 95% at 0% 0%,rgba(233,193,90,.17),rgba(18,18,28,.74) 62%),var(--ink2);
+  box-shadow:0 28px 58px -40px #000,inset 0 1px 0 rgba(255,255,255,.06)}
+.commcard::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--sunh);background-size:200% 100%;animation:shimmer 5s linear infinite}
+.commlive{display:flex;align-items:center;gap:9px;font-family:"Inter";font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.livedot{width:8px;height:8px;border-radius:50%;background:var(--gold);position:relative;flex:none;box-shadow:0 0 8px var(--gold)}
+.livedot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--gold);animation:livepulse 2.1s ease-out infinite}
+@keyframes livepulse{0%{transform:scale(.55);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.avstack{display:flex;align-items:center;margin-top:15px}
+.avstack .av{width:31px;height:31px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Inter";font-weight:800;font-size:11px;color:#1A1408;background:var(--goldgrad);border:2px solid #121218;margin-left:-9px;flex:none}
+.avstack .av:first-child{margin-left:0}
+.avstack .av.off{background:rgba(255,255,255,.14);color:var(--mid)}
+.avstack .more{margin-left:11px;font-size:12.5px;color:var(--dim)}
+.commhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-top:12px}
 .commhead .cbig{font-family:"Inter";font-weight:800;font-size:31px;letter-spacing:-.02em;line-height:1;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
 .commhead .ctx{font-size:14px;color:var(--mid);line-height:1.4}
 .commbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
@@ -478,6 +492,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .wrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
 .wrow:first-child{border-top:0}
 .wrow .wp{font-family:"Inter";font-size:11px;font-weight:700;color:var(--dim);width:18px;flex:none}
+.wrow .wp.top{color:var(--gold)}
 .wrow .wdot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 7px var(--gold);flex:none}
 .wrow .wdot.off{background:rgba(255,255,255,.13);box-shadow:none}
 .wrow .wa{flex:1;min-width:0;font-size:14px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1154,37 +1169,54 @@ async function loadCommunity(force){
   return COMM;}
 function commTick(){
   if(!ME||!S)return;
+  commCountUp();
   pushPresence();
   if(!COMM||Date.now()-_commAt>60000){
     loadCommunity(true).then(()=>{if(S&&S.ui&&S.ui.tab==="panel")render();});}}
 function wallRow(x,i){const me=!!(S.alias&&x.alias===S.alias);
-  return `<div class="wrow ${me?'me':''}"><span class="wp">${i+1}</span><span class="wdot ${x.done?'':'off'}"></span>
+  return `<div class="wrow ${me?'me':''}"><span class="wp ${i<3?'top':''}">${i+1}</span><span class="wdot ${x.done?'':'off'}"></span>
     <span class="wa">${esc(x.alias)}${me?' · tú':''}</span>
     <span class="ws">${x.streak}<span class="wk">d</span></span></div>`;}
+function avInit(a){const s=String(a||"").replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/g,"");return (s.slice(0,2)||"??").toUpperCase();}
+function avStack(wall){
+  const ord=wall.slice().sort((a,b)=>(b.done?1:0)-(a.done?1:0));
+  const show=ord.slice(0,6);const rest=wall.length-show.length;
+  if(!show.length)return "";
+  return `<div class="avstack">${show.map(x=>`<span class="av ${x.done?'':'off'}">${esc(avInit(x.alias))}</span>`).join("")}
+    ${rest>0?`<span class="more">+${rest} más</span>`:""}</div>`;}
 function communityCard(){
-  if(!commOn())return `<div class="sec-title">Comunidad</div>
-    <div class="card"><b>No estás en el muro</b>
+  if(!commOn())return `<div class="commcard">
+    <div class="commlive"><span class="livedot"></span>La comunidad</div>
+    <div style="font-family:'Inter';font-weight:800;font-size:18px;margin-top:11px;color:var(--tx)">No estás en el muro</div>
     <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">Elige un alias y aparecerás junto a los demás con tu racha. Nunca se comparte tu adicción, tu peso ni tu journal — solo el alias que tú escribas y tus días seguidos.</div>
-    <button class="chip" style="margin-top:13px" onclick="aliasSheet()">Elegir mi alias</button></div>`;
+    <button class="chip" style="margin-top:14px" onclick="aliasSheet()">Elegir mi alias</button></div>`;
   const c=COMM;
-  if(!c)return `<div class="sec-title">Comunidad</div><div class="card"><div class="dim" style="font-size:13px">Cargando la comunidad…</div></div>`;
-  const w=(c.wall||[]).slice(0,5);
-  const mine=(c.wall||[]).findIndex(x=>x.alias===S.alias);
+  if(!c)return `<div class="commcard"><div class="commlive"><span class="livedot"></span>La comunidad</div>
+    <div class="dim" style="font-size:13px;margin-top:11px">Cargando…</div></div>`;
+  const all=c.wall||[];const w=all.slice(0,5);
+  const mine=all.findIndex(x=>x.alias===S.alias);
   const few=(c.members||0)<5;
-  return `<div class="sec-title">Comunidad</div>
-  <div class="card">
-    ${few?`<b>Estás entre los primeros</b>
-      <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">Van ${c.members} ${c.members===1?"hombre":"hombres"} en VIDA ALFA. Cuando sean más, aquí verás cuántos ya cerraron su día.</div>`
-     :`<div class="commhead"><span class="cbig">${c.done_today}</span><span class="ctx">de ${c.members} hombres ya cerraron su día de hoy</span></div>`}
+  return `<div class="commcard">
+    <div class="commlive"><span class="livedot"></span>Ahora en VIDA ALFA</div>
+    ${few?`<div style="font-family:'Inter';font-weight:800;font-size:18px;margin-top:11px;color:var(--tx)">Estás entre los primeros</div>
+      <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">${c.members===1?"Vas tú solo por ahora":"Van "+c.members+" hombres"} en VIDA ALFA. Cuando sean más, aquí verás cuántos ya cerraron su día.</div>`
+     :`<div class="commhead"><span class="cbig" id="commbig" data-n="${c.done_today}">0</span><span class="ctx">de ${c.members} hombres ya cerraron su día de hoy</span></div>`}
+    ${avStack(all)}
     <div class="commbar">
       ${c.week1>0?`<span class="commchip"><b>${c.week1}</b> en su primera semana limpios</span>`:""}
       ${c.clean_total>0?`<span class="commchip"><b>${c.clean_total}</b> días limpios entre todos</span>`:""}
       ${c.waves_total>0?`<span class="commchip"><b>${c.waves_total}</b> olas superadas</span>`:""}
     </div>
     ${w.length?`<div class="wall">${w.map((x,i)=>wallRow(x,i)).join("")}</div>
-      ${(mine>=5)?`<div class="wall" style="border-top:0;margin-top:0;padding-top:0">${wallRow(c.wall[mine],mine)}</div>`:""}
-      <button class="chip" style="margin-top:13px" onclick="wallSheet()">Ver el muro completo</button>`:""}
+      ${(mine>=5)?`<div class="wall" style="border-top:0;margin-top:0;padding-top:0">${wallRow(all[mine],mine)}</div>`:""}
+      <button class="chip" style="margin-top:14px" onclick="wallSheet()">Ver el muro completo</button>`:""}
   </div>`;}
+let _commShown=-1;
+function commCountUp(){const el=document.getElementById("commbig");if(!el)return;
+  const t=+el.getAttribute("data-n")||0;
+  if(t===_commShown||t<=0){el.textContent=t;_commShown=t;return;}
+  _commShown=t;let i=0;const step=Math.max(1,Math.round(t/16));
+  clearInterval(el._t);el._t=setInterval(()=>{i+=step;if(i>=t){i=t;clearInterval(el._t);}el.textContent=i;},32);}
 function wallSheet(){const w=(COMM&&COMM.wall)||[];
   openSheet(`<h3>El muro</h3>
   <p class="dim" style="font-size:13px;margin-top:-6px">Hombres activos en los últimos 21 días, ordenados por racha. El punto encendido es quien ya cerró su día de hoy.</p>
