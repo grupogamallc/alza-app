@@ -167,14 +167,16 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .vplayer .frame16{position:relative;width:100%;max-width:860px;margin:auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
 .vplayer .frame16 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));background:rgba(10,10,16,.86);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:40}
-.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dim);font-size:9.5px;font-family:"Inter";letter-spacing:.02em;padding:4px 4px;flex:1;opacity:.62;transition:opacity .2s}
-.nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;justify-content:space-around;padding:9px 2px calc(9px + env(safe-area-inset-bottom));background:rgba(10,10,16,.86);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:40}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dim);font-size:9px;font-family:"Inter";letter-spacing:0;padding:4px 1px;flex:1;min-width:0;opacity:.62;transition:opacity .2s}
+.nav button span{white-space:nowrap}
+.nav button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7}
 .nav button.panel{color:var(--tx)}
 .nav button.mente{color:var(--mente)}
 .nav button.cuerpo{color:var(--cuerpo)}
 .nav button.alma{color:var(--alma)}
 .nav button.apoyo{color:var(--apoyo)}
+.nav button.perfil{color:var(--golds)}
 .nav button.on{opacity:1;font-weight:700}
 
 .toast{position:fixed;bottom:104px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--line2);color:var(--tx);padding:11px 18px;border-radius:999px;font-size:14px;z-index:200;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 12px 40px -10px #000}
@@ -444,6 +446,28 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .haltb .ico{width:16px;height:16px;color:var(--dim);flex:none}
 .haltb.on{border-color:rgba(233,193,90,.55);background:rgba(233,193,90,.12);color:var(--golds)}
 .haltb.on .ico{color:var(--gold)}
+.pid{display:flex;align-items:center;gap:14px}
+.pavatar{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Inter";font-weight:800;font-size:23px;color:#1A1408;background:var(--sunh);box-shadow:0 12px 32px -14px var(--gold);flex:none}
+.pid .pn{font-family:"Inter";font-weight:800;font-size:19px;letter-spacing:-.01em;color:var(--tx)}
+.pid .pe{font-size:12.5px;color:var(--dim);margin-top:2px;word-break:break-all}
+.pid .pm{font-family:"Inter";font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+.pstats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.pst{border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--ink2)}
+.pst .v{font-family:"Inter";font-weight:800;font-size:23px;letter-spacing:-.02em;line-height:1.15;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pst .k{font-family:"Inter";font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:4px;line-height:1.35}
+.wbars{display:flex;align-items:flex-end;gap:5px;height:58px;margin-top:14px}
+.wbars .wb{flex:1;border-radius:3px;background:linear-gradient(180deg,var(--golds),var(--amber));min-height:5px}
+.wnow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.wnow .wv{font-family:"Inter";font-weight:800;font-size:30px;letter-spacing:-.02em;color:var(--golds)}
+.wnow .wd{font-size:13px;color:var(--dim)}
+.jrow{border-top:1px solid var(--line);padding:13px 0;cursor:pointer}
+.jrow:first-of-type{border-top:0;padding-top:2px}
+.jrow .jd{font-family:"Inter";font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold)}
+.jrow .jt{font-size:14px;line-height:1.45;color:var(--tx);margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.prow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.prow:first-of-type{border-top:0}
+.prow .pk{color:var(--dim)}
+.prow .pv{color:var(--tx);font-weight:600;text-align:right}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -479,6 +503,8 @@ const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:tr
 /* ================= ICONOS (line icons) ================= */
 const ICONS={
  dot:'<circle cx="12" cy="12" r="3"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
  brain:'<path d="M12 5a3 3 0 0 0-5.9-.7A3 3 0 0 0 3 7c0 1 .4 1.8 1 2.4A3.5 3.5 0 0 0 5 16a3 3 0 0 0 4 2.8"/><path d="M12 5a3 3 0 0 1 5.9-.7A3 3 0 0 1 21 7c0 1-.4 1.8-1 2.4A3.5 3.5 0 0 1 19 16a3 3 0 0 1-4 2.8"/><path d="M12 5v14.8"/>',
  lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
  activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
@@ -880,10 +906,11 @@ function render(){
   else if(tab==="cuerpo")body=viewCuerpo();
   else if(tab==="alma")body=viewPillar("alma");
   else if(tab==="apoyo")body=viewApoyo();
+  else if(tab==="perfil")body=viewPerfil();
   else if(tab==="admin")body=viewAdmin();
   $("#app").innerHTML=`
     <div class="appbar"><div class="ibspace"></div><div class="brandwrap"><div class="bmark"><span class="bword">VIDA</span>${alfaMark(30)}<span class="bword">ALFA</span></div></div>
-      <button class="iconbtn" onclick="settingsSheet()">${svgIcon('settings')}</button></div>
+      <button class="iconbtn" onclick="go('perfil')">${svgIcon('settings')}</button></div>
     <div class="view">${body}</div>
     ${navBar(tab)}`;
 }
@@ -895,6 +922,7 @@ function navBar(tab){
     ${item("cuerpo","cuerpo","Cuerpo",'<svg viewBox="0 0 24 24"><path d="M20 12h-4l-3 9L9 3l-3 9H2"/></svg>')}
     ${item("alma","alma","Alma",'<svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>')}
     ${item("apoyo","apoyo","Apoyo",'<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>')}
+    ${item("perfil","perfil","Perfil",'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>')}
   </div>`;
 }
 
@@ -1083,6 +1111,131 @@ function playVideo(url,title){const yid=ytId(url);
 }
 function closeVideo(){$("#vplayer").classList.remove("on");$("#vpframe").innerHTML="";}
 
+/* ---- PERFIL ---- */
+function initialsOf(n){const p=(n||"").trim().split(/\s+/).filter(Boolean);
+  if(!p.length)return "VA";return (p[0][0]+(p[1]?p[1][0]:"")).toUpperCase();}
+function bestStreakEver(){const ks=Object.keys(S.days||{}).filter(k=>dayCompletion(k)>=0.5).sort();
+  if(!ks.length)return 0;let best=1,cur=1;
+  for(let i=1;i<ks.length;i++){const a=new Date(ks[i-1]+"T12:00:00"),b=new Date(ks[i]+"T12:00:00");
+    cur=(Math.round((b-a)/864e5)===1)?cur+1:1;if(cur>best)best=cur;}
+  return best;}
+function fullDays(){return Object.keys(S.days||{}).filter(k=>dayCompletion(k)>=1).length;}
+function cleanTotal(){return (S.addictions||[]).reduce((s,a)=>s+daysOf(a)+(a.totalDays||0),0);}
+function wavesTotal(){return (S.addictions||[]).reduce((s,a)=>s+(a.sosWon||0),0);}
+function badgesTotal(){return (S.addictions||[]).reduce((s,a)=>s+((a.celebrated||[]).length),0);}
+function bibleRead(){return Object.keys((S.bible&&S.bible.read)||{}).length;}
+function journalKeys(){return Object.keys(S.days||{}).filter(k=>((S.days[k].journal||"").trim())).sort().reverse();}
+function weightSeries(){const out=[];Object.keys(S.days||{}).sort().forEach(k=>{const w=+(S.days[k].weight||0);if(w>0)out.push({d:k,w:w});});
+  if(!out.length&&+(S.weightLbs||0)>0)out.push({d:S.weightAt||todayKey(),w:+S.weightLbs});
+  return out;}
+function fmtDate(k){try{return new Date(k+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});}catch(e){return k;}}
+function fmtShort(k){try{return new Date(k+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"});}catch(e){return k;}}
+function heightTxt(){const f=+(S.heightFt||0),i=+(S.heightIn||0);return f?(f+"' "+(i||0)+'"'):"—";}
+function viewPerfil(){
+  const nm=(ME&&ME.full_name)||"";
+  const st=computeStreak(),bs=bestStreakEver();
+  const ws=weightSeries();const last=ws.length?ws[ws.length-1]:null;
+  const dlt=(ws.length>1)?(last.w-ws[0].w):0;
+  const g=S.goals||{};const jk=journalKeys();
+  const since=(ME&&ME.created_at)||Object.keys(S.days||{}).sort()[0]||todayKey();
+  const memb=(SUB&&(SUB.status==="active"||SUB.status==="trialing"))?"Membresía activa":"Sin membresía";
+  const stat=(v,k)=>`<div class="pst"><div class="v">${v}</div><div class="k">${k}</div></div>`;
+  const mn=ws.length?Math.min.apply(null,ws.map(x=>x.w)):0;
+  const mx=ws.length?Math.max.apply(null,ws.map(x=>x.w)):0;
+  const bars=ws.slice(-14).map(x=>{const p=(mx>mn)?((x.w-mn)/(mx-mn)):1;
+    return `<div class="wb" style="height:${Math.max(5,Math.round(14+p*44))}px"></div>`;}).join("");
+  return `<div class="ph">
+    <div class="em">${svgIcon('user')}</div><h2>Mi perfil</h2><div class="sub">Quién estás construyendo, día con día.</div></div>
+
+  <div class="card">
+    <div class="pid"><div class="pavatar">${esc(initialsOf(nm))}</div>
+      <div style="min-width:0"><div class="pn">${esc(nm||"Tu nombre")}</div>
+      <div class="pe">${esc((ME&&ME.email)||"")}</div>
+      <div class="pm">${memb} · desde ${fmtShort(String(since).slice(0,10))}</div></div></div>
+  </div>
+
+  <div class="sec-title">Mi razón</div>
+  <div class="card" onclick="goalTextSheet()" style="cursor:pointer">
+    ${S.goalText?`<div class="serif" style="font-style:italic;font-size:16.5px;line-height:1.45;color:#FBEBD3">"${esc(S.goalText)}"</div><div class="link" style="margin-top:10px;display:inline-block">Editar</div>`
+      :`<b>¿Por qué estás haciendo esto?</b><div class="dim" style="font-size:13px;margin-top:4px">Escríbelo. Es lo que vas a leer el día que no tengas ganas.</div><div class="link" style="margin-top:8px;display:inline-block">Escribir mi razón ›</div>`}
+  </div>
+
+  <div class="sec-title">Mis números</div>
+  <div class="pstats">
+    ${stat(st,"Racha actual")}
+    ${stat(bs,"Mejor racha")}
+    ${stat(fullDays(),"Días al 100%")}
+    ${stat(journalCount(),"Notas en el journal")}
+    ${stat(cleanTotal(),"Días limpio acumulados")}
+    ${stat(wavesTotal(),"Olas superadas")}
+    ${stat(badgesTotal(),"Hitos ganados")}
+    ${stat(bibleRead(),"Días de Biblia")}
+  </div>
+
+  <div class="sec-title">Mi peso</div>
+  <div class="card">
+    ${ws.length?`<div class="wnow"><span class="wv">${last.w}</span><span class="wd">lbs${S.targetLbs?` · meta ${S.targetLbs} lbs`:""}</span>
+      ${ws.length>1?`<span class="wd" style="margin-left:auto;color:${dlt<0?'var(--golds)':'var(--dim)'}">${dlt>0?"+":""}${dlt.toFixed(1)} lbs desde ${fmtShort(ws[0].d)}</span>`:""}</div>
+      ${ws.length>1?`<div class="wbars">${bars}</div><div class="ckax"><span>${fmtShort(ws.slice(-14)[0].d)}</span><span>${fmtShort(last.d)}</span></div>`:'<div class="dim" style="font-size:12.5px;margin-top:10px">Registra tu peso unos días más y aquí verás tu tendencia.</div>'}`
+      :'<div class="empty">Aún no registras tu peso. Anótalo en Cuerpo o aquí abajo en "Mi cuerpo".</div>'}
+    <button class="chip" style="margin-top:14px" onclick="bodySheet()">Registrar peso</button>
+  </div>
+
+  <div class="sec-title">Mis metas</div>
+  <div class="card">
+    <div class="prow"><span class="pk">Calorías al día</span><span class="pv">${g.kcal||0} kcal</span></div>
+    <div class="prow"><span class="pk">Proteína · Carbos · Grasas</span><span class="pv">${g.p||0} · ${g.c||0} · ${g.f||0} g</span></div>
+    <div class="prow"><span class="pk">Estatura</span><span class="pv">${heightTxt()}</span></div>
+    <div class="prow"><span class="pk">Peso objetivo</span><span class="pv">${S.targetLbs?S.targetLbs+" lbs":"—"}</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <button class="chip" onclick="goalsSheet()">Editar macros</button>
+      <button class="chip" onclick="bodySheet()">Editar mi cuerpo</button></div>
+  </div>
+
+  <div class="sec-title">Mi journal</div>
+  <div class="card">
+    ${jk.length?jk.slice(0,8).map(k=>`<div class="jrow" onclick="journalSheet('${k}')"><div class="jd">${esc(fmtDate(k))}</div><div class="jt">${esc(S.days[k].journal)}</div></div>`).join("")
+      :'<div class="empty">Lo que escribas en Mente aparecerá aquí para que puedas releerlo.</div>'}
+    ${jk.length>8?`<div class="dim" style="font-size:12.5px;margin-top:12px">Mostrando las 8 más recientes de ${jk.length}.</div>`:""}
+  </div>
+
+  <div class="sec-title">Ajustes</div>
+  <div style="margin-bottom:10px">${audioBtn()}</div>
+  <button class="pillbtn ghost" onclick="installSheet()">Instalar en mi teléfono</button>
+  ${ME&&ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="go('admin')">Panel de admin</button>`:""}
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="showTerms()">Términos de uso</button>
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" style="color:var(--coral);border-color:rgba(201,86,78,.4)" onclick="logout()">Cerrar sesión</button>`;
+}
+function journalCount(){return journalKeys().length;}
+function goalTextSheet(){openSheet(`<h3>Mi razón</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Lo que vas a leer el día que no tengas ganas.</p>
+  <div class="field"><textarea id="gt_b" style="min-height:120px" placeholder="Ej. Ser más fuerte, disciplinado y presente para mi familia.">${esc(S.goalText||"")}</textarea></div>
+  <button class="pillbtn primary" onclick="saveGoalText()">Guardar</button>`);}
+function saveGoalText(){S.goalText=(($("#gt_b")&&$("#gt_b").value)||"").trim();save();closeSheet();render();window.scrollTo(0,0);toast("Guardado");}
+function journalSheet(k){const d=S.days[k];if(!d)return;
+  openSheet(`<h3>${esc(fmtDate(k))}</h3>
+  <div class="field"><textarea id="jr_b" style="min-height:180px">${esc(d.journal||"")}</textarea></div>
+  <button class="pillbtn primary" onclick="saveJournalDay('${k}')">Guardar cambios</button>
+  <button class="pillbtn ghost" style="margin-top:8px" onclick="closeSheet()">Cerrar</button>`);}
+function saveJournalDay(k){if(!S.days[k])return;
+  S.days[k].journal=(($("#jr_b")&&$("#jr_b").value)||"");
+  save();closeSheet();render();window.scrollTo(0,0);toast("Journal actualizado");}
+function bodySheet(){openSheet(`<h3>Mi cuerpo</h3>
+  <p class="dim" style="font-size:13px;margin-top:-6px">Todo en libras y pies.</p>
+  <div class="g2"><div class="field"><label>Estatura (pies)</label><input id="b_ft" type="number" inputmode="numeric" placeholder="5" value="${S.heightFt||""}"></div>
+  <div class="field"><label>Pulgadas</label><input id="b_in" type="number" inputmode="numeric" placeholder="10" value="${S.heightIn||""}"></div></div>
+  <div class="g2"><div class="field"><label>Peso de hoy (lbs)</label><input id="b_w" type="number" inputmode="decimal" placeholder="180" value="${(getDay().weight||S.weightLbs||"")}"></div>
+  <div class="field"><label>Peso objetivo (lbs)</label><input id="b_t" type="number" inputmode="decimal" placeholder="170" value="${S.targetLbs||""}"></div></div>
+  <button class="pillbtn primary" onclick="saveBody()">Guardar</button>`);}
+function saveBody(){const n=id=>{const e=$("#"+id);return e?(parseFloat(e.value)||0):0;};
+  S.heightFt=n("b_ft");S.heightIn=n("b_in");S.targetLbs=n("b_t");
+  const w=n("b_w");if(w>0){S.weightLbs=w;S.weightAt=todayKey();getDay().weight=w;}
+  save();closeSheet();render();window.scrollTo(0,0);toast("Actualizado");}
+
 /* ---- CUERPO ---- */
 function viewCuerpo(){
   const P=PILLARS.cuerpo;const hs=S.habits.filter(h=>h.pillar==="cuerpo");const r=getDay().ritual;
@@ -1152,7 +1305,9 @@ function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
   <button class="pillbtn primary" onclick="saveGoals()">Guardar</button>`);}
 function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
 function saveSteps(v){getDay().steps=Math.max(0,parseInt(v)||0);save();toast("Pasos guardados");}
-function saveWeight(v){const w=parseFloat(v)||0;S.weightLbs=w;delete S.weightKg;S.weightAt=todayKey();save();toast(w?("Peso: "+w+" lbs"):"Peso borrado");}
+function saveWeight(v){const w=parseFloat(v)||0;S.weightLbs=w;delete S.weightKg;S.weightAt=todayKey();
+  if(w>0)getDay().weight=w;else delete getDay().weight;
+  save();toast(w?("Peso: "+w+" lbs"):"Peso borrado");}
 
 /* ---- APOYO (adicciones) ---- */
 const ADDICTIONS=[
