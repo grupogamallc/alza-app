@@ -1,5 +1,5 @@
 // ALZA product — network-first service worker
-const C = "alza-app-v37";
+const C = "alza-app-v38";
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim()));
