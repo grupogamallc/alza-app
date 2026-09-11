@@ -367,6 +367,35 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .bu{font-family:"Inter";font-weight:700;font-size:14px;color:var(--dim)}
 .bl{font-family:"Inter";font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .bdiv{width:1px;background:var(--line);margin:6px 4px}
+.biblecard{position:relative;border:1px solid rgba(255,193,94,.24);border-radius:18px;overflow:hidden;padding:17px;background:linear-gradient(180deg,rgba(255,193,94,.11),rgba(18,18,28,.62));box-shadow:0 22px 46px -34px var(--gold),inset 0 1px 0 rgba(255,255,255,.05);cursor:pointer}
+.biblecard:active{transform:scale(.995)}
+.biblecard .top{display:flex;align-items:center;gap:12px}
+.biblecard .bi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,193,94,.13);color:var(--gold);flex:none}
+.biblecard .bi .ico{width:22px;height:22px}
+.biblecard .ti{flex:1;min-width:0}
+.biblecard .ti .h{font-family:"Inter",system-ui,sans-serif;font-weight:700;font-size:17px;color:#FBF3E7}
+.biblecard .ti .s{font-family:"Inter";font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--golds);margin-top:2px}
+.biblecard .bstreak{flex:none;font-family:"Inter";font-weight:800;font-size:14px;color:var(--gold);background:rgba(255,193,94,.13);border:1px solid rgba(255,193,94,.3);border-radius:999px;padding:5px 11px}
+.biblecard .pass{font-family:"Fraunces",serif;font-style:italic;font-size:15.5px;color:#FBEBD3;margin-top:13px}
+.biblecard .pbar{height:7px;border-radius:99px;background:#232333;overflow:hidden;margin-top:11px}
+.biblecard .pbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--amber),var(--gold));border-radius:99px;transition:width .5s}
+.biblecard .prow{display:flex;justify-content:space-between;font-family:"Inter";font-size:10.5px;color:var(--dim);margin-top:7px;letter-spacing:.03em}
+.biblecard .go{margin-top:13px;padding:11px;border-radius:12px;background:linear-gradient(90deg,var(--gold),var(--amber));color:var(--ink);font-weight:700;font-size:14px;text-align:center}
+.brhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px}
+.brhead .brday{font-family:"Inter";font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--golds)}
+.brhead .brref{font-family:"Inter",system-ui,sans-serif;font-weight:700;font-size:22px;color:#FBF3E7;margin-top:3px}
+.bvtog{display:flex;flex:none;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.bvtog .bvt{font-family:"Inter";font-size:10.5px;font-weight:600;color:var(--dim);padding:5px 10px;background:var(--surface)}
+.bvtog .bvt.on{background:var(--gold);color:var(--ink)}
+.brbody{max-height:54vh;overflow:auto;margin:8px 0 14px;padding-right:4px}
+.brbody .bk{font-family:"Inter",system-ui,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--golds);margin:18px 0 8px}
+.brbody .bk:first-child{margin-top:2px}
+.brbody .vv{font-family:"Fraunces",serif;font-size:17px;line-height:1.78;color:#EDE7DA}
+.brbody .vv .n{font-family:"Inter";font-size:9.5px;color:var(--gold);vertical-align:super;margin-right:2px;font-weight:500}
+.brbody .load{text-align:center;padding:26px 10px;color:var(--dim);font-family:"Inter";font-size:12px}
+.brnav{display:flex;gap:9px}
+.brnav .bnav{flex:1;padding:11px;border-radius:11px;border:1px solid var(--line2);background:var(--surface);color:var(--tx);font-size:13px;font-weight:600}
+.brnav .bnav:disabled{opacity:.35}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -521,7 +550,7 @@ const DEFAULT_STATE={
   inbody:{weight:{c:null,p:null},smm:{c:null,p:null},pbf:{c:null,p:null}},
   addiction:{enabled:false,label:"",since:null,best:0,triggers:[],sos:0,plan:{why:"",trigger:"",action:"",contact:""}},
   addictions:[], addUi:{cur:null},
-  bible:{streak:0,lastRead:null},
+  bible:{ver:"en-kjv",cur:1,read:{},streak:0,lastRead:null},
   ui:{tab:"panel"}
 };
 const EMOJIS=["📖","🎯","✍️","🧠","📚","🎧","🏋️","🥗","💧","😴","🏃","🚶","🧘","🙏","🕊️","❤️","☀️","🌙","💊","🚭","🍎","💪","⚡","🔥","✨","🎵","💤","🧊","📝","💵"];
@@ -895,9 +924,9 @@ function viewPillar(p){
   </div>
   ${ritualSection(p)}
   ${p==="mente"?menteModules():""}
+  ${p==="alma"?almaModules():""}
   <div class="sec-title">Videos${P.name?` · ${P.name}`:""}</div>
-  ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}
-  ${p==="alma"?almaExtra():""}`;
+  ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}`;
 }
 function menteModules(){const q=daily(SEED_QUOTES);const d=getDay();
   return `<div class="sec-title">Palabra de tus mentores</div>
@@ -924,11 +953,65 @@ function addHabitSheet(p){pickIcon="star";openSheet(`<h3>Nuevo hábito</h3>
   <button class="pillbtn primary" onclick="addHabit()">Agregar hábito</button>`);}
 function pickIc(n,el){pickIcon=n;[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
 function addHabit(){const l=$("#nh_l").value.trim();if(!l){toast("Escribe el nombre");return;}const p=$("#nh_p").value;S.habits.push({id:'h'+Date.now().toString(36),ic:pickIcon,lbl:l,pillar:p});save();closeSheet();render();toast("Hábito agregado");}
-function almaExtra(){
-  const v=daily(SEED_VERSES);
-  return `<div class="sec-title">Palabra del día</div>
-  <div class="verse"><div class="q">${esc(v.t)}</div><b>${esc(v.r)}</b></div>`;
+function almaModules(){const v=daily(SEED_VERSES);const d=getDay();
+  return `<div class="sec-title">Verso del día</div>
+   <div class="verse"><div class="q">"${esc(v.t)}"</div><b>${esc(v.r)}</b></div>
+   ${bibleModule()}
+   <div class="sec-title">Intención del día</div>
+   <div class="card"><textarea id="intn" style="min-height:64px" placeholder="Hoy quiero vivir desde… / Mi enfoque espiritual de hoy es…" oninput="saveIntention(this.value)">${esc(d.intention||"")}</textarea></div>`;}
+function saveIntention(v){getDay().intention=v;save();}
+/* ---- ALMA: Biblia en un año (KJV / Reina-Valera, dominio público, vía jsDelivr) ---- */
+const BBOOKS=[["Genesis",50,"génesis","Génesis"],["Exodus",40,"éxodo","Éxodo"],["Leviticus",27,"levítico","Levítico"],["Numbers",36,"números","Números"],["Deuteronomy",34,"deuteronomio","Deuteronomio"],["Joshua",24,"josué","Josué"],["Judges",21,"jueces","Jueces"],["Ruth",4,"rut","Rut"],["1 Samuel",31,"1samuel","1 Samuel"],["2 Samuel",24,"2samuel","2 Samuel"],["1 Kings",22,"1reyes","1 Reyes"],["2 Kings",25,"2reyes","2 Reyes"],["1 Chronicles",29,"1crónicas","1 Crónicas"],["2 Chronicles",36,"2crónicas","2 Crónicas"],["Ezra",10,"esdras","Esdras"],["Nehemiah",13,"nehemías","Nehemías"],["Esther",10,"ester","Ester"],["Job",42,"job","Job"],["Psalms",150,"salmos","Salmos"],["Proverbs",31,"proverbios","Proverbios"],["Ecclesiastes",12,"eclesiastés","Eclesiastés"],["Song of Solomon",8,"cantares","Cantares"],["Isaiah",66,"isaías","Isaías"],["Jeremiah",52,"jeremías","Jeremías"],["Lamentations",5,"lamentaciones","Lamentaciones"],["Ezekiel",48,"ezequiel","Ezequiel"],["Daniel",12,"daniel","Daniel"],["Hosea",14,"oseas","Oseas"],["Joel",3,"joel","Joel"],["Amos",9,"amós","Amós"],["Obadiah",1,"abdías","Abdías"],["Jonah",4,"jonás","Jonás"],["Micah",7,"miqueas","Miqueas"],["Nahum",3,"nahúm","Nahúm"],["Habakkuk",3,"habacuc","Habacuc"],["Zephaniah",3,"sofonías","Sofonías"],["Haggai",2,"hageo","Hageo"],["Zechariah",14,"zacarías","Zacarías"],["Malachi",4,"malaquías","Malaquías"],["Matthew",28,"sanmateo","San Mateo"],["Mark",16,"sanmarcos","San Marcos"],["Luke",24,"sanlucas","San Lucas"],["John",21,"sanjuan","San Juan"],["Acts",28,"hechos","Hechos"],["Romans",16,"romanos","Romanos"],["1 Corinthians",16,"1corintios","1 Corintios"],["2 Corinthians",13,"2corintios","2 Corintios"],["Galatians",6,"gálatas","Gálatas"],["Ephesians",6,"efesios","Efesios"],["Philippians",4,"filipenses","Filipenses"],["Colossians",4,"colosenses","Colosenses"],["1 Thessalonians",5,"1tesalonicenses","1 Tesalonicenses"],["2 Thessalonians",3,"2tesalonicenses","2 Tesalonicenses"],["1 Timothy",6,"1timoteo","1 Timoteo"],["2 Timothy",4,"2timoteo","2 Timoteo"],["Titus",3,"tito","Tito"],["Philemon",1,"filemón","Filemón"],["Hebrews",13,"hebreos","Hebreos"],["James",5,"santiago","Santiago"],["1 Peter",5,"1pedro","1 Pedro"],["2 Peter",3,"2pedro","2 Pedro"],["1 John",5,"1juan","1 Juan"],["2 John",1,"2juan","2 Juan"],["3 John",1,"3juan","3 Juan"],["Jude",1,"judas","Judas"],["Revelation",22,"apocalipsis","Apocalipsis"]];
+const BIBLE_DAYS=365, BIBLE_CDN="https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles";
+const BIBLE_VERS={"en-kjv":"King James","es-rv09":"Reina-Valera"};
+function bslug(n){return n.toLowerCase().replace(/[^a-z0-9]/g,"");}
+function bkSlug(bi,ver){return ver==="es-rv09"?BBOOKS[bi][2]:bslug(BBOOKS[bi][0]);}
+function bkName(bi,ver){return ver==="es-rv09"?BBOOKS[bi][3]:BBOOKS[bi][0];}
+function bibleVer(){return (S.bible&&S.bible.ver)||"en-kjv";}
+let _bcache={},_allCh=null,_bview=1;
+function allChapters(){if(_allCh)return _allCh;const a=[];BBOOKS.forEach((b,bi)=>{for(let c=1;c<=b[1];c++)a.push([bi,c]);});_allCh=a;return a;}
+function dayRange(day){const all=allChapters(),N=all.length;const s=Math.round((day-1)*N/BIBLE_DAYS),e=Math.round(day*N/BIBLE_DAYS);return all.slice(s,Math.max(s+1,e));}
+function dayLabel(day,ver){ver=ver||bibleVer();const l=dayRange(day);if(!l.length)return"";const f=l[0],g=l[l.length-1];const nf=bkName(f[0],ver),ng=bkName(g[0],ver);if(f[0]===g[0])return f[1]===g[1]?`${nf} ${f[1]}`:`${nf} ${f[1]}–${g[1]}`;return `${nf} ${f[1]} – ${ng} ${g[1]}`;}
+async function fetchChapter(ver,slug,ch){const key=ver+"/"+slug+"/"+ch;if(_bcache[key])return _bcache[key];const r=await fetch(`${BIBLE_CDN}/${ver}/books/${encodeURIComponent(slug)}/chapters/${ch}.json`);if(!r.ok)throw new Error("http");const d=await r.json();const arr=(d.data||[]);_bcache[key]=arr;return arr;}
+function bibleModule(){
+  const b=S.bible||{cur:1,read:{}};const done=Object.keys(b.read||{}).length;const pct=Math.round(done/BIBLE_DAYS*100);const ver=bibleVer();const st=b.streak||0;
+  return `<div class="sec-title">Biblia en un año</div>
+   <div class="biblecard" onclick="openBible(${b.cur||1})">
+     <div class="top"><div class="bi">${svgIcon('book')}</div>
+       <div class="ti"><div class="h">Biblia en un año</div><div class="s">${esc(BIBLE_VERS[ver])} · Día ${b.cur||1} de ${BIBLE_DAYS}</div></div>
+       ${st>0?`<div class="bstreak">🔥 ${st}</div>`:''}</div>
+     <div class="pass">Hoy: ${esc(dayLabel(b.cur||1,ver))}</div>
+     <div class="pbar"><i style="width:${Math.max(2,pct)}%"></i></div>
+     <div class="prow"><span>${done} de ${BIBLE_DAYS} leídos</span><span>${pct}%</span></div>
+     <div class="go">${done>0?'Continuar lectura':'Empezar hoy'} →</div>
+   </div>`;
 }
+function openBible(day){day=Math.max(1,Math.min(BIBLE_DAYS,day||1));_bview=day;
+  const done=!!(S.bible.read&&S.bible.read[day]);const ver=bibleVer();
+  openSheet(`<div class="brhead"><div><div class="brday">Día ${day} · ${BIBLE_DAYS}</div><div class="brref">${esc(dayLabel(day,ver))}</div></div>
+     <div class="bvtog"><button class="bvt ${ver==='en-kjv'?'on':''}" onclick="setBibleVer('en-kjv')">KJV</button><button class="bvt ${ver==='es-rv09'?'on':''}" onclick="setBibleVer('es-rv09')">RVR</button></div></div>
+   <div id="brbody" class="brbody"><div class="load">Cargando la Palabra…</div></div>
+   <div class="brnav"><button class="bnav" onclick="bibleNav(-1)" ${day<=1?'disabled':''}>◀ Anterior</button><button class="bnav" onclick="bibleNav(1)" ${day>=BIBLE_DAYS?'disabled':''}>Siguiente ▶</button></div>
+   <button class="pillbtn primary" style="width:100%;margin-top:10px" onclick="markBibleRead()">${done?'✓ Leído · marcar siguiente':'Marcar como leído ✓'}</button>`);
+  loadBibleBody(day);
+}
+function setBibleVer(v){if(!BIBLE_VERS[v])return;S.bible.ver=v;save();openBible(_bview);}
+async function loadBibleBody(day){
+  const el=document.getElementById("brbody");if(!el)return;
+  el.innerHTML='<div class="load">Cargando la Palabra…</div>';
+  try{
+    const ver=bibleVer();let html="";
+    for(const [bi,ch] of dayRange(day)){
+      const vs=await fetchChapter(ver,bkSlug(bi,ver),ch);
+      html+=`<div class="bk">${esc(bkName(bi,ver))} ${ch}</div><div class="vv">`+vs.map(v=>`<span class="n">${v.verse}</span>${esc((v.text||"").trim())} `).join("")+`</div>`;
+    }
+    if(document.getElementById("brbody"))document.getElementById("brbody").innerHTML=html||'<div class="load">Sin contenido.</div>';
+  }catch(e){if(document.getElementById("brbody"))document.getElementById("brbody").innerHTML=`<div class="load">No pude cargar el texto (revisa tu conexión).<br><button class="pillbtn ghost" style="margin-top:12px" onclick="loadBibleBody(${day})">Reintentar</button></div>`;}
+}
+function bibleNav(d){openBible(_bview+d);}
+function markBibleRead(){if(!S.bible.read)S.bible.read={};S.bible.read[_bview]=true;if((S.bible.cur||1)<=_bview)S.bible.cur=Math.min(BIBLE_DAYS,_bview+1);
+  const today=todayKey();if(S.bible.lastRead!==today){const y=new Date();y.setDate(y.getDate()-1);S.bible.streak=(S.bible.lastRead===keyOf(y))?((S.bible.streak||0)+1):1;S.bible.lastRead=today;}
+  save();toast("✓ Día "+_bview+" leído"+(S.bible.streak>1?" · 🔥 "+S.bible.streak:""));render();const nx=Math.min(BIBLE_DAYS,_bview+1);if(nx!==_bview)openBible(nx);else closeSheet();}
 function videoRow(v){
   const yid=ytId(v.url);
   const thumb=yid?`<img src="https://i.ytimg.com/vi/${yid}/mqdefault.jpg" alt="">`:"";
