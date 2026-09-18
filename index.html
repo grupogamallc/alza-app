@@ -761,7 +761,7 @@ let S=null;          // user state (jsonb)
 let ME=null;         // {user_id,email,full_name,is_admin,...}
 let SUB=null;        // subscription row
 const PRICE_USD="19.99";
-const STRIPE_ON=false;   // se pone en true cuando existan las llaves y la Edge Function
+const STRIPE_ON=true;    // Stripe conectado
 let CONTENT=[];      // admin content
 let saveTimer=null;
 
@@ -1089,7 +1089,9 @@ function startCheckout(){
     goAuth('signup');return;
   }
   toast("Abriendo el pago seguro…");
-  sb.functions.invoke("alza-checkout",{body:{price:"monthly",origin:location.origin+location.pathname}})
+  const payload={price:"monthly",origin:location.origin+location.pathname};
+  if(ME&&ME.user_id){payload.user_id=ME.user_id;if(ME.email)payload.email=ME.email;}
+  sb.functions.invoke("alza-checkout",{body:payload})
     .then(r=>{const u=r&&r.data&&r.data.url;if(u)location.href=u;else throw new Error("sin url");})
     .catch(e=>{console.warn("checkout",e);toast("No se pudo abrir el pago. Intenta de nuevo.");});
 }
