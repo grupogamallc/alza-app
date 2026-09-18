@@ -66,6 +66,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .iconbtn .ico{width:19px;height:19px}
 
 #app{max-width:520px;margin:0 auto;min-height:100%;position:relative;padding-bottom:96px}
+#app:has(>.auth){padding-bottom:0}
 .view{padding:14px 16px 8px;animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
@@ -191,13 +192,20 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
 /* AUTH / ONBOARDING */
-.auth{max-width:440px;margin:0 auto;min-height:100%;padding:calc(30px + env(safe-area-inset-top)) 22px 40px;display:flex;flex-direction:column}
+.auth{max-width:440px;margin:0 auto;min-height:100%;margin-bottom:-96px;padding:calc(30px + env(safe-area-inset-top)) 22px 40px;display:flex;flex-direction:column}
 .auth .logo{font-family:"Inter";font-weight:800;font-size:40px;letter-spacing:.12em;background:var(--sunh);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;animation:shimmer 5s linear infinite}
 .auth .tag{text-align:center;color:var(--mid);font-family:"Fraunces";font-style:italic;font-size:16px;margin-top:6px}
 .auth .aur{position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 42% at 50% 2%,rgba(233,193,90,.20),transparent 60%),radial-gradient(60% 34% at 50% 100%,rgba(196,146,46,.14),transparent 64%);animation:auroraB 9s ease-in-out infinite}
 @keyframes auroraB{0%,100%{opacity:.85}50%{opacity:1}}
 .auth .aur::after{content:"";position:fixed;left:0;right:0;bottom:0;height:34%;background:linear-gradient(0deg,rgba(233,193,90,.08),transparent);pointer-events:none}
 .alfa-hero{display:flex;justify-content:center;margin-bottom:14px}
+.auth.home{min-height:100svh;justify-content:center;padding-block:calc(18px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-bottom))}
+.auth.home .alfa-hero{margin-bottom:10px}
+.auth.home .logo{font-size:clamp(30px,8.6vw,38px)}
+.auth.home .pitch{font-size:clamp(15px,4vw,16.5px);line-height:1.5;color:var(--mid);margin:clamp(14px,3.2vh,24px) auto 0;max-width:30ch}
+.auth.home .tri3{margin:clamp(14px,3vh,24px) 0 clamp(16px,3.4vh,28px)}
+.auth.home .tri3 .t .d{width:clamp(40px,11vw,46px);height:clamp(40px,11vw,46px)}
+.auth.home .fine{margin-top:clamp(10px,2vh,16px)}
 .auth .card{margin-top:22px}
 .auth .tabs{display:flex;gap:6px;margin-bottom:16px;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--surface)}
 .auth .tabs button{flex:1;padding:10px;border-radius:9px;color:var(--mid);font-weight:600;font-size:14px}
@@ -883,15 +891,12 @@ async function logout(){closeSheet();await sb.auth.signOut();}
 
 function goAuth(mode){authMode=mode;renderAuth();window.scrollTo(0,0);}
 function renderLanding(){
-  const inc=(t)=>`<div class="i">${svgIcon('check')}<div>${t}</div></div>`;
-  const faq=(q,a)=>`<div class="q"><div class="qt">${q}</div><div class="qa">${a}</div></div>`;
-  $("#app").innerHTML=`<div class="auth land"><div class="aur"></div>
-    <div style="height:calc(22px + env(safe-area-inset-top))"></div>
-    <div class="alfa-hero">${alfaMark(98)}</div>
+  $("#app").innerHTML=`<div class="auth land home"><div class="aur"></div>
+    <div class="alfa-hero">${alfaMark(96)}</div>
     <div class="logo">VIDA ALFA</div>
     <div class="tag" style="font-family:'Inter';font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--golds);opacity:.85;margin-top:12px">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
 
-    <p style="font-size:16.5px;line-height:1.55;color:var(--tx);margin:24px 0 0;max-width:34ch;margin-left:auto;margin-right:auto">El sistema diario para el hombre que ya se cansó de empezar de nuevo cada lunes.</p>
+    <p class="pitch">El sistema diario para el hombre que ya se cansó de empezar de nuevo cada lunes.</p>
 
     <div class="tri3">
       <div class="t"><div class="d" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
@@ -899,8 +904,23 @@ function renderLanding(){
       <div class="t"><div class="d" style="color:var(--alma)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
 
+    <button class="pillbtn primary" onclick="showOffer()">Compra tu membresía</button>
+    <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya soy miembro</button>
+    <div class="fine">VIDA ALFA es una herramienta de disciplina y bienestar; no sustituye atención médica ni psicológica profesional.</div>
+  </div>`;
+}
+function showOffer(){renderOffer();window.scrollTo(0,0);}
+function renderOffer(){
+  const inc=(t)=>`<div class="i">${svgIcon('check')}<div>${t}</div></div>`;
+  const faq=(q,a)=>`<div class="q"><div class="qt">${q}</div><div class="qa">${a}</div></div>`;
+  $("#app").innerHTML=`<div class="auth land"><div class="aur"></div>
+    <div style="height:calc(18px + env(safe-area-inset-top))"></div>
+    <div style="text-align:left"><button class="chip" onclick="renderLanding()">‹ Volver</button></div>
+    <div class="alfa-hero" style="margin-top:16px">${alfaMark(54)}</div>
+    <div class="logo" style="font-size:22px;letter-spacing:.26em">VIDA ALFA</div>
+
     <div class="offer">
-      <div class="eye2">Membresía VIDA ALFA</div>
+      <div class="eye2">Membresía</div>
       <div class="priceline"><span class="p">$${PRICE_USD}</span><span class="per">USD / mes</span></div>
       <div class="sub2">Cancela cuando quieras, desde la app.</div>
       <div class="inc">
@@ -911,7 +931,7 @@ function renderLanding(){
         ${inc("La Sala y el muro: otros hombres en lo mismo, sin exponer nada tuyo.")}
         ${inc("Videos escogidos para cada pilar y afirmación diaria.")}
       </div>
-      <button class="pillbtn primary" onclick="startCheckout()">Empezar · $${PRICE_USD} al mes</button>
+      <button class="pillbtn primary" onclick="startCheckout()">Pagar $${PRICE_USD} al mes</button>
       <div class="guar">Pago seguro con Stripe. Tu recibo y tu acceso te llegan por correo en cuanto se confirme.</div>
     </div>
 
