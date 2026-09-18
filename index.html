@@ -793,6 +793,9 @@ function daily(arr){return arr[dayIndex()%arr.length];}
 /* ================= AUTH ================= */
 let authMode="signup", pendingTerms=false;
 async function boot(){
+  const q=new URLSearchParams(location.search);
+  if(q.get("pago")==="ok"){renderGracias(q.get("sid")||"");return;}
+  if(q.get("pago")==="cancelado"){history.replaceState({},"",location.pathname);}
   const {data:{session}}=await sb.auth.getSession();
   if(!session){$("#loader").style.display="none";renderLanding();return;}
   await loadAccount();
@@ -910,6 +913,29 @@ function renderLanding(){
   </div>`;
 }
 function showOffer(){renderOffer();window.scrollTo(0,0);}
+function limpiaUrl(){try{history.replaceState({},"",location.pathname);}catch(e){}}
+function renderGracias(sid){
+  $("#loader").style.display="none";
+  $("#app").innerHTML=`<div class="auth land home"><div class="aur"></div>
+    <div class="alfa-hero">${alfaMark(88)}</div>
+    <div class="logo" style="font-size:30px">YA ERES MIEMBRO</div>
+    <p class="pitch" id="gtxt">Tu pago se confirmó. Te estoy abriendo la puerta…</p>
+    <div id="gact" style="margin-top:8px"></div>
+    <div class="fine" id="gfine">También te llega un correo con tu recibo y tu enlace de acceso.</div>
+  </div>`;
+  if(!sid){gFallback("No encontré la referencia del pago. Revisa tu correo: ahí está tu enlace de acceso.");return;}
+  sb.functions.invoke("alza-claim",{body:{sid:sid}}).then(r=>{
+    const d=r&&r.data;
+    if(d&&d.url){limpiaUrl();location.href=d.url;return;}
+    gFallback((d&&d.email)?("Tu cuenta quedó lista con "+d.email+". Revisa tu correo para entrar."):
+      "Tu pago está confirmado. Revisa tu correo: ahí está tu enlace de acceso.");
+  }).catch(e=>{console.warn("claim",e);
+    gFallback("Tu pago está confirmado. Revisa tu correo: ahí está tu enlace de acceso.");});
+}
+function gFallback(msg){
+  const t=$("#gtxt");if(t)t.textContent=msg;
+  const a=$("#gact");if(a)a.innerHTML=`<button class="pillbtn primary" onclick="limpiaUrl();goAuth('login')">Entrar</button>`;
+}
 function renderOffer(){
   const inc=(t)=>`<div class="i">${svgIcon('check')}<div>${t}</div></div>`;
   const faq=(q,a)=>`<div class="q"><div class="qt">${q}</div><div class="qa">${a}</div></div>`;
