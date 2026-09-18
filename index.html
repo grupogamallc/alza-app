@@ -260,6 +260,42 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .week .dl{font-family:"Inter";font-size:9px;color:var(--dim);text-transform:uppercase}
 .week .dot.today{box-shadow:0 0 0 2px var(--gold)}
 .week .dot.fut{opacity:.3}
+.daybar{display:flex;align-items:center;gap:6px;margin-bottom:12px;border:1px solid var(--line);border-radius:16px;background:var(--ink2);padding:10px 8px}
+.daybar .nav{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--mid);flex:none;display:grid;place-items:center;font-size:15px;line-height:1}
+.daybar .nav:disabled{opacity:.28}
+.daybar .days{flex:1;display:flex;justify-content:space-between;gap:3px;min-width:0}
+.dcell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0 2px;border:0;background:none;border-radius:11px;color:inherit}
+.dcell .dn{font-family:"Inter";font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.dcell .dd{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-family:"Inter";font-size:12.5px;font-weight:700;color:var(--mid);font-variant-numeric:tabular-nums}
+.dcell .dd.part{border-color:var(--amber);color:var(--golds)}
+.dcell .dd.full{background:var(--goldgrad);border-color:transparent;color:#17120A}
+.dcell .dd.fut{opacity:.24}
+.dcell.sel .dd{box-shadow:0 0 0 2px var(--gold);border-color:transparent}
+.dcell.sel .dn{color:var(--gold)}
+.dcell .hoy{width:4px;height:4px;border-radius:50%;background:var(--gold);margin-top:-1px}
+.daybar .cal{width:34px;height:34px;border-radius:10px;border:1px solid rgba(233,193,90,.32);background:rgba(233,193,90,.09);color:var(--gold);flex:none;display:grid;place-items:center}
+.daybar .cal .ico{width:17px;height:17px}
+.pastbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;border:1px solid rgba(233,193,90,.34);border-radius:14px;background:rgba(233,193,90,.10);padding:11px 13px;font-size:13.5px;color:var(--tx)}
+.pastbar .ico{width:16px;height:16px;color:var(--gold);flex:none}
+.pastbar b{color:var(--golds)}
+.pastbar button{margin-left:auto;flex:none;border:1px solid var(--line2);background:var(--surface);color:var(--tx);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+.mgrid .mh{text-align:center;font-family:"Inter";font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-bottom:3px}
+.mcell{aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--mid);font-family:"Inter";font-size:13px;font-weight:600;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.mcell.empty{border:0;background:none}
+.mcell.part{border-color:var(--amber);color:var(--golds)}
+.mcell.full{background:var(--goldgrad);border-color:transparent;color:#17120A}
+.mcell.fut{opacity:.22}
+.mcell.sel{box-shadow:0 0 0 2px var(--gold)}
+.mcell.today{border-color:var(--gold)}
+.mnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
+.mnav .mt{font-family:"Inter";font-weight:700;font-size:15px;color:var(--tx);text-transform:capitalize}
+.mnav button{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--mid);display:grid;place-items:center}
+.mnav button:disabled{opacity:.28}
+.dsum{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:14px}
+.dsum .ds{border:1px solid var(--line);border-radius:14px;background:var(--ink2);padding:12px 13px}
+.dsum .ds .v{font-family:"Inter";font-weight:800;font-size:21px;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dsum .ds .k{font-family:"Inter";font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 
 /* MEDALLAS */
 .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -566,6 +602,7 @@ const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:tr
 const ICONS={
  dot:'<circle cx="12" cy="12" r="3"/>',
  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
  brain:'<path d="M12 5a3 3 0 0 0-5.9-.7A3 3 0 0 0 3 7c0 1 .4 1.8 1 2.4A3.5 3.5 0 0 0 5 16a3 3 0 0 0 4 2.8"/><path d="M12 5a3 3 0 0 1 5.9-.7A3 3 0 0 1 21 7c0 1-.4 1.8-1 2.4A3.5 3.5 0 0 1 19 16a3 3 0 0 1-4 2.8"/><path d="M12 5v14.8"/>',
  lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
@@ -703,7 +740,10 @@ let CONTENT=[];      // admin content
 let saveTimer=null;
 
 const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
-function getDay(){const k=todayKey();if(!S.days[k])S.days[k]={ritual:{},journal:"",intention:""};if(!S.days[k].ritual)S.days[k].ritual={};return S.days[k];}
+function dayOf(k){if(!S.days[k])S.days[k]={ritual:{},journal:"",intention:""};if(!S.days[k].ritual)S.days[k].ritual={};if(!S.days[k].foods)S.days[k].foods=[];return S.days[k];}
+function viewKey(){const t=todayKey();const k=(S.ui&&S.ui.day)||t;return (k>t)?t:k;}
+function isToday(){return viewKey()===todayKey();}
+function getDay(){return dayOf(viewKey());}
 function dayIndex(){const start=new Date(2026,0,1);return Math.floor((new Date()-start)/864e5);}
 
 function save(){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{
@@ -752,6 +792,10 @@ async function loadAccount(){
     const {data:st}=await sb.from("alza_user_state").select("data").eq("user_id",user.id).maybeSingle();
     S=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), (st&&st.data)||{});
     if(!S.ui)S.ui={tab:"panel"};
+    S.ui.day=todayKey();
+    if(S.foods&&S.foods.length&&!S._foodsMoved){ // las comidas vivían sueltas: se mudan al día de hoy
+      const D=dayOf(todayKey());D.foods=(D.foods||[]).concat(S.foods);
+      S.foods=[];S._foodsMoved=1;}
     if(!S.addiction)S.addiction=JSON.parse(JSON.stringify(DEFAULT_STATE.addiction));
     if(!S.addictions){S.addictions=[];if(S.addiction&&S.addiction.enabled){S.addictions.push({id:'legacy',type:'otra',label:S.addiction.label||'Mi proceso',ic:'shield',since:S.addiction.since,best:S.addiction.best||0,plan:S.addiction.plan||{},triggers:S.addiction.triggers||[],celebrated:S.addiction.celebrated||[]});}}
     if(!S.addUi)S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};
@@ -996,25 +1040,87 @@ function pillarPct(p){const hs=S.habits.filter(h=>h.pillar===p);if(!hs.length)re
 function keyOf(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function dayCompletion(k){const day=S.days[k];if(!day||!day.ritual)return 0;const ids=(S.habits||[]).map(h=>h.id);if(!ids.length)return 0;return ids.filter(id=>day.ritual[id]).length/ids.length;}
 function computeStreak(){let s=0;const d=new Date();if(dayCompletion(keyOf(d))<0.5)d.setDate(d.getDate()-1);for(let i=0;i<400;i++){if(dayCompletion(keyOf(d))>=0.5){s++;d.setDate(d.getDate()-1);}else break;}return s;}
+/* ---- Barra de días + calendario ---- */
+const DL=["D","L","M","M","J","V","S"];
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function parseK(k){return new Date(k+"T12:00:00");}
+function addDays(k,n){const d=parseK(k);d.setDate(d.getDate()+n);return keyOf(d);}
+function weekStartOf(k){const d=parseK(k);d.setDate(d.getDate()-d.getDay());return keyOf(d);}
+function fechaLabel(k){const d=parseK(k);const t=todayKey();
+  if(k===t)return "hoy";
+  if(k===addDays(t,-1))return "ayer";
+  return d.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});}
+function setDay(k){const t=todayKey();if(k>t)return;S.ui.day=k;save();render();window.scrollTo(0,0);}
+function goToday(){setDay(todayKey());}
+function shiftWeek(n){const t=todayKey();let k=addDays(viewKey(),n*7);if(k>t)k=t;S.ui.day=k;save();render();}
+function dayBar(){
+  const t=todayKey();const sel=viewKey();const ws=weekStartOf(sel);
+  const nextDisabled=(addDays(ws,7)>t);
+  const cells=[];
+  for(let i=0;i<7;i++){const k=addDays(ws,i);const c=dayCompletion(k);const fut=(k>t);
+    const cls=fut?'fut':(c>=1?'full':(c>0?'part':''));
+    cells.push(`<button class="dcell ${k===sel?'sel':''}" ${fut?'disabled':''} onclick="setDay('${k}')">
+      <span class="dn">${DL[i]}</span><span class="dd ${cls}">${parseK(k).getDate()}</span>
+      ${k===t?'<span class="hoy"></span>':'<span style="height:4px"></span>'}</button>`);}
+  return `<div class="daybar">
+    <button class="nav" onclick="shiftWeek(-1)" aria-label="Semana anterior">‹</button>
+    <div class="days">${cells.join("")}</div>
+    <button class="nav" onclick="shiftWeek(1)" ${nextDisabled?'disabled':''} aria-label="Semana siguiente">›</button>
+    <button class="cal" onclick="calSheet()" aria-label="Abrir calendario">${svgIcon('calendar')}</button>
+  </div>
+  ${isToday()?'':`<div class="pastbar">${svgIcon('calendar')}<div>Estás viendo <b>${esc(fechaLabel(sel))}</b></div><button onclick="goToday()">Volver a hoy</button></div>`}`;}
+let _calM=null;
+function calSheet(m){const t=todayKey();const sel=viewKey();
+  _calM=m||_calM||sel.slice(0,7)+"-01";
+  const first=parseK(_calM);const y=first.getFullYear(),mo=first.getMonth();
+  const start=new Date(y,mo,1),end=new Date(y,mo+1,0);
+  const pad=start.getDay();const cells=[];
+  for(let i=0;i<pad;i++)cells.push('<div class="mcell empty"></div>');
+  for(let d=1;d<=end.getDate();d++){
+    const k=keyOf(new Date(y,mo,d));const c=dayCompletion(k);const fut=(k>t);
+    const cls=[fut?'fut':(c>=1?'full':(c>0?'part':'')),k===sel?'sel':'',k===t?'today':''].filter(Boolean).join(' ');
+    cells.push(`<button class="mcell ${cls}" ${fut?'disabled':''} onclick="pickDay('${k}')">${d}</button>`);}
+  const prevM=keyOf(new Date(y,mo-1,1)),nextM=keyOf(new Date(y,mo+1,1));
+  const nextOff=(new Date(y,mo+1,1)>new Date(t+"T12:00:00"));
+  openSheet(`<h3>Elige un día</h3>
+    <p class="dim" style="font-size:13px;margin-top:-6px">Abre cualquier día pasado para ver sus números. Los días llenos son los que cerraste al 100%.</p>
+    <div class="mnav"><button onclick="calSheet('${prevM}')">‹</button>
+      <span class="mt">${MESES[mo]} ${y}</span>
+      <button onclick="calSheet('${nextM}')" ${nextOff?'disabled':''}>›</button></div>
+    <div class="mgrid">${DL.map(l=>`<div class="mh">${l}</div>`).join("")}${cells.join("")}</div>
+    <button class="pillbtn ghost" style="margin-top:16px" onclick="closeSheet();goToday()">Ir a hoy</button>`);}
+function pickDay(k){_calM=k.slice(0,7)+"-01";closeSheet();setDay(k);}
+function daySummary(){
+  const k=viewKey();const D=dayOf(k);const r=D.ritual||{};
+  const ids=(S.habits||[]).map(h=>h.id);const done=ids.filter(i=>r[i]).length;
+  const e=(D.foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p}),{kc:0,p:0});
+  const g=S.goals||{};
+  return `<div class="dsum">
+    <div class="ds"><div class="v">${done}/${ids.length||0}</div><div class="k">Hábitos cerrados</div></div>
+    <div class="ds"><div class="v">${Math.round(e.kc)}</div><div class="k">Calorías${g.kcal?` de ${g.kcal}`:""}</div></div>
+    <div class="ds"><div class="v">${D.steps?Number(D.steps).toLocaleString("es-MX"):"—"}</div><div class="k">Pasos</div></div>
+    <div class="ds"><div class="v">${D.weight?D.weight:"—"}<span style="font-size:12px">${D.weight?" lbs":""}</span></div><div class="k">Peso</div></div>
+  </div>`;}
 function weekStrip(){const out=[];const now=new Date();const today=keyOf(now);const sun=new Date(now);sun.setDate(now.getDate()-now.getDay());const L=['D','L','M','M','J','V','S'];for(let i=0;i<7;i++){const d=new Date(sun);d.setDate(sun.getDate()+i);const k=keyOf(d);const c=dayCompletion(k);const fut=(k>today);const cls=c>=1?'full':(c>0?'part':'');out.push(`<div class="d"><div class="dot ${cls} ${k===today?'today':''} ${fut?'fut':''}">${c>=1?'✓':(c>0?'·':'')}</div><div class="dl">${L[i]}</div></div>`);}return out.join("");}
 function momentumCard(){const s=computeStreak();return `<div class="momentum">
   <div class="mt"><div class="flame"><span class="fi" style="color:${s>0?'var(--amber)':'var(--dim)'}">${svgIcon('flame')}</span>${s} <small>${s===1?'día':'días'} de racha</small></div>
     <div class="chip" onclick="go('mente')">Mi ritual ›</div></div>
   ${S.goalText?`<div class="goaltxt">"${esc(S.goalText)}"</div>`:''}
-  <div class="week">${weekStrip()}</div>
 </div>`;}
 function viewPanel(){
-  const d=new Date();const dd=d.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
+  const dd=parseK(viewKey()).toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
   const q=daily(SEED_QUOTES);
   const aff=CONTENT.filter(c=>c.kind==="affirmation");
   const affTxt = aff.length ? aff[dayIndex()%aff.length].body : daily(SEED_AFF);
   const v=daily(SEED_VERSES);
   return `
+  ${dayBar()}
   <div class="greetband slim"><div class="warmglow"></div>
     <div class="day">${dd}</div>
     <div class="hi">Hola, <span class="nm">${esc((ME.full_name||"").split(" ")[0]||"")}</span></div>
   </div>
   ${stageTriangle()}
+  ${daySummary()}
   ${momentumCard()}
   ${communityCard()}
   <div class="card" style="border-color:rgba(216,196,138,.25);background:linear-gradient(180deg,rgba(216,196,138,.10),var(--ink2))">
@@ -1067,6 +1173,7 @@ function viewPillar(p){
   const P=PILLARS[p];const hs=S.habits.filter(h=>h.pillar===p);const r=getDay().ritual;
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section===p);
   return `
+  ${dayBar()}
   <div class="ph">
     <div class="em">${svgIcon(P.ic)}</div><h2>${P.name}</h2>
     <div class="sub">${P.sub}</div>
@@ -1196,15 +1303,16 @@ async function pushPresence(){
   catch(e){console.warn("presence",e);}}
 async function loadCommunity(force){
   if(!sb)return COMM;
-  if(!force&&COMM&&Date.now()-_commAt<60000)return COMM;
-  try{const r=await sb.rpc("alza_community");if(r.error)throw r.error;COMM=r.data;_commAt=Date.now();}
+  if(!force&&Date.now()-_commAt<60000)return COMM;
+  _commAt=Date.now();
+  try{const r=await sb.rpc("alza_community");if(r.error)throw r.error;COMM=r.data;}
   catch(e){console.warn("community",e);}
   return COMM;}
 function commTick(){
   if(!ME||!S)return;
   commCountUp();
   pushPresence();
-  if(!COMM||Date.now()-_commAt>60000){
+  if(Date.now()-_commAt>60000){
     loadCommunity(true).then(()=>{if(S&&S.ui&&S.ui.tab==="panel")render();});}
   if(commOn()&&Date.now()-_salaLoad>20000){
     loadSala(true).then(()=>{if(S&&S.ui&&S.ui.tab==="panel")render();});}}
@@ -1313,7 +1421,7 @@ function salaSubscribe(){
 function salaUnsub(){try{if(_salaSub&&sb.removeChannel)sb.removeChannel(_salaSub);}catch(e){}_salaSub=null;}
 function salaTick(){
   salaSubscribe();
-  if(!MSGS.length||Date.now()-_salaLoad>20000){
+  if(Date.now()-_salaLoad>20000){
     loadSala(true).then(()=>{if(S&&S.ui&&S.ui.tab==="sala")render();});}
   const top=MSGS.length?MSGS[0].id:0;
   if(top>(S.salaSeen||0)){S.salaSeen=top;save();}}
@@ -1526,18 +1634,18 @@ function bodySheet(){openSheet(`<h3>Mi cuerpo</h3>
   <p class="dim" style="font-size:13px;margin-top:-6px">Todo en libras y pies.</p>
   <div class="g2"><div class="field"><label>Estatura (pies)</label><input id="b_ft" type="number" inputmode="numeric" placeholder="5" value="${S.heightFt||""}"></div>
   <div class="field"><label>Pulgadas</label><input id="b_in" type="number" inputmode="numeric" placeholder="10" value="${S.heightIn||""}"></div></div>
-  <div class="g2"><div class="field"><label>Peso de hoy (lbs)</label><input id="b_w" type="number" inputmode="decimal" placeholder="180" value="${(getDay().weight||S.weightLbs||"")}"></div>
+  <div class="g2"><div class="field"><label>Peso de hoy (lbs)</label><input id="b_w" type="number" inputmode="decimal" placeholder="180" value="${(dayOf(todayKey()).weight||S.weightLbs||"")}"></div>
   <div class="field"><label>Peso objetivo (lbs)</label><input id="b_t" type="number" inputmode="decimal" placeholder="170" value="${S.targetLbs||""}"></div></div>
   <button class="pillbtn primary" onclick="saveBody()">Guardar</button>`);}
 function saveBody(){const n=id=>{const e=$("#"+id);return e?(parseFloat(e.value)||0):0;};
   S.heightFt=n("b_ft");S.heightIn=n("b_in");S.targetLbs=n("b_t");
-  const w=n("b_w");if(w>0){S.weightLbs=w;S.weightAt=todayKey();getDay().weight=w;}
+  const w=n("b_w");if(w>0){S.weightLbs=w;S.weightAt=todayKey();dayOf(todayKey()).weight=w;}
   save();closeSheet();render();window.scrollTo(0,0);toast("Actualizado");}
 
 /* ---- CUERPO ---- */
 function viewCuerpo(){
   const P=PILLARS.cuerpo;const hs=S.habits.filter(h=>h.pillar==="cuerpo");const r=getDay().ritual;
-  const g=S.goals;const eaten=(S.foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p,c:a.c+ +f.c,f:a.f+ +f.f}),{kc:0,p:0,c:0,f:0});
+  const g=S.goals;const eaten=(getDay().foods||[]).reduce((a,f)=>({kc:a.kc+ +f.kc,p:a.p+ +f.p,c:a.c+ +f.c,f:a.f+ +f.f}),{kc:0,p:0,c:0,f:0});
   const rem=Math.round(g.kcal-eaten.kc);const over=rem<0;
   const MR=27,MC=2*Math.PI*MR;
   const macroRing=(lbl,val,goal,col)=>{const pct=goal?Math.min(1,val/goal):0;const off=(MC*(1-pct)).toFixed(1);
@@ -1545,6 +1653,7 @@ function viewCuerpo(){
   const steps=getDay().steps||"";const weight=S.weightLbs||S.weightKg||"";
   const vids=CONTENT.filter(c=>c.kind==="video"&&c.section==="cuerpo");
   return `
+  ${dayBar()}
   <div class="ph">
     <div class="em">${svgIcon(P.ic)}</div><h2>${P.name}</h2><div class="sub">${P.sub}</div>
   </div>
@@ -1567,7 +1676,7 @@ function viewCuerpo(){
     </div>
     <div class="mrings">${macroRing("Prot",eaten.p,g.p,"#F2CF6B")}${macroRing("Carbos",eaten.c,g.c,"#E0A63A")}${macroRing("Grasas",eaten.f,g.f,"#C0842E")}</div>
     <div class="row" style="margin-top:18px"><div class="eye">Comidas de hoy</div><button class="chip" onclick="addFoodSheet()">+ Agregar comida</button></div>
-    ${(S.foods||[]).length?`<div style="margin-top:8px">${S.foods.map((f,i)=>`<div class="row" style="padding:9px 0;border-top:1px solid var(--line)"><div style="flex:1">${esc(f.n)}<div class="mono dim" style="font-size:11px">${f.p}P · ${f.c}C · ${f.f}G</div></div><div class="mono">${f.kc} kcal</div><button class="del" onclick="rmFood(${i})" style="color:var(--dim);width:28px">✕</button></div>`).join("")}</div>`:'<div class="empty">Agrega tu primera comida del día.</div>'}
+    ${(getDay().foods||[]).length?`<div style="margin-top:8px">${getDay().foods.map((f,i)=>`<div class="row" style="padding:9px 0;border-top:1px solid var(--line)"><div style="flex:1">${esc(f.n)}<div class="mono dim" style="font-size:11px">${f.p}P · ${f.c}C · ${f.f}G</div></div><div class="mono">${f.kc} kcal</div><button class="del" onclick="rmFood(${i})" style="color:var(--dim);width:28px">✕</button></div>`).join("")}</div>`:'<div class="empty">Agrega tu primera comida del día.</div>'}
     <div style="text-align:center;margin-top:10px"><span class="link" onclick="goalsSheet()">Editar mis metas</span></div>
   </div>
   <div class="sec-title">Actividad y peso · hoy</div>
@@ -1591,10 +1700,10 @@ function addFoodSheet(){openSheet(`<h3>Agregar comida</h3>
   <div class="field"><label>Grasas (g)</label><input id="f_f" type="number" inputmode="decimal" placeholder="G"></div></div>
   <button class="pillbtn primary" onclick="addFood()">Agregar</button>`);}
 function addFood(){const n=$("#f_n").value.trim();if(!n){toast("Escribe el alimento");return;}
-  if(!S.foods)S.foods=[];
-  S.foods.push({n,kc:+$("#f_kc").value||0,p:+$("#f_p").value||0,c:+$("#f_c").value||0,f:+$("#f_f").value||0});
+  const D=getDay();if(!D.foods)D.foods=[];
+  D.foods.push({n,kc:+$("#f_kc").value||0,p:+$("#f_p").value||0,c:+$("#f_c").value||0,f:+$("#f_f").value||0});
   save();closeSheet();render();}
-function rmFood(i){S.foods.splice(i,1);save();render();}
+function rmFood(i){getDay().foods.splice(i,1);save();render();}
 function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
   <div class="g2"><div class="field"><label>Calorías</label><input id="g_kc" type="number" value="${g.kcal}"></div>
   <div class="field"><label>Proteína (g)</label><input id="g_p" type="number" value="${g.p}"></div></div>
@@ -1602,10 +1711,11 @@ function goalsSheet(){const g=S.goals;openSheet(`<h3>Mis metas de macros</h3>
   <div class="field"><label>Grasas (g)</label><input id="g_f" type="number" value="${g.f}"></div></div>
   <button class="pillbtn primary" onclick="saveGoals()">Guardar</button>`);}
 function saveGoals(){S.goals={kcal:+$("#g_kc").value||0,p:+$("#g_p").value||0,c:+$("#g_c").value||0,f:+$("#g_f").value||0};save();closeSheet();render();toast("Metas actualizadas");}
-function saveSteps(v){getDay().steps=Math.max(0,parseInt(v)||0);save();toast("Pasos guardados");}
-function saveWeight(v){const w=parseFloat(v)||0;S.weightLbs=w;delete S.weightKg;S.weightAt=todayKey();
-  if(w>0)getDay().weight=w;else delete getDay().weight;
-  save();toast(w?("Peso: "+w+" lbs"):"Peso borrado");}
+function saveSteps(v){getDay().steps=Math.max(0,parseInt(v)||0);save();toast("Pasos guardados"+(isToday()?"":" · "+fechaLabel(viewKey())));}
+function saveWeight(v){const w=parseFloat(v)||0;const k=viewKey();
+  if(w>0)dayOf(k).weight=w;else delete dayOf(k).weight;
+  if(w>0&&k>=(S.weightAt||"")){S.weightLbs=w;delete S.weightKg;S.weightAt=k;}
+  save();toast(w?("Peso: "+w+" lbs"+(isToday()?"":" · "+fechaLabel(k))):"Peso borrado");}
 
 /* ---- APOYO (adicciones) ---- */
 const ADDICTIONS=[
