@@ -214,6 +214,21 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .chkbox svg{width:13px;height:13px;opacity:0}.chkbox.on svg{opacity:1}
 
 /* LANDING */
+.offer{position:relative;overflow:hidden;border:1px solid rgba(233,193,90,.38);border-radius:20px;padding:22px 18px 20px;margin:26px 0 18px;text-align:left;background:radial-gradient(130% 100% at 50% 0%,rgba(233,193,90,.16),var(--ink2) 70%);box-shadow:0 28px 60px -42px #000}
+.offer::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--sunh);background-size:200% 100%;animation:shimmer 5s linear infinite}
+.offer .eye2{font-family:"Inter";font-size:9.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);text-align:center}
+.priceline{display:flex;align-items:baseline;justify-content:center;gap:7px;margin-top:12px}
+.priceline .p{font-family:"Inter";font-weight:800;font-size:46px;letter-spacing:-.03em;line-height:1;background:var(--sunh);-webkit-background-clip:text;background-clip:text;color:transparent}
+.priceline .per{font-size:14px;color:var(--mid)}
+.offer .sub2{text-align:center;font-size:13px;color:var(--dim);margin-top:7px}
+.inc{display:flex;flex-direction:column;gap:10px;margin:18px 0 20px}
+.inc .i{display:flex;gap:11px;align-items:flex-start;font-size:14px;line-height:1.45;color:var(--tx)}
+.inc .i .ico{width:16px;height:16px;color:var(--gold);flex:none;margin-top:3px}
+.offer .guar{text-align:center;font-size:12px;color:var(--dim);margin-top:12px;line-height:1.5}
+.faq{text-align:left;margin-top:8px}
+.faq .q{border-top:1px solid var(--line);padding:14px 0}
+.faq .q .qt{font-family:"Inter";font-weight:600;font-size:14px;color:var(--golds)}
+.faq .q .qa{font-size:13.5px;color:var(--mid);line-height:1.55;margin-top:5px}
 .land-feats{margin:22px 0 20px;display:flex;flex-direction:column;gap:12px}
 .lfeat{display:flex;gap:13px;align-items:flex-start;text-align:left}
 .lfeat .le{font-size:24px;flex:none;width:30px;text-align:center}
@@ -603,6 +618,7 @@ const ICONS={
  dot:'<circle cx="12" cy="12" r="3"/>',
  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ check:'<path d="M4 12.5l5 5L20 6.5"/>',
  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
  brain:'<path d="M12 5a3 3 0 0 0-5.9-.7A3 3 0 0 0 3 7c0 1 .4 1.8 1 2.4A3.5 3.5 0 0 0 5 16a3 3 0 0 0 4 2.8"/><path d="M12 5a3 3 0 0 1 5.9-.7A3 3 0 0 1 21 7c0 1-.4 1.8-1 2.4A3.5 3.5 0 0 1 19 16a3 3 0 0 1-4 2.8"/><path d="M12 5v14.8"/>',
  lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
@@ -736,6 +752,8 @@ const EMOJIS=["📖","🎯","✍️","🧠","📚","🎧","🏋️","🥗","💧
 let S=null;          // user state (jsonb)
 let ME=null;         // {user_id,email,full_name,is_admin,...}
 let SUB=null;        // subscription row
+const PRICE_USD="19.99";
+const STRIPE_ON=false;   // se pone en true cuando existan las llaves y la Edge Function
 let CONTENT=[];      // admin content
 let saveTimer=null;
 
@@ -865,25 +883,48 @@ async function logout(){closeSheet();await sb.auth.signOut();}
 
 function goAuth(mode){authMode=mode;renderAuth();window.scrollTo(0,0);}
 function renderLanding(){
+  const inc=(t)=>`<div class="i">${svgIcon('check')}<div>${t}</div></div>`;
+  const faq=(q,a)=>`<div class="q"><div class="qt">${q}</div><div class="qa">${a}</div></div>`;
   $("#app").innerHTML=`<div class="auth land"><div class="aur"></div>
     <div style="height:calc(22px + env(safe-area-inset-top))"></div>
     <div class="alfa-hero">${alfaMark(98)}</div>
     <div class="logo">VIDA ALFA</div>
     <div class="tag" style="font-family:'Inter';font-style:normal;font-size:10px;letter-spacing:.2em;color:var(--golds);opacity:.85;margin-top:12px">DISCIPLINA · CONSISTENCIA · EVOLUCIÓN</div>
+
+    <p style="font-size:16.5px;line-height:1.55;color:var(--tx);margin:24px 0 0;max-width:34ch;margin-left:auto;margin-right:auto">El sistema diario para el hombre que ya se cansó de empezar de nuevo cada lunes.</p>
+
     <div class="tri3">
       <div class="t"><div class="d" style="color:var(--mente)">${svgIcon('lightbulb')}</div><div class="n">Mente</div></div>
       <div class="t"><div class="d" style="color:var(--cuerpo)">${svgIcon('activity')}</div><div class="n">Cuerpo</div></div>
       <div class="t"><div class="d" style="color:var(--alma)">${svgIcon('sparkle')}</div><div class="n">Alma</div></div>
     </div>
-    <div class="land-feats">
-      ${landFeat("flame","Un ritual diario","Hábitos por pilar y una racha que te mantiene constante.")}
-      ${landFeat("apple","Cuerpo y nutrición","Lleva tus macros, tu composición y tu energía.")}
-      ${landFeat("users","Apoyo real","Un módulo para vencer tus adicciones, día a día.")}
-      ${landFeat("sparkle","Mente y alma","Frases, la Palabra y foco para tu propósito.")}
+
+    <div class="offer">
+      <div class="eye2">Membresía VIDA ALFA</div>
+      <div class="priceline"><span class="p">$${PRICE_USD}</span><span class="per">USD / mes</span></div>
+      <div class="sub2">Cancela cuando quieras, desde la app.</div>
+      <div class="inc">
+        ${inc("Tu ritual diario en los tres pilares, con racha y calendario para revisar cualquier día.")}
+        ${inc("Nutrición completa: calorías, macros, pasos y tu peso en el tiempo.")}
+        ${inc("<b>Apoyo</b> contra 11 adicciones — días limpio, plan anti-recaída y un SOS con voz guiada para el momento del antojo.")}
+        ${inc("La Palabra: versículo del día y la Biblia en un año.")}
+        ${inc("La Sala y el muro: otros hombres en lo mismo, sin exponer nada tuyo.")}
+        ${inc("Videos escogidos para cada pilar y afirmación diaria.")}
+      </div>
+      <button class="pillbtn primary" onclick="startCheckout()">Empezar · $${PRICE_USD} al mes</button>
+      <div class="guar">Pago seguro con Stripe. Tu recibo y tu acceso te llegan por correo en cuanto se confirme.</div>
     </div>
-    <button class="pillbtn primary" style="margin-top:8px" onclick="goAuth('signup')">Crear cuenta</button>
-    <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya tengo cuenta</button>
-    <div class="fine">VIDA ALFA es una herramienta de bienestar; no sustituye atención médica ni psicológica profesional.</div>
+
+    <div class="faq">
+      ${faq("¿Qué pasa después de pagar?","Te llega el recibo de Stripe y un correo con tu enlace de acceso. Entras, eliges tus hábitos y empiezas ese mismo día.")}
+      ${faq("¿Puedo cancelar?","Sí, cuando quieras y tú solo desde la app. Sin llamadas ni correos.")}
+      ${faq("¿Quién ve mis datos?","Nadie. Tu adicción, tu peso y tu journal viven en tu cuenta y ni el administrador puede verlos. En la comunidad solo aparece el alias que tú escribas y tus días de racha.")}
+      ${faq("¿Necesito bajar algo?","No. Se instala desde el navegador en tu pantalla de inicio y funciona como una app normal.")}
+    </div>
+
+    <button class="pillbtn ghost" style="margin-top:18px" onclick="goAuth('login')">Ya soy miembro</button>
+    <div class="fine">VIDA ALFA es una herramienta de disciplina y bienestar; no sustituye atención médica ni psicológica profesional. Si estás en crisis, busca ayuda inmediata.</div>
+    <div class="fine" style="margin-top:8px"><span class="link" onclick="showTerms()">Términos</span> · <span class="link" onclick="showPrivacy()">Privacidad</span></div>
   </div>`;
 }
 function landFeat(ic,t,d){return `<div class="lfeat"><div class="le">${svgIcon(ic)}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
@@ -997,8 +1038,11 @@ function renderPaywall(){
   </div>`;
 }
 function startCheckout(){
-  // Se conecta con Stripe cuando estén las llaves. Por ahora informa.
-  toast("Pagos en línea en configuración — te avisamos pronto.");
+  if(!STRIPE_ON){goAuth('signup');return;}  // hasta que Stripe esté conectado, alta directa
+  toast("Abriendo el pago seguro…");
+  sb.functions.invoke("alza-checkout",{body:{price:"monthly",origin:location.origin+location.pathname}})
+    .then(r=>{const u=r&&r.data&&r.data.url;if(u)location.href=u;else throw new Error("sin url");})
+    .catch(e=>{console.warn("checkout",e);toast("No se pudo abrir el pago. Intenta de nuevo.");});
 }
 
 /* ================= APP SHELL ================= */
