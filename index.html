@@ -1058,7 +1058,10 @@ function renderPaywall(){
   </div>`;
 }
 function startCheckout(){
-  if(!STRIPE_ON){goAuth('signup');return;}  // hasta que Stripe esté conectado, alta directa
+  if(!STRIPE_ON){                            // hasta que Stripe esté conectado
+    if(ME){toast("El pago en línea se conecta en unos días.");return;}
+    goAuth('signup');return;
+  }
   toast("Abriendo el pago seguro…");
   sb.functions.invoke("alza-checkout",{body:{price:"monthly",origin:location.origin+location.pathname}})
     .then(r=>{const u=r&&r.data&&r.data.url;if(u)location.href=u;else throw new Error("sin url");})
