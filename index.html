@@ -796,6 +796,15 @@ async function boot(){
   const q=new URLSearchParams(location.search);
   if(q.get("pago")==="ok"){renderGracias(q.get("sid")||"");return;}
   if(q.get("pago")==="cancelado"){history.replaceState({},"",location.pathname);}
+  const tk=q.get("t");
+  if(tk){ // enlace del correo: APP_URL?t=<hashed_token>
+    const err=await entraConToken(tk);
+    if(!err)return;
+    const {data:{session:s0}}=await sb.auth.getSession();
+    if(s0){await loadAccount();return;}
+    $("#loader").style.display="none";authMode="login";renderAuth();
+    toast("Ese enlace ya se usó o expiró. Inicia sesión.");return;
+  }
   const {data:{session}}=await sb.auth.getSession();
   if(!session){$("#loader").style.display="none";renderLanding();return;}
   await loadAccount();
@@ -805,7 +814,24 @@ sb.auth.onAuthStateChange((ev,session)=>{
   if(ev==="SIGNED_OUT"){ME=null;S=null;renderLanding();}
 });
 
-async function loadAccount(){
+let FORCE_PW=false;   // entró con enlace de un solo uso → ofrecer crear contraseña
+let PW_LOGIN=false;   // entró con contraseña en esta carga → ya tiene una
+async function entraConToken(th,askPw=true){
+  $("#loader").style.display="grid";
+  FORCE_PW=askPw; // antes de verifyOtp: SIGNED_IN dispara loadAccount durante la verificación
+  const {error}=await sb.auth.verifyOtp({token_hash:th,type:"magiclink"});
+  limpiaUrl();
+  if(error){FORCE_PW=false;console.warn("verifyOtp",error);return error;}
+  await loadAccount();
+  return null;
+}
+let _acctP=null;
+function loadAccount(){
+  if(_acctP)return _acctP;
+  _acctP=_loadAccount().finally(()=>{_acctP=null;});
+  return _acctP;
+}
+async function _loadAccount(){
   $("#loader").style.display="grid";
   try{
     const {data:{user}}=await sb.auth.getUser();
@@ -827,15 +853,49 @@ async function loadAccount(){
       S.foods=[];S._foodsMoved=1;}
     if(!S.addiction)S.addiction=JSON.parse(JSON.stringify(DEFAULT_STATE.addiction));
     if(!S.addictions){S.addictions=[];if(S.addiction&&S.addiction.enabled){S.addictions.push({id:'legacy',type:'otra',label:S.addiction.label||'Mi proceso',ic:'shield',since:S.addiction.since,best:S.addiction.best||0,plan:S.addiction.plan||{},triggers:S.addiction.triggers||[],celebrated:S.addiction.celebrated||[]});}}
+    if(PW_LOGIN&&!S.pwSet){S.pwSet=1;save();}
     if(!S.addUi)S.addUi={cur:(S.addictions[0]&&S.addictions[0].id)||null};
     // content
     const {data:ct}=await sb.from("alza_content").select("*").eq("active",true).order("sort",{ascending:true});
     CONTENT=ct||[];
     $("#loader").style.display="none";
-    if(!hasAccess()){renderPaywall();return;}
-    if(!S.onboarded){renderOnboarding();return;}
-    render();
+    if(FORCE_PW){FORCE_PW=false;if(!S.pwSet){renderSetPw();return;}}
+    routeAccount();
   }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderLanding();}
+}
+function routeAccount(){
+  if(!hasAccess()){renderPaywall();return;}
+  if(!S.onboarded){renderOnboarding();return;}
+  render();
+}
+function renderSetPw(){
+  const em=(ME&&ME.email)||"";
+  $("#app").innerHTML=`<div class="auth land home"><div class="aur"></div>
+    <div class="alfa-hero">${alfaMark(64)}</div>
+    <div class="logo" style="font-size:26px">CREA TU CONTRASEÑA</div>
+    <p class="pitch">Entraste con un enlace de un solo uso. Elige una contraseña para volver a entrar cuando quieras${em?` con <b>${esc(em)}</b>`:""}.</p>
+    <div class="card" style="text-align:left">
+      <div class="field"><label>Contraseña</label><input id="pw_1" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
+      <div class="field"><label>Repite tu contraseña</label><input id="pw_2" type="password" autocomplete="new-password" placeholder="Otra vez" onkeydown="if(event.key==='Enter')doSetPw()"></div>
+      <div class="err" id="pw_err"></div>
+      <button class="pillbtn primary" id="pw_btn" onclick="doSetPw()">Guardar contraseña</button>
+      <button class="pillbtn ghost" style="margin-top:10px" onclick="routeAccount()">Más tarde</button>
+    </div>
+  </div>`;
+  window.scrollTo(0,0);
+}
+async function doSetPw(){
+  const a=$("#pw_1").value, b=$("#pw_2").value, err=$("#pw_err");
+  if(a.length<6){err.textContent="La contraseña debe tener al menos 6 caracteres.";return;}
+  if(a!==b){err.textContent="Las contraseñas no coinciden.";return;}
+  err.textContent="";
+  const btn=$("#pw_btn");btn.textContent="Guardando…";btn.disabled=true;
+  const {error}=await sb.auth.updateUser({password:a});
+  btn.disabled=false;btn.textContent="Guardar contraseña";
+  if(error){err.textContent=traduce(error.message);return;}
+  S.pwSet=1;save();
+  toast("Contraseña guardada");
+  routeAccount();
 }
 function hasAccess(){
   if(ME&&ME.is_admin)return true;
@@ -862,7 +922,7 @@ async function doSignup(){
     const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
     btn.disabled=false;btn.textContent="Crear cuenta";
     if(error){err.textContent="Cuenta creada. Ahora inicia sesión.";authMode='login';renderAuth();return;}
-    loadAccount();
+    PW_LOGIN=true;loadAccount();
   }catch(e){btn.disabled=false;btn.textContent="Crear cuenta";err.textContent="Error de conexión. Intenta de nuevo.";}
 }
 async function doLogin(){
@@ -873,7 +933,7 @@ async function doLogin(){
   const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
   btn.disabled=false;btn.textContent="Entrar";
   if(error){err.textContent=traduce(error.message);return;}
-  loadAccount();
+  PW_LOGIN=true;loadAccount();
 }
 async function doReset(){
   const em=$("#a_email").value.trim(), err=$("#a_err");
@@ -926,7 +986,11 @@ function renderGracias(sid){
   if(!sid){gFallback("No encontré la referencia del pago. Revisa tu correo: ahí está tu enlace de acceso.");return;}
   sb.functions.invoke("alza-claim",{body:{sid:sid}}).then(r=>{
     const d=r&&r.data;
-    if(d&&d.url){limpiaUrl();location.href=d.url;return;}
+    if(d&&d.token_hash){
+      sb.auth.getSession().then(({data})=>entraConToken(d.token_hash,!(data&&data.session))).then(err=>{if(!err)return;
+        $("#loader").style.display="none";
+        gFallback("Tu pago está confirmado. Revisa tu correo: ahí está tu enlace de acceso.");});
+      return;}
     gFallback((d&&d.email)?("Tu cuenta quedó lista con "+d.email+". Revisa tu correo para entrar."):
       "Tu pago está confirmado. Revisa tu correo: ahí está tu enlace de acceso.");
   }).catch(e=>{console.warn("claim",e);
