@@ -798,12 +798,13 @@ async function boot(){
   if(q.get("pago")==="cancelado"){history.replaceState({},"",location.pathname);}
   const tk=q.get("t");
   if(tk){ // enlace del correo: APP_URL?t=<hashed_token>[&tipo=recovery]
-    const err=await entraConToken(tk,true,q.get("tipo")==="recovery"?"recovery":"magiclink");
-    if(!err)return;
-    const {data:{session:s0}}=await sb.auth.getSession();
-    if(s0){await loadAccount();return;}
-    $("#loader").style.display="none";authMode="login";renderAuth();
-    toast("Ese enlace ya se usó o expiró. Inicia sesión.");return;
+    // No lo canjeamos al cargar: Outlook y otros correos abren los enlaces para
+    // revisarlos y se gastarian el token de un solo uso antes que el dueño.
+    // Con un boton de por medio, el escáner no lo toca y el token llega vivo.
+    limpiaUrl();
+    $("#loader").style.display="none";
+    renderPuerta(tk,q.get("tipo")==="recovery"?"recovery":"magiclink");
+    return;
   }
   const {data:{session}}=await sb.auth.getSession();
   if(!session){$("#loader").style.display="none";renderLanding();return;}
@@ -863,6 +864,33 @@ async function _loadAccount(){
     if(FORCE_PW){FORCE_PW=false;if(PW_MOTIVO==="recovery"||!S.pwSet){renderSetPw();return;}}
     routeAccount();
   }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderLanding();}
+}
+let PUERTA=null;
+function renderPuerta(tk,tipo){
+  PUERTA={tk:tk,tipo:tipo};
+  const rec=tipo==="recovery";
+  $("#app").innerHTML=`<div class="auth land home"><div class="aur"></div>
+    <div class="alfa-hero">${alfaMark(72)}</div>
+    <div class="logo" style="font-size:26px">${rec?"CAMBIA TU CONTRASEÑA":"ENTRA A TU CUENTA"}</div>
+    <p class="pitch">${rec?"Toca el botón para elegir tu contraseña nueva.":"Toca el botón para entrar. Tu enlace es de un solo uso."}</p>
+    <button class="pillbtn primary" id="pu_btn" style="margin-top:20px" onclick="usarToken()">${rec?"Elegir contraseña nueva":"Entrar a VIDA ALFA"}</button>
+    <div class="err" id="pu_err" style="text-align:center"></div>
+    <div id="pu_act"></div>
+  </div>`;
+  window.scrollTo(0,0);
+}
+async function usarToken(){
+  if(!PUERTA)return;
+  const b=$("#pu_btn");if(b){b.textContent="Entrando…";b.disabled=true;}
+  const err=await entraConToken(PUERTA.tk,true,PUERTA.tipo);
+  if(!err)return;
+  $("#loader").style.display="none";
+  const {data:{session:s0}}=await sb.auth.getSession();
+  if(s0){await loadAccount();return;}
+  if(b)b.style.display="none";
+  const e=$("#pu_err");if(e)e.textContent="Este enlace ya se usó o venció.";
+  const a=$("#pu_act");
+  if(a)a.innerHTML=`<button class="pillbtn ghost" style="margin-top:12px" onclick="authMode='login';renderAuth()">Pedir otro enlace o entrar con contraseña</button>`;
 }
 function routeAccount(){
   if(!hasAccess()){renderPaywall();return;}
