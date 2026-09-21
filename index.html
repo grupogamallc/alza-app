@@ -797,8 +797,8 @@ async function boot(){
   if(q.get("pago")==="ok"){renderGracias(q.get("sid")||"");return;}
   if(q.get("pago")==="cancelado"){history.replaceState({},"",location.pathname);}
   const tk=q.get("t");
-  if(tk){ // enlace del correo: APP_URL?t=<hashed_token>
-    const err=await entraConToken(tk);
+  if(tk){ // enlace del correo: APP_URL?t=<hashed_token>[&tipo=recovery]
+    const err=await entraConToken(tk,true,q.get("tipo")==="recovery"?"recovery":"magiclink");
     if(!err)return;
     const {data:{session:s0}}=await sb.auth.getSession();
     if(s0){await loadAccount();return;}
@@ -816,10 +816,11 @@ sb.auth.onAuthStateChange((ev,session)=>{
 
 let FORCE_PW=false;   // entró con enlace de un solo uso → ofrecer crear contraseña
 let PW_LOGIN=false;   // entró con contraseña en esta carga → ya tiene una
-async function entraConToken(th,askPw=true){
+let PW_MOTIVO="magiclink"; // "recovery" = viene a cambiarla, aunque ya tenga
+async function entraConToken(th,askPw=true,tipo="magiclink"){
   $("#loader").style.display="grid";
-  FORCE_PW=askPw; // antes de verifyOtp: SIGNED_IN dispara loadAccount durante la verificación
-  const {error}=await sb.auth.verifyOtp({token_hash:th,type:"magiclink"});
+  FORCE_PW=askPw;PW_MOTIVO=tipo; // antes de verifyOtp: SIGNED_IN dispara loadAccount durante la verificación
+  const {error}=await sb.auth.verifyOtp({token_hash:th,type:tipo});
   limpiaUrl();
   if(error){FORCE_PW=false;console.warn("verifyOtp",error);return error;}
   await loadAccount();
@@ -859,7 +860,7 @@ async function _loadAccount(){
     const {data:ct}=await sb.from("alza_content").select("*").eq("active",true).order("sort",{ascending:true});
     CONTENT=ct||[];
     $("#loader").style.display="none";
-    if(FORCE_PW){FORCE_PW=false;if(!S.pwSet){renderSetPw();return;}}
+    if(FORCE_PW){FORCE_PW=false;if(PW_MOTIVO==="recovery"||!S.pwSet){renderSetPw();return;}}
     routeAccount();
   }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderLanding();}
 }
@@ -869,11 +870,11 @@ function routeAccount(){
   render();
 }
 function renderSetPw(){
-  const em=(ME&&ME.email)||"";
+  const em=(ME&&ME.email)||"", rec=PW_MOTIVO==="recovery";
   $("#app").innerHTML=`<div class="auth land home"><div class="aur"></div>
     <div class="alfa-hero">${alfaMark(64)}</div>
-    <div class="logo" style="font-size:26px">CREA TU CONTRASEÑA</div>
-    <p class="pitch">Entraste con un enlace de un solo uso. Elige una contraseña para volver a entrar cuando quieras${em?` con <b>${esc(em)}</b>`:""}.</p>
+    <div class="logo" style="font-size:26px">${rec?"CONTRASEÑA NUEVA":"CREA TU CONTRASEÑA"}</div>
+    <p class="pitch">${rec?"Elige tu contraseña nueva":"Entraste con un enlace de un solo uso. Elige una contraseña para volver a entrar cuando quieras"}${em?` con <b>${esc(em)}</b>`:""}.</p>
     <div class="card" style="text-align:left">
       <div class="field"><label>Contraseña</label><input id="pw_1" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
       <div class="field"><label>Repite tu contraseña</label><input id="pw_2" type="password" autocomplete="new-password" placeholder="Otra vez" onkeydown="if(event.key==='Enter')doSetPw()"></div>
@@ -937,10 +938,15 @@ async function doLogin(){
 }
 async function doReset(){
   const em=$("#a_email").value.trim(), err=$("#a_err");
-  if(!em){err.textContent="Escribe tu correo primero.";return;}
-  const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.href});
-  if(error){err.textContent=traduce(error.message);return;}
-  toast("Te enviamos un correo para restablecer tu contraseña.");
+  if(!em||!/.+@.+\..+/.test(em)){err.textContent="Escribe tu correo primero.";return;}
+  err.textContent="";
+  try{
+    const r=await sb.functions.invoke("alza-reset",{body:{email:em}});
+    const d=r&&r.data;
+    if(!d||!d.ok){err.textContent="No se pudo enviar el correo. Intenta más tarde.";return;}
+    if(!d.enviado){err.textContent="El correo todavía no está conectado. Escríbenos y te abrimos la puerta.";return;}
+    toast("Si ese correo tiene cuenta, ahí va tu enlace para cambiar la contraseña.");
+  }catch(e){console.warn("reset",e);err.textContent="No se pudo enviar el correo. Intenta más tarde.";}
 }
 function traduce(m){
   m=m||"";
@@ -2268,9 +2274,23 @@ function settingsSheet(){
   <button class="pillbtn ghost" onclick="closeSheet();installSheet()">📲 Instalar en mi teléfono</button>
   ${ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="closeSheet();go('admin')">🛠️ Panel de admin</button>`:""}
   <div style="height:8px"></div>
+  ${(SUB&&SUB.stripe_customer_id)?`<div style="height:8px"></div><button class="pillbtn ghost" id="pt_btn" onclick="abrirPortal()">Administrar o cancelar mi membresía</button>`:""}
+  <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="logout()" style="color:var(--coral)">Cerrar sesión</button>`);}
+
+async function abrirPortal(){
+  const b=$("#pt_btn");if(b){b.textContent="Abriendo…";b.disabled=true;}
+  try{
+    const r=await sb.functions.invoke("alza-portal",{body:{}});
+    const u=r&&r.data&&r.data.url;
+    if(!u)throw new Error("sin url");
+    location.href=u;
+  }catch(e){console.warn("portal",e);
+    if(b){b.textContent="Administrar o cancelar mi membresía";b.disabled=false;}
+    toast("No se pudo abrir el portal de pagos. Intenta más tarde.");}
+}
 
 function installSheet(){
   const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
