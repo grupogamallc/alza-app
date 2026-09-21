@@ -1774,6 +1774,7 @@ function viewPerfil(){
   <div style="margin-bottom:10px">${audioBtn()}</div>
   <button class="pillbtn ghost" onclick="installSheet()">Instalar en mi teléfono</button>
   ${ME&&ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="go('admin')">Panel de admin</button>`:""}
+  ${(SUB&&SUB.stripe_customer_id)?`<div style="height:8px"></div><button class="pillbtn ghost" id="pt_btn2" onclick="abrirPortal('pt_btn2')">Administrar o cancelar mi membresía</button>`:""}
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
   <div style="height:8px"></div>
@@ -2274,14 +2275,14 @@ function settingsSheet(){
   <button class="pillbtn ghost" onclick="closeSheet();installSheet()">📲 Instalar en mi teléfono</button>
   ${ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="closeSheet();go('admin')">🛠️ Panel de admin</button>`:""}
   <div style="height:8px"></div>
-  ${(SUB&&SUB.stripe_customer_id)?`<div style="height:8px"></div><button class="pillbtn ghost" id="pt_btn" onclick="abrirPortal()">Administrar o cancelar mi membresía</button>`:""}
+  ${(SUB&&SUB.stripe_customer_id)?`<div style="height:8px"></div><button class="pillbtn ghost" id="pt_btn" onclick="abrirPortal('pt_btn')">Administrar o cancelar mi membresía</button>`:""}
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="logout()" style="color:var(--coral)">Cerrar sesión</button>`);}
 
-async function abrirPortal(){
-  const b=$("#pt_btn");if(b){b.textContent="Abriendo…";b.disabled=true;}
+async function abrirPortal(id){
+  const b=$("#"+(id||"pt_btn"));if(b){b.textContent="Abriendo…";b.disabled=true;}
   try{
     const r=await sb.functions.invoke("alza-portal",{body:{}});
     const u=r&&r.data&&r.data.url;
