@@ -1802,6 +1802,8 @@ function viewPerfil(){
   <div class="sec-title">Ajustes</div>
   <div style="margin-bottom:10px">${audioBtn()}</div>
   <button class="pillbtn ghost" onclick="installSheet()">Instalar en mi teléfono</button>
+  <div style="height:8px"></div>
+  <button class="pillbtn ghost" onclick="pushSheet()">Recordatorio diario</button>
   ${ME&&ME.is_admin?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="go('admin')">Panel de admin</button>`:""}
   ${(SUB&&SUB.stripe_customer_id)?`<div style="height:8px"></div><button class="pillbtn ghost" id="pt_btn2" onclick="abrirPortal('pt_btn2')">Administrar o cancelar mi membresía</button>`:""}
   <div style="height:8px"></div>
@@ -2321,6 +2323,96 @@ async function abrirPortal(id){
   }catch(e){console.warn("portal",e);
     if(b){b.textContent="Administrar o cancelar mi membresía";b.disabled=false;}
     toast("No se pudo abrir el portal de pagos. Intenta más tarde.");}
+}
+
+/* ---- RECORDATORIO DIARIO (notificaciones push) ---- */
+const VAPID_PUB="BAkAd9a0ouqTh1R-FzYjDHNIMf_LWSjyky2Ie49bMIHTcOT0xNjE2QfcXTSwZEbV_4w7WhuPGUY-b1QJQqMmAQs";
+let PUSHSUB=null;   // la fila de este teléfono, si ya está dado de alta
+function pushSoportado(){return ("serviceWorker" in navigator)&&("PushManager" in window)&&("Notification" in window);}
+function pushInstalada(){ // en iPhone el aviso solo existe si la app está en la pantalla de inicio
+  try{return window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;}catch(e){return false;}}
+function esIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent);}
+function b64ToU8(v){const p="=".repeat((4-v.length%4)%4);const b=atob((v+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(b,c=>c.charCodeAt(0));}
+function horaLabel(h){const am=h<12?"am":"pm";const t=h%12===0?12:h%12;return t+":00 "+am;}
+function horaOpts(sel){let o="";for(let h=4;h<=23;h++)o+=`<option value="${h}"${h===sel?" selected":""}>${horaLabel(h)}</option>`;return o;}
+
+async function pushSheet(){
+  if(!pushSoportado()){openSheet(`<h3>Recordatorio diario</h3>
+    <p class="dim">Este navegador no permite avisos. Abre VIDA ALFA en Safari o Chrome desde tu teléfono.</p>
+    <button class="pillbtn primary" style="margin-top:12px" onclick="closeSheet()">Entendido</button>`);return;}
+  if(esIOS()&&!pushInstalada()){openSheet(`<h3>Recordatorio diario</h3>
+    <p class="dim">En iPhone los avisos solo funcionan con la app instalada en tu pantalla de inicio. Instálala primero y vuelve aquí.</p>
+    <button class="pillbtn primary" style="margin-top:12px" onclick="closeSheet();installSheet()">Cómo instalarla</button>`);return;}
+  openSheet(`<h3>Recordatorio diario</h3><p class="dim">Cargando…</p>`);
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.getSubscription();
+    PUSHSUB=null;
+    if(sub){const {data}=await sb.from("alza_push_subs").select("*").eq("endpoint",sub.endpoint).maybeSingle();PUSHSUB=data||null;}
+    pintaPush();
+  }catch(e){console.warn("push",e);openSheet(`<h3>Recordatorio diario</h3>
+    <p class="dim">No se pudo consultar el estado de los avisos en este teléfono.</p>
+    <button class="pillbtn primary" style="margin-top:12px" onclick="closeSheet()">Cerrar</button>`);}
+}
+
+function pintaPush(){
+  const on=!!(PUSHSUB&&PUSHSUB.activo);
+  const hora=(PUSHSUB&&PUSHSUB.hora)||7;
+  const bloqueado=(typeof Notification!=="undefined"&&Notification.permission==="denied");
+  openSheet(`<h3>Recordatorio diario</h3>
+  <p class="dim" style="margin-top:-6px">Un aviso al día para que no se te pase tu ritual. Nada más.</p>
+  ${bloqueado?`<div class="card tight"><div class="dim" style="font-size:13.5px">Tienes los avisos bloqueados para VIDA ALFA. Actívalos en los ajustes de tu teléfono y vuelve aquí.</div></div>`:""}
+  <div class="card tight"><div style="font-size:13px;color:var(--mid)">Estado</div>
+    <div style="font-weight:700;color:${on?"var(--gold)":"var(--mid)"}">${on?("Encendido · "+horaLabel(hora)):"Apagado"}</div></div>
+  <div class="field"><label>A qué hora</label><select id="pu_hora">${horaOpts(hora)}</select></div>
+  <div class="err" id="pu_err2"></div>
+  <button class="pillbtn primary" id="pu_on" onclick="activarPush()">${on?"Guardar la hora":"Encender el recordatorio"}</button>
+  ${on?`<div style="height:8px"></div><button class="pillbtn ghost" onclick="probarPush()">Mandarme uno de prueba</button>
+        <div style="height:8px"></div><button class="pillbtn ghost" style="color:var(--coral)" onclick="apagarPush()">Apagar</button>`:""}`);
+}
+
+async function activarPush(){
+  const err=$("#pu_err2"), btn=$("#pu_on");
+  const hora=parseInt(($("#pu_hora")&&$("#pu_hora").value)||"7",10);
+  if(btn){btn.textContent="Guardando…";btn.disabled=true;}
+  try{
+    if(Notification.permission!=="granted"){
+      const perm=await Notification.requestPermission();
+      if(perm!=="granted"){if(btn){btn.textContent="Encender el recordatorio";btn.disabled=false;}
+        if(err)err.textContent="No diste permiso para los avisos.";return;}
+    }
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToU8(VAPID_PUB)});
+    const j=sub.toJSON();
+    const fila={user_id:ME.user_id,endpoint:sub.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,
+      hora:hora,tz_offset:-new Date().getTimezoneOffset(),activo:true,fallos:0,updated_at:new Date().toISOString()};
+    const {error}=await sb.from("alza_push_subs").upsert(fila,{onConflict:"endpoint"});
+    if(error)throw error;
+    PUSHSUB=fila;
+    toast("Listo: te aviso a las "+horaLabel(hora));
+    pintaPush();
+  }catch(e){console.warn("push on",e);
+    if(btn){btn.textContent="Encender el recordatorio";btn.disabled=false;}
+    if(err)err.textContent="No se pudo encender el recordatorio en este teléfono.";}
+}
+
+async function apagarPush(){
+  if(!PUSHSUB)return;
+  try{
+    await sb.from("alza_push_subs").update({activo:false}).eq("endpoint",PUSHSUB.endpoint);
+    PUSHSUB.activo=false;toast("Recordatorio apagado");pintaPush();
+  }catch(e){console.warn("push off",e);toast("No se pudo apagar");}
+}
+
+async function probarPush(){
+  toast("Mandando…");
+  try{
+    const r=await sb.functions.invoke("alza-push",{body:{test:true}});
+    const d=r&&r.data;
+    if(d&&d.ok&&d.enviados>0)toast("Te lo mandé: debe llegar en segundos");
+    else toast("No salió. Revisa que los avisos estén permitidos.");
+  }catch(e){console.warn("push test",e);toast("No se pudo mandar la prueba");}
 }
 
 function installSheet(){
