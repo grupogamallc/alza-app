@@ -982,6 +982,8 @@ function traduce(m){
   if(/Invalid login/i.test(m))return "Correo o contraseña incorrectos.";
   if(/Email not confirmed/i.test(m))return "Confirma tu correo antes de entrar (revisa tu bandeja).";
   if(/rate limit|too many/i.test(m))return "Demasiados intentos, espera un momento.";
+  if(/pwned|leaked|compromis|known to be weak|easy to guess/i.test(m))return "Esa contraseña aparece en filtraciones públicas de internet. Elige otra.";
+  if(/at least \d+ characters|password.*too short/i.test(m))return "La contraseña debe tener al menos 6 caracteres.";
   return m;
 }
 async function logout(){closeSheet();await sb.auth.signOut();}
@@ -1188,7 +1190,7 @@ function startCheckout(){
     goAuth('signup');return;
   }
   toast("Abriendo el pago seguro…");
-  const payload={price:"monthly",origin:location.origin+location.pathname};
+  const payload={origin:location.origin+location.pathname};
   if(ME&&ME.user_id){payload.user_id=ME.user_id;if(ME.email)payload.email=ME.email;}
   sb.functions.invoke("alza-checkout",{body:payload})
     .then(r=>{const u=r&&r.data&&r.data.url;if(u)location.href=u;else throw new Error("sin url");})
