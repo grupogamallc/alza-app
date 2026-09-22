@@ -1004,6 +1004,7 @@ function renderLanding(){
     <button class="pillbtn primary" onclick="showOffer()">Compra tu membresía</button>
     <button class="pillbtn ghost" style="margin-top:10px" onclick="goAuth('login')">Ya soy miembro</button>
     <div class="fine">VIDA ALFA es una herramienta de disciplina y bienestar; no sustituye atención médica ni psicológica profesional.</div>
+    <div class="fine" style="margin-top:8px"><a class="link" href="terminos.html">Términos</a> · <a class="link" href="privacidad.html">Privacidad</a> · <a class="link" href="reembolsos.html">Reembolsos</a></div>
   </div>`;
 }
 function showOffer(){renderOffer();window.scrollTo(0,0);}
@@ -1068,7 +1069,7 @@ function renderOffer(){
 
     <button class="pillbtn ghost" style="margin-top:18px" onclick="goAuth('login')">Ya soy miembro</button>
     <div class="fine">VIDA ALFA es una herramienta de disciplina y bienestar; no sustituye atención médica ni psicológica profesional. Si estás en crisis, busca ayuda inmediata.</div>
-    <div class="fine" style="margin-top:8px"><span class="link" onclick="showTerms()">Términos</span> · <span class="link" onclick="showPrivacy()">Privacidad</span></div>
+    <div class="fine" style="margin-top:8px"><a class="link" href="terminos.html">Términos</a> · <a class="link" href="privacidad.html">Privacidad</a> · <a class="link" href="reembolsos.html">Reembolsos</a></div>
   </div>`;
 }
 function landFeat(ic,t,d){return `<div class="lfeat"><div class="le">${svgIcon(ic)}</div><div><div class="lt">${t}</div><div class="ld">${d}</div></div></div>`;}
@@ -1146,7 +1147,7 @@ function renderAuth(){
         <div class="field"><label>Contraseña</label><input id="a_pass" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
         <div class="chkline">
           <div class="chkbox ${pendingTerms?'on':''}" id="a_terms" onclick="pendingTerms=!pendingTerms;this.classList.toggle('on')">${CK}</div>
-          <div>Acepto los <span class="link" onclick="showTerms()">Términos</span> y el <span class="link" onclick="showPrivacy()">Aviso de Privacidad</span>. Entiendo que VIDA ALFA <b>no es consejo médico</b>.</div>
+          <div>Acepto los <a class="link" href="terminos.html" target="_blank" rel="noopener">Términos</a> y el <a class="link" href="privacidad.html" target="_blank" rel="noopener">Aviso de Privacidad</a>. Entiendo que VIDA ALFA <b>no es consejo médico</b>.</div>
         </div>
         <div class="err" id="a_err"></div>
         <button class="pillbtn primary" id="a_btn" onclick="doSignup()">Crear cuenta</button>
@@ -1807,6 +1808,7 @@ function viewPerfil(){
   <button class="pillbtn ghost" onclick="showPrivacy()">Aviso de privacidad</button>
   <div style="height:8px"></div>
   <button class="pillbtn ghost" onclick="showTerms()">Términos de uso</button>
+  <div class="fine" style="margin:10px 0 2px"><a class="link" href="reembolsos.html">Cancelaciones y reembolsos</a></div>
   <div style="height:8px"></div>
   <button class="pillbtn ghost" style="color:var(--coral);border-color:rgba(201,86,78,.4)" onclick="logout()">Cerrar sesión</button>`;
 }
