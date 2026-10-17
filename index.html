@@ -342,6 +342,51 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 
 /* ADICCION */
 .sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Inter";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
+
+/* ===== PAUSA Y DIRECCIÓN ===== */
+.pausa{border:1px solid rgba(233,193,90,.34);border-radius:20px;padding:18px;margin:0 0 14px;
+  background:linear-gradient(180deg,rgba(233,193,90,.11),rgba(18,18,28,.62));box-shadow:0 24px 52px -34px var(--gold)}
+.pausa .pzh{font-family:"Inter";font-weight:800;font-size:21px;line-height:1.15;margin-top:6px}
+.pausa .pzs{color:var(--mid);font-size:13.5px;line-height:1.5;margin-top:6px}
+.pzbtn{width:100%;margin-top:14px;padding:17px;border-radius:15px;border:0;
+  background:linear-gradient(90deg,var(--golds),var(--amber));color:#17120A;
+  font-family:"Inter";font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:9px}
+.pzbtn svg{width:21px;height:21px}
+.pzaudio{width:100%;margin-top:10px;padding:13px 15px;border-radius:14px;border:1px solid var(--line2);
+  background:var(--surf,rgba(255,255,255,.04));color:var(--tx);display:flex;align-items:center;gap:12px;text-align:left}
+.pzaudio svg{width:22px;height:22px;color:var(--gold);flex:none}
+.pzaudio b{display:block;font-size:15.5px;font-weight:700}
+.pzaudio span{display:block;font-size:12.5px;color:var(--mid);margin-top:1px;line-height:1.35}
+.pzaudio.on{border-color:var(--gold);background:rgba(233,193,90,.1)}
+.pzlog{margin-top:13px;font-size:13px;color:var(--mid);line-height:1.5}
+.pzlog b{color:var(--golds)}
+.pzfoot{margin-top:12px;font-size:12.5px;color:var(--dim)}
+.pzstep{display:flex;justify-content:space-between;align-items:center;color:var(--dim);font-size:11.5px;
+  font-family:"Inter";letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.pzchips{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 12px}
+.pzchip{font-size:13.5px;padding:10px 13px;border:1.5px solid var(--line2);border-radius:999px;
+  color:var(--mid);background:rgba(255,255,255,.03)}
+.pzchip.on{background:rgba(233,193,90,.16);border-color:var(--gold);color:var(--golds);font-weight:600}
+.pzquote{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:20px;line-height:1.35;
+  color:var(--golds);border-left:2px solid var(--gold);padding-left:14px;margin:4px 0 14px}
+.pzwhy{font-size:13.5px;color:var(--mid);line-height:1.6}
+.pzwhy b{color:var(--tx)}
+.pzsrc{font-size:11px;color:var(--dim);margin-top:12px;line-height:1.5}
+.pzplay{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:9px 14px;border-radius:999px;
+  border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--mid);font-size:13px}
+.pzplay svg{width:16px;height:16px;color:var(--gold)}
+.pzbreath{display:grid;place-items:center;height:184px;margin:6px 0}
+.pzbreath i{display:grid;place-items:center;width:92px;height:92px;border-radius:50%;
+  background:rgba(233,193,90,.12);border:2.5px solid var(--gold);font-style:normal;
+  font-family:"Inter";font-weight:700;font-size:13px;color:var(--golds);animation:pzb 11s ease-in-out 3}
+@keyframes pzb{0%{transform:scale(1)}36%{transform:scale(1.8)}64%{transform:scale(1.8)}100%{transform:scale(1)}}
+.pzfe{border:1px solid rgba(233,193,90,.26);border-radius:14px;padding:14px;margin-top:14px;
+  background:rgba(233,193,90,.06);font-size:13.5px;line-height:1.6;color:var(--mid)}
+.pzfe b{color:var(--golds)}
+.pzfuente{border-top:1px solid var(--line);padding:13px 0;font-size:13px;line-height:1.55}
+.pzfuente:last-child{border-bottom:1px solid var(--line)}
+.pzfuente b{color:var(--tx);display:block;font-size:14px}
+.pzfuente span{color:var(--dim);font-size:12px}
 .bignum{font-family:"Inter";font-weight:800;font-size:56px;line-height:1;letter-spacing:-.02em;text-align:center;background:linear-gradient(180deg,#F6E4A6,#C4922E);-webkit-background-clip:text;background-clip:text;color:transparent}
 .trg{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
 .trg .dt{font-family:"Inter";font-size:10.5px;color:var(--dim)}
@@ -1955,6 +2000,7 @@ function viewApoyo(){
   if(!list.length){
     return `<div class="ph">
       <div class="em">${svgIcon('shield')}</div><h2>Apoyo</h2><div class="sub">Elige tu batalla. Un día a la vez.</div></div>
+      ${pausaCard()}
       <div class="card"><p>Este espacio te acompaña a <b>vencer tus adicciones</b>: elige con cuál(es) estás luchando y lleva tus días limpio, un ejercicio SOS para el antojo, tu plan anti-recaída y una bitácora de lo que te detona.</p></div>
       <div class="sec-title">¿Con qué estás luchando?</div>
       ${addPicker('pickAddiction')}
@@ -1983,6 +2029,8 @@ function viewApoyo(){
     <button class="pillbtn ghost" style="margin-top:14px" onclick="resetClean()">Tuve una recaída</button>
   </div>
   <button class="sos" onclick="sosSheet()">Tengo un antojo — ayúdame ahora</button>
+  <div style="height:12px"></div>
+  ${pausaCard()}
   ${checkinCard()}
   ${playbookCard()}
   ${badgesCard(days)}
@@ -2201,6 +2249,141 @@ function audioBtn(){return `<button class="mutebtn" id="mutebtn" onclick="toggle
 function toggleAudio(){S.audioOff=!S.audioOff;save();if(!audioOn())stopClip();
   const b=document.getElementById("mutebtn");
   if(b)b.innerHTML=svgIcon(audioOn()?'volume':'volumeoff')+`<span>${audioOn()?'Voz activada':'Voz silenciada'}</span>`;}
+/* ====== PAUSA Y DIRECCIÓN ======
+   Vive en S.pausa, aparte del resto del estado.
+   Técnicas: desfusión cognitiva (ACT), anclaje y desenganche (OMS),
+   registro de pensamientos (NHS), creencias sobre uno mismo (CCI).
+   No es tratamiento. La salida a ayuda real está siempre a la vista. */
+const PENSAMIENTOS=["No soy suficiente","No merezco esto","Mis errores me impiden prosperar",
+  "No va a alcanzar","Tengo que resolverlo ya","Voy tarde en la vida","Todos lo hacen mejor que yo"];
+function pausaRoot(){
+  if(!S.pausa||typeof S.pausa!=="object")S.pausa={};
+  if(!Array.isArray(S.pausa.log))S.pausa.log=[];
+  if(!Array.isArray(S.pausa.rem))S.pausa.rem=[];
+  return S.pausa;
+}
+function pausaSemana(){const lim=Date.now()-7*864e5;return pausaRoot().log.filter(x=>x.at>lim).length;}
+function pausaTop(){const c={};pausaRoot().log.forEach(x=>{if(x.t)c[x.t]=(c[x.t]||0)+1;});
+  let b=null,n=0;for(const k in c){if(c[k]>n){n=c[k];b=k;}}return b?{t:b,n:n}:null;}
+
+function pausaCard(){
+  const sem=pausaSemana(),top=pausaTop();
+  return `<div class="pausa">
+    <div class="eye" style="color:var(--gold)">Pausa y dirección</div>
+    <div class="pzh">Cuando un pensamiento te esté ganando</div>
+    <div class="pzs">No se trata de pelear con lo que piensas. Se trata de verlo, soltar el anzuelo y moverte hacia donde quieres ir.</div>
+    <button class="pzbtn" onclick="pausaStart()">${svgIcon('brain')} Hazme una pausa</button>
+    <button class="pzaudio" onclick="tierraFirme()">${svgIcon('anchor')}<div><b>Tierra firme</b><span>Lo que necesitas oír antes de que el día te hable</span></div></button>
+    ${(sem||top)?`<div class="pzlog">${sem?`<b>${sem}</b> ${sem===1?"pausa":"pausas"} esta semana.`:""}${(top&&top.n>1)?` El que más vuelve: <b>"${esc(top.t)}"</b> — ${top.n} veces.`:""}</div>`:""}
+    <div class="pzfoot"><span class="link" onclick="fuentesSheet()">Técnicas y fuentes</span> · <span class="link" onclick="remSheet()">Recordatorios</span></div>
+  </div>`;
+}
+function tierraFirme(){
+  if(!audioOn()){toast("Activa la voz en Perfil para escucharlo");return;}
+  playClip("tierrafirme");
+  toast("Tierra firme");
+}
+
+/* --- la pausa guiada: 4 pasos --- */
+let _pzPaso=0,_pzT="",_pzAcc="";
+/* voz por paso. El 0 (Nómbralo) no lleva: ahí se escribe, no se escucha. */
+const PZ_AUDIO={1:"desfusion",2:"aterriza",3:"direccion"};
+function pausaStart(){_pzPaso=0;_pzT="";_pzAcc="";pausaDraw();}
+function pzVoz(){const n=PZ_AUDIO[_pzPaso];if(n)playClip(n);}
+function pzCerrar(){stopClip();closeSheet();}
+function pzCap(s){return s?s.charAt(0).toLowerCase()+s.slice(1):s;}
+function pausaDraw(){
+  const total=4;const n=_pzPaso+1;
+  let cuerpo="";
+  if(_pzPaso===0){
+    cuerpo=`<h3>Nómbralo</h3>
+      <div class="pzwhy">¿Qué te está diciendo la cabeza ahorita? Ponerle palabras ya le quita fuerza.</div>
+      <div class="pzchips">${PENSAMIENTOS.map((p,i)=>`<button class="pzchip${_pzT===p?" on":""}" onclick="pzPick(${i})">${esc(p)}</button>`).join("")}</div>
+      <div class="field"><label>O escríbelo con tus palabras</label><input id="pz_t" placeholder="Lo que te está diciendo" maxlength="90" value="${_pzT&&PENSAMIENTOS.indexOf(_pzT)<0?esc(_pzT):""}"></div>`;
+  }
+  if(_pzPaso===1){
+    const t=_pzT||"esto que estoy pensando";
+    cuerpo=`<h3>Sepáralo de ti</h3>
+      <div class="pzquote">"Estoy teniendo el pensamiento de que ${esc(pzCap(t))}."</div>
+      <div class="pzwhy">Léelo otra vez, completo, con esas primeras palabras. Se siente distinto, ¿verdad?<br><br>Eso es lo único que cambió: ya no es <b>la verdad sobre ti</b>, es <b>un pensamiento que estás teniendo</b>. Los pensamientos no son hechos ni son órdenes. Pueden estar ahí, ruidosos, y tú de todas formas decides qué haces.</div>
+      <div class="pzsrc">Desfusión cognitiva · Terapia de Aceptación y Compromiso (ACT)</div>`;
+  }
+  if(_pzPaso===2){
+    cuerpo=`<h3>Aterriza</h3>
+      <div class="pzwhy">Respira con el círculo: jala mientras crece, sostén, suelta mientras baja. Mientras tanto, planta los pies en el piso y empuja. Siente el suelo.</div>
+      <div class="pzbreath"><i>respira</i></div>
+      <div class="pzwhy">Ahora nombra <b>cinco cosas</b> que puedes ver desde donde estás. Sin prisa. Estás aquí, no en lo que te dijo la cabeza.</div>
+      <div class="pzsrc">Anclaje al presente y desenganche · OMS, "En tiempos de estrés, haz lo que importa"</div>`;
+  }
+  if(_pzPaso===3){
+    cuerpo=`<h3>Dirección</h3>
+      <div class="pzwhy">El pensamiento puede seguir ahí. No importa. La pregunta no es si se fue — es hacia dónde te mueves ahora.</div>
+      <div class="field" style="margin-top:12px"><label>¿Qué haría en este momento el hombre que quieres ser?</label><input id="pz_a" placeholder="Una acción chica, de los próximos diez minutos" maxlength="120"></div>
+      <div class="pzfe">Tu valor no se mide en resultados. Ni en dinero, ni en ventas, ni en lo que todavía no sale.<br><br><b>Lo que eres no está a prueba hoy.</b> Entrega el resultado y quédate con el siguiente paso, que es lo único que de verdad te toca.</div>`;
+  }
+  const voz=PZ_AUDIO[_pzPaso]
+    ? `<div><button class="pzplay" onclick="pzVoz()">${svgIcon('play')} ${audioOn()?"Escuchar de nuevo":"Escuchar (la voz está silenciada)"}</button></div>`
+    : "";
+  openSheet(`<div class="pzstep"><span>Paso ${n} de ${total}</span><button class="link" onclick="pzCerrar()">Cerrar</button></div>
+    ${cuerpo}
+    ${voz}
+    <button class="pillbtn primary" style="width:100%;margin-top:16px" onclick="pausaNext()">${_pzPaso===3?"Terminar":"Siguiente"}</button>
+    ${_pzPaso===3?'<div class="dim" style="font-size:11.5px;text-align:center;margin-top:12px;line-height:1.5">Esto es acompañamiento, no tratamiento. Si la estás pasando muy mal, <span class="link" onclick="crisisSheet()">busca ayuda ahora</span>.</div>':""}`);
+  pzVoz();
+}
+function pzPick(i){
+  const p=PENSAMIENTOS[i];_pzT=(_pzT===p)?"":p;
+  const el=$("#pz_t");if(el)el.value="";
+  pausaDraw();
+}
+function pausaNext(){
+  if(_pzPaso===0){
+    const el=$("#pz_t");const esc_=el?el.value.trim():"";
+    if(esc_)_pzT=esc_;
+    if(!_pzT){toast("Escoge uno o escríbelo");return;}
+  }
+  if(_pzPaso===3){
+    const el=$("#pz_a");_pzAcc=el?el.value.trim():"";
+    const p=pausaRoot();
+    p.log.push({at:Date.now(),t:_pzT,a:_pzAcc});
+    if(p.log.length>400)p.log.shift();
+    save();stopClip();closeSheet();render();window.scrollTo(0,0);
+    toast(_pzAcc?"Anotado. Ve y hazlo.":"Pausa hecha.");
+    return;
+  }
+  _pzPaso++;pausaDraw();
+}
+
+/* --- técnicas y fuentes --- */
+function fuentesSheet(){
+  const f=(t,q,quien)=>`<div class="pzfuente"><b>${t}</b>${q}<br><span>${quien}</span></div>`;
+  openSheet(`<h3>Técnicas y fuentes</h3>
+   <p class="dim" style="font-size:13.5px;margin-top:-6px">Nada de esto me lo inventé. Son herramientas de salud pública, gratuitas y probadas. Aquí está de dónde salen.</p>
+   ${f("Desfusión cognitiva","Ver los pensamientos como lo que son — experiencias mentales — en vez de hechos u órdenes que hay que obedecer.","Terapia de Aceptación y Compromiso (ACT)")}
+   ${f("Anclaje y desenganche","Volver al presente con el cuerpo y soltar el anzuelo de los pensamientos difíciles.","Organización Mundial de la Salud · \"En tiempos de estrés, haz lo que importa\" (guía ilustrada, gratuita en español)")}
+   ${f("Registro de pensamientos","Anotar el pensamiento para verlo repetirse y poder examinarlo con calma.","Servicio Nacional de Salud del Reino Unido (NHS) · Every Mind Matters")}
+   ${f("Creencias sobre uno mismo","Trabajar las ideas de fondo — \"no soy suficiente\", \"no merezco\" — en vez de solo el pensamiento del momento.","Centre for Clinical Interventions, Gobierno de Australia Occidental · \"Improving Self-Esteem\"")}
+   <div class="dim" style="font-size:12px;margin-top:16px;line-height:1.6">VIDA ALFA es acompañamiento y disciplina. <b style="color:var(--tx)">No es tratamiento médico ni psicológico</b> y no sustituye a un profesional. Si la estás pasando mal, <span class="link" onclick="crisisSheet()">aquí está la ayuda</span>.</div>
+   <button class="pillbtn ghost" style="width:100%;margin-top:14px" onclick="closeSheet()">Cerrar</button>`);
+}
+
+/* --- recordatorios --- */
+function remSheet(){
+  const p=pausaRoot();
+  const op=["07:00","12:00","15:00","18:00","21:00"];
+  openSheet(`<h3>Recordatorios</h3>
+   <p class="dim" style="font-size:13.5px;margin-top:-6px">¿A qué horas quieres que te recuerde hacer la pausa? Escoge las que te sirvan.</p>
+   <div class="pzchips">${op.map(h=>`<button class="pzchip${p.rem.indexOf(h)>-1?" on":""}" onclick="remTog('${h}')">${h}</button>`).join("")}</div>
+   ${p.rem.length?`<div class="dim" style="font-size:12.5px;line-height:1.6">Guardadas: <b style="color:var(--golds)">${p.rem.slice().sort().join(" · ")}</b>.</div>`:""}
+   <div class="dim" style="font-size:11.5px;margin-top:14px;line-height:1.55">Por ahora quedan guardadas aquí y te las muestro en Apoyo. El aviso que suena en el teléfono se conecta con las notificaciones, que van aparte.</div>
+   <button class="pillbtn primary" style="width:100%;margin-top:14px" onclick="closeSheet()">Listo</button>`);
+}
+function remTog(h){
+  const p=pausaRoot();const i=p.rem.indexOf(h);
+  if(i>-1)p.rem.splice(i,1);else p.rem.push(h);
+  save();remSheet();
+}
+
 /* --- SOS: surfear la ola del antojo --- */
 let _sosT=null,_sosLeft=0,_sosTot=300,_sosEl=0;
 const SOS_PH=[[0,"Respira","Inhala 4 · sostén 7 · exhala 8. Repite."],[60,"Observa","No pelees con el antojo. Míralo como una ola que sube."],[150,"Nota","¿Dónde lo sientes en el cuerpo? Solo es una sensación. No tienes que actuar."],[240,"Baja","La ola ya va bajando. Lo estás logrando."]];
