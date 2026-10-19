@@ -343,6 +343,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 /* ADICCION */
 .sos{width:100%;padding:20px;border-radius:18px;border:1px solid rgba(216,196,138,.4);background:linear-gradient(180deg,rgba(216,196,138,.16),rgba(18,18,28,.6));color:var(--teal);font-family:"Inter";font-weight:800;font-size:20px;box-shadow:0 20px 44px -30px var(--teal)}
 
+/* ===== WHOOP ===== */
+.wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.wst{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
+.wst .wn{font-size:19px;color:var(--gold);line-height:1.1;font-variant-numeric:tabular-nums}
+.wst .wn span{font-size:11px;opacity:.65;margin-left:1px}
+.wst .wl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+.wfoot{font-size:11px;color:var(--dim);margin-top:10px}
+
 /* ===== PAUSA Y DIRECCIÓN ===== */
 .pausa{border:1px solid rgba(233,193,90,.34);border-radius:20px;padding:18px;margin:0 0 14px;
   background:linear-gradient(180deg,rgba(233,193,90,.11),rgba(18,18,28,.62));box-shadow:0 24px 52px -34px var(--gold)}
@@ -907,6 +915,7 @@ async function _loadAccount(){
     CONTENT=ct||[];
     $("#loader").style.display="none";
     if(FORCE_PW){FORCE_PW=false;if(PW_MOTIVO==="recovery"||!S.pwSet){renderSetPw();return;}}
+    if(!whoopReturn() && whoopRoot().on) syncWhoop(true);
     routeAccount();
   }catch(e){console.error(e);$("#loader").style.display="none";toast("Error cargando tu cuenta");renderLanding();}
 }
@@ -1933,7 +1942,7 @@ function viewCuerpo(){
     </div>
   </div>
   <div class="sec-title">Wearable</div>
-  <div class="card"><div class="row"><div><b>Conectar dispositivo</b><div class="dim" style="font-size:13px">WHOOP y otros — próximamente. Opcional.</div></div><span class="badge">Pronto</span></div></div>
+  ${whoopCard()}
   <div class="sec-title">Videos recomendados</div>
   ${vids.length?vids.map(v=>videoRow(v)).join(""):'<div class="empty">Aún no hay videos en esta sección.</div>'}`;
 }
@@ -2249,6 +2258,128 @@ function audioBtn(){return `<button class="mutebtn" id="mutebtn" onclick="toggle
 function toggleAudio(){S.audioOff=!S.audioOff;save();if(!audioOn())stopClip();
   const b=document.getElementById("mutebtn");
   if(b)b.innerHTML=svgIcon(audioOn()?'volume':'volumeoff')+`<span>${audioOn()?'Voz activada':'Voz silenciada'}</span>`;}
+/* ====== WHOOP (por usuario) ======
+   La puerta esta escondida a proposito: cinco toques seguidos en la tarjeta
+   de Wearable del pilar Cuerpo. Queda en S.whoop.unlocked, que es por cuenta,
+   asi que solo lo ve quien lo abrio. Mientras WHOOP mantenga su limite de 10
+   miembros conectados, esto NO debe anunciarse como funcion del producto.
+
+   Los datos del dia van a dayOf(todayKey()).rec, aparte del ritual y de los
+   macros: no entran en el progreso diario de nadie.
+
+   Backend: Edge Function alza-whoop (connect / data / disconnect). Valida la
+   sesion del miembro y exige membresia. Los refresh_token viven en
+   whoop_user_tokens, con RLS sin politicas: el navegador nunca los ve.        */
+function whoopRoot(){
+  if(!S.whoop||typeof S.whoop!=="object")S.whoop={};
+  return S.whoop;
+}
+function whoopRec(){return dayOf(todayKey()).rec||{};}
+let _wTaps=0,_wTapT=0;
+function wTap(){
+  const W=whoopRoot();
+  if(W.unlocked)return;
+  const now=Date.now();
+  if(now-_wTapT>1500)_wTaps=0;   // tienen que ser toques seguidos, no de a uno
+  _wTapT=now;_wTaps++;
+  if(_wTaps>=5){_wTaps=0;W.unlocked=true;save();render();toast("WHOOP activado");}
+}
+async function whoopCall(action){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)throw new Error("sin sesión");
+  const r=await fetch(`${SB_URL}/functions/v1/alza-whoop`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+session.access_token},
+    body:JSON.stringify({action})
+  });
+  let j={};try{j=await r.json();}catch(e){}
+  if(!r.ok)throw new Error(j.error||("error "+r.status));
+  return j;
+}
+async function whoopConectar(){
+  try{
+    toast("Abriendo WHOOP…");
+    const j=await whoopCall("connect");
+    if(j.url){location.href=j.url;return;}
+    toast("No se pudo abrir WHOOP");
+  }catch(e){toast("WHOOP: "+(e.message||e));}
+}
+async function syncWhoop(silent){
+  const W=whoopRoot();
+  try{
+    const j=await whoopCall("data");
+    if(j.connected===false){
+      W.on=false;save();
+      if(!silent)toast(j.revoked?"Quitaste el permiso en WHOOP":"WHOOP no está conectado");
+      render();return;
+    }
+    W.on=true;W.last=j.at||new Date().toISOString();
+    // Lo que manda WHOOP es de hoy, no del dia que estes viendo en la barra.
+    const D=dayOf(todayKey());
+    D.rec={recovery:j.recovery,rhr:j.rhr,hrv:j.hrv,strain:j.strain,cal:j.calories,sleep:j.sleep,at:W.last};
+    save();
+    if(!silent)toast("WHOOP actualizado");
+    render();
+  }catch(e){ if(!silent)toast("WHOOP: "+(e.message||e)); }
+}
+async function whoopDesconectar(){
+  try{
+    await whoopCall("disconnect");
+    const W=whoopRoot();W.on=false;
+    delete dayOf(todayKey()).rec;
+    save();render();toast("WHOOP desconectado");
+  }catch(e){toast("No se pudo desconectar");}
+}
+function whoopCard(){
+  const W=whoopRoot();
+  if(!W.unlocked){
+    // Se ve exactamente como antes. Cinco toques la abren.
+    return `<div class="card" onclick="wTap()"><div class="row"><div><b>Conectar dispositivo</b><div class="dim" style="font-size:13px">WHOOP y otros — próximamente. Opcional.</div></div><span class="badge">Pronto</span></div></div>`;
+  }
+  if(!W.on){
+    return `<div class="card">
+      <div class="row"><div><b>WHOOP</b><div class="dim" style="font-size:13px">Conecta tu banda y el recovery entra solo.</div></div>${svgIcon('heart')}</div>
+      <button class="pillbtn primary" style="margin-top:12px" onclick="whoopConectar()">Conectar WHOOP</button>
+    </div>`;
+  }
+  const r=whoopRec();
+  const n=v=>(v===undefined||v===null||v==="")?"—":v;
+  const pct=(v)=>v==null?"—":n(v)+"<span>%</span>";
+  let cuando="—";
+  if(W.last){try{cuando=new Date(W.last).toLocaleString("es-MX",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){cuando=W.last;}}
+  return `<div class="card">
+    <div class="row"><div><b>WHOOP</b><div class="dim" style="font-size:12px">Última lectura: ${esc(cuando)}</div></div>${svgIcon('heart')}</div>
+    <div class="wgrid">
+      <div class="wst"><div class="wn">${pct(r.recovery)}</div><div class="wl">Recovery</div></div>
+      <div class="wst"><div class="wn">${pct(r.sleep)}</div><div class="wl">Sueño</div></div>
+      <div class="wst"><div class="wn">${n(r.hrv)}</div><div class="wl">HRV</div></div>
+      <div class="wst"><div class="wn">${n(r.rhr)}</div><div class="wl">Pulso rep.</div></div>
+      <div class="wst"><div class="wn">${r.strain!=null?(+r.strain).toFixed(1):"—"}</div><div class="wl">Strain</div></div>
+      <div class="wst"><div class="wn">${n(r.cal)}</div><div class="wl">kcal</div></div>
+    </div>
+    <div class="row" style="margin-top:12px;gap:10px">
+      <button class="chip" onclick="syncWhoop(false)">Actualizar</button>
+      <span class="link" style="font-size:13px" onclick="whoopDesconectar()">Desconectar</span>
+    </div>
+    <div class="wfoot">WHOOP no comparte pasos — ese sigue a mano.</div>
+  </div>`;
+}
+/* Regreso del OAuth. El callback manda ?whoop=ok|err|state|token|save|nouser */
+function whoopReturn(){
+  const q=new URLSearchParams(location.search);
+  const w=q.get("whoop");
+  if(!w)return false;
+  history.replaceState({},"",location.pathname);
+  if(w==="ok"){
+    const W=whoopRoot();W.unlocked=true;W.on=true;save();
+    toast("WHOOP conectado");syncWhoop(true);
+  }else{
+    toast("WHOOP: no se completó la conexión");
+    console.warn("whoop callback",w);
+  }
+  return true;
+}
+
 /* ====== PAUSA Y DIRECCIÓN ======
    Vive en S.pausa, aparte del resto del estado.
    Técnicas: desfusión cognitiva (ACT), anclaje y desenganche (OMS),
